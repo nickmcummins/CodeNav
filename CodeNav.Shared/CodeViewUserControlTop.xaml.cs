@@ -1,9 +1,12 @@
-﻿using System;
+﻿#nullable enable
+
+using System;
 using System.Collections.Generic;
 using System.Windows.Controls;
 using System.Windows.Media;
 using CodeNav.Helpers;
 using CodeNav.Models;
+using CodeNav.Models.ViewModels;
 using Microsoft.VisualStudio.PlatformUI;
 using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Text.Editor;
@@ -14,15 +17,16 @@ namespace CodeNav
 {
     public partial class CodeViewUserControlTop : ICodeViewUserControl
     {
-        private readonly RowDefinition _row;
+        private readonly RowDefinition? _row;
 
-        public IDisposable CaretPositionChangedSubscription { get; set; }
-        public IDisposable TextContentChangedSubscription { get; set; }
-        public IDisposable UpdateWhileTypingSubscription { get; set; }
+        public IDisposable? CaretPositionChangedSubscription { get; set; }
+        public IDisposable? TextContentChangedSubscription { get; set; }
+        public IDisposable? UpdateWhileTypingSubscription { get; set; }
+        public IDisposable? FileActionOccuredSubscription { get; set; }
 
         public CodeDocumentViewModel CodeDocumentViewModel { get; set; }
 
-        public CodeViewUserControlTop(RowDefinition row = null)
+        public CodeViewUserControlTop(RowDefinition? row = null)
         {
             InitializeComponent();
 
@@ -46,7 +50,7 @@ namespace CodeNav
         public void RegionsExpanded(RegionsExpandedEventArgs e) =>
             OutliningHelper.RegionsExpanded(e, CodeDocumentViewModel.CodeDocument);
 
-        public void ToggleAll(bool isExpanded, List<CodeItem> root = null)
+        public void ToggleAll(bool isExpanded, List<CodeItem>? root = null)
         {
             OutliningHelper.ToggleAll(root ?? CodeDocumentViewModel.CodeDocument, isExpanded);
         }
@@ -63,7 +67,7 @@ namespace CodeNav
                 e.NewPosition.BufferPosition.GetContainingLine().LineNumber);
 
             // Force NotifyPropertyChanged
-            CodeDocumentViewModel.CodeDocumentTop = null;
+            CodeDocumentViewModel.CodeDocumentTop = new List<CodeItem>();
         }
 
         public async Task RegisterDocumentEvents()

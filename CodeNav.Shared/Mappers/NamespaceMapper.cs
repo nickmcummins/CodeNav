@@ -1,4 +1,7 @@
-﻿using CodeNav.Helpers;
+﻿#nullable enable
+
+using CodeNav.Extensions;
+using CodeNav.Helpers;
 using CodeNav.Models;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
@@ -10,10 +13,13 @@ namespace CodeNav.Mappers
 {
     public static class NamespaceMapper
     {
-        public static CodeNamespaceItem MapNamespace(NamespaceDeclarationSyntax member, 
+        public static CodeNamespaceItem? MapNamespace(NamespaceDeclarationSyntax? member, 
             ICodeViewUserControl control, SemanticModel semanticModel, SyntaxTree tree)
         {
-            if (member == null) return null;
+            if (member == null)
+            {
+                return null;
+            }
 
             var item = BaseMapper.MapBase<CodeNamespaceItem>(member, member.Name, control, semanticModel);
             item.Kind = CodeItemKindEnum.Namespace;
@@ -42,9 +48,9 @@ namespace CodeNav.Mappers
             {
                 foreach (var region in regions)
                 {
-                    if (FindHelper.FindCodeItem(item.Members, region.Id) == null)
+                    if (item.Members.Flatten().FilterNull().Any(i => i.Id == region?.Id) == false)
                     {
-                        item.Members.Add(region);
+                        item.Members.AddIfNotNull(region);
                     }                   
                 }
             }
@@ -53,10 +59,13 @@ namespace CodeNav.Mappers
         }
 
         #if VS2022
-        public static CodeNamespaceItem MapNamespace(BaseNamespaceDeclarationSyntax member,
+        public static CodeNamespaceItem? MapNamespace(BaseNamespaceDeclarationSyntax? member,
             ICodeViewUserControl control, SemanticModel semanticModel, SyntaxTree tree)
         {
-            if (member == null) return null;
+            if (member == null)
+            {
+                return null;
+            }
 
             var item = BaseMapper.MapBase<CodeNamespaceItem>(member, member.Name, control, semanticModel);
             item.Kind = CodeItemKindEnum.Namespace;
@@ -85,9 +94,9 @@ namespace CodeNav.Mappers
             {
                 foreach (var region in regions)
                 {
-                    if (FindHelper.FindCodeItem(item.Members, region.Id) == null)
+                    if (item.Members.Flatten().FilterNull().Any(i => i.Id == region?.Id) == false)
                     {
-                        item.Members.Add(region);
+                        item.Members.AddIfNotNull(region);
                     }
                 }
             }
@@ -96,10 +105,13 @@ namespace CodeNav.Mappers
         }
         #endif
 
-        public static CodeNamespaceItem MapNamespace(VisualBasicSyntax.NamespaceBlockSyntax member, 
+        public static CodeNamespaceItem? MapNamespace(VisualBasicSyntax.NamespaceBlockSyntax? member, 
             ICodeViewUserControl control, SemanticModel semanticModel, SyntaxTree tree)
         {
-            if (member == null) return null;
+            if (member == null)
+            {
+                return null;
+            }
 
             var item = BaseMapper.MapBase<CodeNamespaceItem>(member, member.NamespaceStatement.Name, control, semanticModel);
             item.Kind = CodeItemKindEnum.Namespace;
@@ -127,9 +139,9 @@ namespace CodeNav.Mappers
             {
                 foreach (var region in regions)
                 {
-                    if (FindHelper.FindCodeItem(item.Members, region.Id) == null)
+                    if (item.Members.Flatten().FilterNull().Any(i => i.Id == region?.Id) == false)
                     {
-                        item.Members.Add(region);
+                        item.Members.AddIfNotNull(region);
                     }
                 }
             }

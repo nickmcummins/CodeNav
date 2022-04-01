@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using CodeNav.Models;
+using CodeNav.Models.ViewModels;
 
 namespace CodeNav.Helpers
 {
@@ -10,17 +11,12 @@ namespace CodeNav.Helpers
             => Sort(viewModel.CodeDocument, viewModel.SortOrder);
 
         public static List<CodeItem> Sort(List<CodeItem> document, SortOrderEnum sortOrder)
-        {
-            switch (sortOrder)
+            => sortOrder switch
             {
-                case SortOrderEnum.SortByFile:
-                    return SortByFile(document);
-                case SortOrderEnum.SortByName:
-                    return SortByName(document);
-                default:
-                    return document;
-            }
-        }
+                SortOrderEnum.SortByFile => SortByFile(document),
+                SortOrderEnum.SortByName => SortByName(document),
+                _ => document,
+            };
 
         private static List<CodeItem> SortByName(List<CodeItem> document)
         {
@@ -28,13 +24,13 @@ namespace CodeNav.Helpers
 
             foreach (var item in document)
             {
-                if (item is CodeClassItem)
+                if (item is CodeClassItem codeClassItem)
                 {
-                    (item as CodeClassItem).Members = SortByName((item as CodeClassItem).Members);
+                    codeClassItem.Members = SortByName(codeClassItem.Members);
                 }
-                if (item is CodeNamespaceItem)
+                if (item is CodeNamespaceItem codeNamespaceItem)
                 {
-                    (item as CodeNamespaceItem).Members = SortByName((item as CodeNamespaceItem).Members);
+                    codeNamespaceItem.Members = SortByName(codeNamespaceItem.Members);
                 }
             }
 
@@ -47,13 +43,13 @@ namespace CodeNav.Helpers
 
             foreach (var item in document)
             {
-                if (item is CodeClassItem)
+                if (item is CodeClassItem codeClassItem)
                 {
-                    (item as CodeClassItem).Members = SortByFile((item as CodeClassItem).Members);
+                    codeClassItem.Members = SortByFile(codeClassItem.Members);
                 }
-                if (item is CodeNamespaceItem)
+                if (item is CodeNamespaceItem codeNamespaceItem)
                 {
-                    (item as CodeNamespaceItem).Members = SortByFile((item as CodeNamespaceItem).Members);
+                    codeNamespaceItem.Members = SortByFile(codeNamespaceItem.Members);
                 }
             }
 

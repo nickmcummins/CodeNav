@@ -1,4 +1,6 @@
-﻿using CodeNav.Helpers;
+﻿#nullable enable
+
+using CodeNav.Helpers;
 using CodeNav.Models;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
@@ -24,7 +26,10 @@ namespace CodeNav.Mappers
         {
             var regionList = new List<CodeRegionItem>();
 
-            if (tree == null) return regionList;
+            if (tree == null)
+            {
+                return regionList;
+            }
 
             if (SettingsHelper.FilterRules != null)
             {
@@ -47,25 +52,33 @@ namespace CodeNav.Mappers
                 regionList.Add(MapRegion(regionDirective, control));
             }
 
-            if (!regionList.Any()) return regionList;
+            if (!regionList.Any())
+            {
+                return regionList;
+            }
 
             // Find all matching end points of regions
             foreach (var endRegionDirective in root.DescendantTrivia()
                 .Where(j => (j.RawKind == (int)SyntaxKind.EndRegionDirectiveTrivia ||
                              j.RawKind == (int)VisualBasic.SyntaxKind.EndRegionDirectiveTrivia) && 
                              span.Contains(j.Span)))
-            {              
-                var reg = regionList.LastOrDefault(x => x.StartLine < GetStartLine(endRegionDirective) && x.EndLine == 0);
-                if (reg != null)
+            {
+                var region = regionList
+                    .LastOrDefault(x => x.StartLine < GetStartLine(endRegionDirective) &&
+                                        x.EndLine == null);
+                
+                if (region == null)
                 {
-                    reg.EndLine = GetEndLine(endRegionDirective);
-                    reg.EndLinePosition = GetEndLinePosition(endRegionDirective);
-                }             
+                    continue;
+                }
+
+                region.EndLine = GetEndLine(endRegionDirective);
+                region.EndLinePosition = GetEndLinePosition(endRegionDirective);
             }
 
-            var list = ToHierarchy(regionList, int.MinValue, int.MaxValue);
+            var regions = ToHierarchy(regionList, int.MinValue, int.MaxValue);
 
-            return list.Select(r => r as CodeRegionItem).ToList();
+            return regions;
         }
 
         /// <summary>
@@ -75,29 +88,23 @@ namespace CodeNav.Mappers
         /// <param name="startLine"></param>
         /// <param name="endLine"></param>
         /// <returns></returns>
-        private static List<CodeItem> ToHierarchy(List<CodeRegionItem> regionList, int startLine, int endLine)
+        private static List<CodeRegionItem> ToHierarchy(List<CodeRegionItem> regionList, int? startLine, int? endLine)
         {
-            return (from r in regionList
-                    where r.StartLine > startLine && r.EndLine < endLine && 
-                        !regionList.Any(q => IsContainedWithin(r, q) && (startLine != int.MinValue ? q.EndLine - q.StartLine < endLine - startLine : true))
-                    select new CodeRegionItem
-                    {
-                        Name = r.Name,
-                        FullName = r.Name,
-                        Id = r.Name,
-                        Tooltip = r.Name,
-                        StartLine = r.StartLine,
-                        StartLinePosition = r.StartLinePosition,
-                        EndLine = r.EndLine,
-                        EndLinePosition = r.EndLinePosition,
-                        ForegroundColor = r.ForegroundColor,
-                        BorderColor = r.BorderColor,
-                        FontSize = r.FontSize,
-                        Kind = r.Kind,
-                        Span = r.Span,
-                        Control = r.Control,
-                        Members = ToHierarchy(regionList, r.StartLine, r.EndLine)
-                    }).ToList<CodeItem>();
+            var nestedRegions = new List<CodeRegionItem>();
+
+            foreach (var region in regionList)
+            {
+                if (IsContainedWithin(region, startLine, endLine) && 
+                    regionList.Any(otherBiggerRegion => IsContainedWithin(region, otherBiggerRegion) &&
+                        (startLine != int.MinValue ? otherBiggerRegion.EndLine - otherBiggerRegion.StartLine < endLine - startLine : true)) == false)
+                {
+                    region.Members = ToHierarchy(regionList, region.StartLine, region.EndLine).Cast<CodeItem>().ToList();
+
+                    nestedRegions.Add(region);
+                }
+            }
+
+            return nestedRegions;
         }
 
         private static CodeRegionItem MapRegion(SyntaxTrivia source, ICodeViewUserControl control)
@@ -127,10 +134,16 @@ namespace CodeNav.Mappers
             var syntaxNode = source.GetStructure();
             var name = "#";
 
-            switch (LanguageHelper.GetLanguage(syntaxNode.Language))
+            switch (LanguageHelper.GetLanguage(syntaxNode?.Language))
             {
                 case LanguageEnum.CSharp:
-                    var endDirectiveToken = (syntaxNode as RegionDirectiveTriviaSyntax).EndOfDirectiveToken;
+                    if (!(syntaxNode is RegionDirectiveTriviaSyntax regionSyntax))
+                    {
+                        name += defaultRegionName;
+                        break;
+                    }
+
+                    var endDirectiveToken = regionSyntax.EndOfDirectiveToken;
                     if (endDirectiveToken.HasLeadingTrivia)
                     {
                         name += endDirectiveToken.LeadingTrivia.First().ToString();
@@ -141,7 +154,13 @@ namespace CodeNav.Mappers
                     }                   
                     break;
                 case LanguageEnum.VisualBasic:
-                    name += (syntaxNode as VisualBasicSyntax.RegionDirectiveTriviaSyntax).Name.ValueText;
+                    if (!(syntaxNode is VisualBasicSyntax.RegionDirectiveTriviaSyntax vbRegionSyntax))
+                    {
+                        name += defaultRegionName;
+                        break;
+                    }
+
+                    name += vbRegionSyntax.Name.ValueText;
                     break;
                 default:
                     name += defaultRegionName;
@@ -163,7 +182,7 @@ namespace CodeNav.Mappers
             
             foreach (var region in regions)
             {
-                if (region.Kind == CodeItemKindEnum.Region)
+                if (region?.Kind == CodeItemKindEnum.Region)
                 {
                     if (AddToRegion(region.Members, item))
                     {
@@ -190,16 +209,19 @@ namespace CodeNav.Mappers
         {
             foreach (var member in members)
             {
-                if (member == null) continue;
+                if (member == null)
+                {
+                    continue;
+                }
 
-                if (member is IMembers && AddToRegion((member as IMembers).Members, item))
+                if (member is IMembers memberItem && AddToRegion(memberItem.Members, item))
                 {
                     return true;
                 }
 
-                if (member.Kind == CodeItemKindEnum.Region && IsContainedWithin(item, member))
+                if (member is CodeRegionItem regionItem && IsContainedWithin(item, member))
                 {
-                    (member as CodeRegionItem).Members.Add(item);
+                    regionItem.Members.Add(item);
                     return true;
                 }
             }
@@ -207,25 +229,30 @@ namespace CodeNav.Mappers
             return false;
         }
 
-        private static int GetStartLine(SyntaxTrivia source) =>
-            source.SyntaxTree.GetLineSpan(source.Span).StartLinePosition.Line + 1;
+        private static int? GetStartLine(SyntaxTrivia source) =>
+            source.SyntaxTree?.GetLineSpan(source.Span).StartLinePosition.Line + 1;
 
-        private static LinePosition GetStartLinePosition(SyntaxTrivia source) =>
-            source.SyntaxTree.GetLineSpan(source.Span).StartLinePosition;
+        private static LinePosition? GetStartLinePosition(SyntaxTrivia source) =>
+            source.SyntaxTree?.GetLineSpan(source.Span).StartLinePosition;
 
-        private static int GetEndLine(SyntaxTrivia source) =>
-            source.SyntaxTree.GetLineSpan(source.Span).EndLinePosition.Line + 1;
+        private static int? GetEndLine(SyntaxTrivia source) =>
+            source.SyntaxTree?.GetLineSpan(source.Span).EndLinePosition.Line + 1;
 
-        private static LinePosition GetEndLinePosition(SyntaxTrivia source) =>
-            source.SyntaxTree.GetLineSpan(source.Span).EndLinePosition;
+        private static LinePosition? GetEndLinePosition(SyntaxTrivia source) =>
+            source.SyntaxTree?.GetLineSpan(source.Span).EndLinePosition;
 
         /// <summary>
         /// Check if item 1 is contained within item 2
         /// </summary>
-        /// <param name="r1">Smaller Item</param>
-        /// <param name="r2">Bigger Item</param>
+        /// <param name="smallerRegion">Smaller Item</param>
+        /// <param name="biggerRegion">Bigger Item</param>
         /// <returns></returns>
-        private static bool IsContainedWithin(CodeItem r1, CodeItem r2) =>
-            r1.StartLine > r2.StartLine && r1.EndLine < r2.EndLine;
+        private static bool IsContainedWithin(CodeItem smallerRegion, CodeItem biggerRegion)
+            => smallerRegion.StartLine > biggerRegion.StartLine &&
+               smallerRegion.EndLine < biggerRegion.EndLine;
+
+        private static bool IsContainedWithin(CodeItem region, int? startLine, int? endLine)
+            => region.StartLine > startLine &&
+               region.EndLine < endLine;
     }
 }

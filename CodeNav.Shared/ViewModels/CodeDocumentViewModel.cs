@@ -1,11 +1,13 @@
-﻿using System.Collections.Generic;
+﻿#nullable enable
+
+using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.Serialization;
 using System.Windows;
 using CodeNav.Helpers;
 using Microsoft.VisualStudio.PlatformUI;
 
-namespace CodeNav.Models
+namespace CodeNav.Models.ViewModels
 {
     [DataContract]
     public class CodeDocumentViewModel : ObservableObject
@@ -45,7 +47,12 @@ namespace CodeNav.Models
                     result.Add(new CodeDepthGroupItem());
                 }
 
-                (result[depth] as IMembers).Members.Add(item);
+                if (!(result[depth] is IMembers memberItem))
+                {
+                    continue;
+                }
+
+                memberItem.Members.Add(item);
 
                 if (item is IMembers hasMembersItem &&
                     hasMembersItem != null &&
@@ -99,7 +106,7 @@ namespace CodeNav.Models
             string.IsNullOrEmpty(FilterText) ?
             Visibility.Collapsed : Visibility.Visible;
 
-        private string _filterText;
+        private string _filterText = string.Empty;
         public string FilterText
         {
             get => _filterText;

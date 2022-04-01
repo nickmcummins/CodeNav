@@ -1,4 +1,6 @@
-﻿using System;
+﻿#nullable enable
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reactive.Linq;
@@ -6,6 +8,7 @@ using System.Windows.Controls;
 using System.Windows.Media;
 using CodeNav.Helpers;
 using CodeNav.Models;
+using CodeNav.Models.ViewModels;
 using Community.VisualStudio.Toolkit;
 using Microsoft.VisualStudio.PlatformUI;
 using Microsoft.VisualStudio.Shell;
@@ -18,16 +21,17 @@ namespace CodeNav
 {
     public partial class CodeViewUserControl : ICodeViewUserControl
     {
-        private readonly ColumnDefinition _column;
-        private IOutliningManager _outliningManager;
+        private readonly ColumnDefinition? _column;
+        private IOutliningManager? _outliningManager;
 
-        public IDisposable CaretPositionChangedSubscription { get; set; }
-        public IDisposable TextContentChangedSubscription { get; set; }
-        public IDisposable UpdateWhileTypingSubscription { get; set; }
+        public IDisposable? CaretPositionChangedSubscription { get; set; }
+        public IDisposable? TextContentChangedSubscription { get; set; }
+        public IDisposable? UpdateWhileTypingSubscription { get; set; }
+        public IDisposable? FileActionOccuredSubscription { get; set; }
 
         public CodeDocumentViewModel CodeDocumentViewModel { get; set; }
 
-        public CodeViewUserControl(ColumnDefinition column = null)
+        public CodeViewUserControl(ColumnDefinition? column = null)
         {
             InitializeComponent();
 
@@ -39,15 +43,27 @@ namespace CodeNav
 
             VSColorTheme.ThemeChanged += VSColorTheme_ThemeChanged;
             VS.Events.DocumentEvents.Opened += DocumentEvents_Opened;
-            VS.Events.DocumentEvents.Saved += DocumentEvents_Saved;
             VS.Events.WindowEvents.ActiveFrameChanged += WindowEvents_ActiveFrameChanged;
         }
 
         public async Task RegisterDocumentEvents()
         {
-            var documentView = await VS.Documents.GetActiveDocumentViewAsync();
-            var caret = documentView?.TextView.Caret;
-            var textBuffer2 = documentView?.TextView.TextBuffer as ITextBuffer2;
+            var documentView = await DocumentHelper.GetDocumentView();
+            var document = documentView?.Document;
+            var caret = documentView?.TextView?.Caret;
+            var textBuffer2 = documentView?.TextView?.TextBuffer as ITextBuffer2;
+
+            // Subscribe to Document save events
+            if (document != null && FileActionOccuredSubscription == null)
+            {
+                FileActionOccuredSubscription = Observable
+                    .FromEventPattern<TextDocumentFileActionEventArgs>(
+                        h => document.FileActionOccurred += h,
+                        h => document.FileActionOccurred -= h)
+                    .Select(x => x.EventArgs)
+                    .Where(e => e.FileActionType == FileActionTypes.ContentSavedToDisk)
+                    .Subscribe(e => DocumentEvents_Saved());
+            }
 
             // Subscribe to Cursor move event
             if (caret != null && !General.Instance.DisableHighlight && CaretPositionChangedSubscription == null)
@@ -110,7 +126,7 @@ namespace CodeNav
         private void WindowEvents_ActiveFrameChanged(ActiveFrameChangeEventArgs obj)
             => WindowChangedEvent(obj).FireAndForget();
 
-        private void DocumentEvents_Saved(string e)
+        private void DocumentEvents_Saved()
         {
             UpdateDocument();
             SolutionStorageHelper.SaveToSolutionStorage(CodeDocumentViewModel).FireAndForget();
@@ -134,7 +150,7 @@ namespace CodeNav
 
             RegisterDocumentEvents().FireAndForget();
 
-            UpdateDocument(filePath);
+            UpdateDocument(filePath!);
         }
 
         private void TextBuffer_ChangedOnBackground(TextContentChangedEventArgs e)
@@ -166,7 +182,7 @@ namespace CodeNav
         public void FilterBookmarks()
             => VisibilityHelper.SetCodeItemVisibility(CodeDocumentViewModel);
 
-        public void ToggleAll(bool isExpanded, List<CodeItem> root = null)
+        public void ToggleAll(bool isExpanded, List<CodeItem>? root = null)
             => OutliningHelper.ToggleAll(root ?? CodeDocumentViewModel.CodeDocument, isExpanded);
 
         public void UpdateDocument(string filePath = "")

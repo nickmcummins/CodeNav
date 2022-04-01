@@ -1,8 +1,10 @@
-﻿using System;
+﻿#nullable enable
+
+using System;
 using System.Windows;
 using System.Windows.Controls;
 using CodeNav.Helpers;
-using CodeNav.Models;
+using CodeNav.Models.ViewModels;
 using CodeNav.Windows;
 
 namespace CodeNav.Controls
@@ -44,12 +46,18 @@ namespace CodeNav.Controls
             new FilterWindow().ShowDialog();
 
             var control = WpfHelper.FindParent<CodeViewUserControl>(this);
-            control.UpdateDocument();
+            control?.UpdateDocument();
         }
 
         private void ButtonFilterBookmark_OnClick(object sender, RoutedEventArgs e)
         {
             var control = WpfHelper.FindParent<CodeViewUserControl>(this);
+
+            if (control == null)
+            {
+                return;
+            }
+
             control.CodeDocumentViewModel.FilterOnBookmarks = !control.CodeDocumentViewModel.FilterOnBookmarks;
             control.FilterBookmarks();
         }

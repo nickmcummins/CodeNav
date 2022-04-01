@@ -1,4 +1,6 @@
-﻿using EnvDTE;
+﻿#nullable enable
+
+using Community.VisualStudio.Toolkit;
 using Microsoft.ApplicationInsights;
 using Newtonsoft.Json;
 using System;
@@ -12,9 +14,8 @@ namespace CodeNav.Helpers
 {
     public static class LogHelper
     {
-        private static TelemetryClient _client;
+        private static TelemetryClient? _client;
         private const string InstrumentationKey = "0913ac4a-1127-4d28-91cf-07673e70200f";
-        public static _DTE Dte;
 
         public static void GetClient()
         {
@@ -22,21 +23,20 @@ namespace CodeNav.Helpers
             _client.Context.Session.Id = Guid.NewGuid().ToString();
             _client.InstrumentationKey = InstrumentationKey;
             _client.Context.Component.Version = GetExecutingAssemblyVersion().ToString();
-
-            var enc = Encoding.UTF8.GetBytes(Environment.UserName + Environment.MachineName);
-            using (var crypto = new MD5CryptoServiceProvider())
-            {
-                var hash = crypto.ComputeHash(enc);
-                _client.Context.User.Id = Convert.ToBase64String(hash);
-            }
+            _client.Context.User.Id = GetUserId();
         }
 
-        public static void Log(string message, Exception exception = null, 
-            object additional = null, string language = null)
+        public static void Log(string message, Exception? exception = null, 
+            object? additional = null, string language = "")
         {
             if (_client == null)
             {
                 GetClient();
+            }
+
+            if (_client == null)
+            {
+                return;
             }
 
             var properties = new Dictionary<string, string>
@@ -45,7 +45,7 @@ namespace CodeNav.Helpers
                 { "message", JsonConvert.SerializeObject(message) },
                 { "language", language },
                 { "additional", JsonConvert.SerializeObject(additional) },
-                { "vsVersion", Dte?.Version ?? string.Empty }
+                { "vsVersion", VS.Shell.GetVsVersionAsync().Result?.ToString() ?? string.Empty }
             };
 
             if (exception == null)
@@ -64,6 +64,13 @@ namespace CodeNav.Helpers
 
             // read what's defined in [assembly: AssemblyFileVersion("1.2.3.4")]
             return new Version(ver.ProductMajorPart, ver.ProductMinorPart, ver.ProductBuildPart, ver.ProductPrivatePart);
+        }
+
+        private static string GetUserId()
+        {
+            var enc = Encoding.UTF8.GetBytes(Environment.UserName + Environment.MachineName);
+            var hash = new MD5CryptoServiceProvider().ComputeHash(enc);
+            return Convert.ToBase64String(hash);
         }
     }
 }

@@ -83,6 +83,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)CodeViewUserControlTop.xaml.cs">
       <DependentUpon>CodeViewUserControlTop.xaml</DependentUpon>
     </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)Comparers\CodeItemComparer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Controls\FilterToolbar.xaml.cs">
       <DependentUpon>FilterToolbar.xaml</DependentUpon>
     </Compile>
@@ -90,10 +91,9 @@
       <DependentUpon>MainToolbar.xaml</DependentUpon>
     </Compile>
     <Compile Include="$(MSBuildThisFileDirectory)Helpers\BookmarkHelper.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Helpers\CodeItemExtensions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Extensions\CodeItemExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Helpers\ColorHelper.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Helpers\DocumentHelper.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Helpers\FindHelper.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Helpers\HighlightHelper.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Helpers\HistoryHelper.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Helpers\LanguageHelper.cs" />
@@ -123,6 +123,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Mappers\NamespaceMapper.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Mappers\ParameterMapper.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Mappers\PropertyMapper.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Mappers\RecordMapper.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Mappers\RegionMapper.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Mappers\StatementMapper.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Mappers\StructMapper.cs" />
@@ -133,7 +134,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Models\BookmarkStyle.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\CodeClassItem.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\CodeDepthGroupItem.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Models\CodeDocumentViewModel.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ViewModels\CodeDocumentViewModel.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\CodeFunctionItem.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\CodeInterfaceItem.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\CodeItem.cs" />
@@ -173,5 +174,8 @@
     <EmbeddedResource Include="$(MSBuildThisFileDirectory)VSPackage.resx">
       <SubType>Designer</SubType>
     </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="$(MSBuildThisFileDirectory)Extensions\" />
   </ItemGroup>
 </Project>

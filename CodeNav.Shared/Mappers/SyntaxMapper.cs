@@ -180,6 +180,10 @@ namespace CodeNav.Mappers
 
                 return root.Members.Select(member => MapMember(member, tree, semanticModel, control)).ToList();
             }
+            else if (fileExtension == ".json")
+            {
+                //var tree = JsonTree;
+            }
             else if (fileExtension == ".vb")
             {
                 var tree = VisualBasic.VisualBasicSyntaxTree.ParseText(text);

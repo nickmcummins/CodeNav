@@ -14,6 +14,8 @@ using VisualBasicSyntax = Microsoft.CodeAnalysis.VisualBasic.Syntax;
 using System.Threading.Tasks;
 using CodeNav.Shared.Helpers;
 using CodeNav.Languages.JS.Mappers;
+using CodeNav.Shared.Languages.XML.Mappers;
+using CodeNav.Shared.Languages.VisualBasic;
 
 namespace CodeNav.Mappers
 {
@@ -52,7 +54,7 @@ namespace CodeNav.Mappers
 
             var root = (VisualBasicSyntax.CompilationUnitSyntax)tree.GetRoot();
 
-            return root.Members.Select(member => MapMember(member, tree, semanticModel, control)).ToList();
+            return root.Members.Select(member => SyntaxMapperVB.MapMember(member, tree, semanticModel, control)).ToList();
         }
 
         /// <summary>
@@ -104,6 +106,11 @@ namespace CodeNav.Mappers
                 return Languages.CSS.Mappers.SyntaxMapper.Map(codeAnalysisDocument, control);
             }
 
+            if (codeAnalysisDocument.FilePath.IsXmlFile())
+            {
+                return SyntaxMapperXML.Map(codeAnalysisDocument, control);
+            }
+
             var tree = await codeAnalysisDocument.GetSyntaxTreeAsync();
 
             if (tree == null)
@@ -131,7 +138,7 @@ namespace CodeNav.Mappers
                         return new List<CodeItem?>();
                     }
 
-                    return vbRootSyntax.Members.Select(member => MapMember(member, tree, semanticModel, control)).ToList();
+                    return vbRootSyntax.Members.Select(member => SyntaxMapperVB.MapMember(member, tree, semanticModel, control)).ToList();
                 default:
                     return new List<CodeItem?>();
             }
@@ -180,6 +187,10 @@ namespace CodeNav.Mappers
 
                 return root.Members.Select(member => MapMember(member, tree, semanticModel, control)).ToList();
             }
+            else if (filePath.IsXmlFile())
+            {
+                return SyntaxMapperXML.Map(filePath, control);
+            }
             else if (fileExtension == ".json")
             {
                 //var tree = JsonTree;
@@ -195,7 +206,7 @@ namespace CodeNav.Mappers
                     return new List<CodeItem?>();
                 }
 
-                return root.Members.Select(member => MapMember(member, tree, semanticModel, control)).ToList();
+                return root.Members.Select(member => SyntaxMapperVB.MapMember(member, tree, semanticModel, control)).ToList();
             }
 
             return new List<CodeItem?>();
@@ -249,49 +260,6 @@ namespace CodeNav.Mappers
                 case SyntaxKind.VariableDeclarator:
                     var bla = member as VariableDeclaratorSyntax;
                     return null;
-                default:
-                    return null;
-            }
-        }
-
-        public static CodeItem? MapMember(VisualBasicSyntax.StatementSyntax member,
-            SyntaxTree tree, SemanticModel semanticModel, ICodeViewUserControl control)
-        {
-            if (member == null)
-            {
-                return null;
-            }
-
-            switch (member.Kind())
-            {
-                case VisualBasic.SyntaxKind.FunctionBlock:
-                case VisualBasic.SyntaxKind.SubBlock:
-                    return MethodMapper.MapMethod(member as VisualBasicSyntax.MethodBlockSyntax, control, semanticModel);
-                case VisualBasic.SyntaxKind.SubStatement:
-                    return MethodMapper.MapMethod(member as VisualBasicSyntax.MethodStatementSyntax, control, semanticModel);
-                case VisualBasic.SyntaxKind.EnumBlock:
-                    return EnumMapper.MapEnum(member as VisualBasicSyntax.EnumBlockSyntax, control, semanticModel, tree);
-                case VisualBasic.SyntaxKind.EnumMemberDeclaration:
-                    return EnumMapper.MapEnumMember(member as VisualBasicSyntax.EnumMemberDeclarationSyntax, control, semanticModel);
-                case VisualBasic.SyntaxKind.InterfaceBlock:
-                    return InterfaceMapper.MapInterface(member as VisualBasicSyntax.InterfaceBlockSyntax, control, semanticModel, tree);
-                case VisualBasic.SyntaxKind.FieldDeclaration:
-                    return FieldMapper.MapField(member as VisualBasicSyntax.FieldDeclarationSyntax, control, semanticModel);
-                case VisualBasic.SyntaxKind.PropertyBlock:
-                    return PropertyMapper.MapProperty(member as VisualBasicSyntax.PropertyBlockSyntax, control, semanticModel);
-                case VisualBasic.SyntaxKind.StructureBlock:
-                    return StructMapper.MapStruct(member as VisualBasicSyntax.StructureBlockSyntax, control, semanticModel, tree);
-                case VisualBasic.SyntaxKind.ClassBlock:
-                case VisualBasic.SyntaxKind.ModuleBlock:
-                    return ClassMapper.MapClass(member as VisualBasicSyntax.TypeBlockSyntax, control, semanticModel, tree);
-                case VisualBasic.SyntaxKind.EventBlock:
-                    return DelegateEventMapper.MapEvent(member as VisualBasicSyntax.EventBlockSyntax, control, semanticModel);
-                case VisualBasic.SyntaxKind.DelegateFunctionStatement:
-                    return DelegateEventMapper.MapDelegate(member as VisualBasicSyntax.DelegateStatementSyntax, control, semanticModel);
-                case VisualBasic.SyntaxKind.NamespaceBlock:
-                    return NamespaceMapper.MapNamespace(member as VisualBasicSyntax.NamespaceBlockSyntax, control, semanticModel, tree);
-                case VisualBasic.SyntaxKind.ConstructorBlock:
-                    return MethodMapper.MapConstructor(member as VisualBasicSyntax.ConstructorBlockSyntax, control, semanticModel);
                 default:
                     return null;
             }

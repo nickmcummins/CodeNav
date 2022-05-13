@@ -3,6 +3,7 @@
 using CodeNav.Extensions;
 using CodeNav.Helpers;
 using CodeNav.Models;
+using CodeNav.Shared.Languages.VisualBasic;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using System.Windows.Media;
@@ -59,7 +60,7 @@ namespace CodeNav.Mappers
 
             foreach (var structMember in member.Members)
             {
-                item.Members.AddIfNotNull(SyntaxMapper.MapMember(structMember, tree, semanticModel, control));
+                item.Members.AddIfNotNull(SyntaxMapperVB.MapMember(structMember, tree, semanticModel, control));
             }
 
             return item;

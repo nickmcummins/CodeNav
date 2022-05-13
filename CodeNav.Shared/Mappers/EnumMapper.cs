@@ -3,6 +3,7 @@
 using CodeNav.Extensions;
 using CodeNav.Helpers;
 using CodeNav.Models;
+using CodeNav.Shared.Languages.VisualBasic;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using System.Linq;
@@ -92,7 +93,7 @@ namespace CodeNav.Mappers
 
             foreach (var enumMember in member.Members)
             {
-                item.Members.AddIfNotNull(SyntaxMapper.MapMember(enumMember, tree, semanticModel, control));
+                item.Members.AddIfNotNull(SyntaxMapperVB.MapMember(enumMember, tree, semanticModel, control));
             }
 
             return item;

@@ -12,6 +12,8 @@ using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Text;
 using Microsoft.VisualStudio.Text.Editor;
 using System;
+using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Controls;
@@ -21,6 +23,8 @@ namespace CodeNav.Helpers
 {
     public static class DocumentHelper
     {
+        private static readonly IEnumerable<string> XmlFileExtensions = new[] { ".xml", ".csproj", ".vsixmanifest", ".nuspec" };
+
         public static async Task<DocumentView?> GetDocumentView()
         {
             try
@@ -283,6 +287,11 @@ namespace CodeNav.Helpers
             {
                 LogHelper.Log("Error finishing UpdateDocument", e);
             }
+        }
+
+        public static bool IsXmlFile(this string filePath)
+        {
+            return XmlFileExtensions.Contains(Path.GetExtension(filePath));
         }
 
         private static async Task<VisualStudioWorkspace> GetVisualStudioWorkspace()

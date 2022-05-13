@@ -3,6 +3,7 @@
 using CodeNav.Extensions;
 using CodeNav.Helpers;
 using CodeNav.Models;
+using CodeNav.Shared.Languages.VisualBasic;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using System.Linq;
@@ -127,7 +128,7 @@ namespace CodeNav.Mappers
 
             foreach (var namespaceMember in member.Members)
             {
-                var memberItem = SyntaxMapper.MapMember(namespaceMember, tree, semanticModel, control);
+                var memberItem = SyntaxMapperVB.MapMember(namespaceMember, tree, semanticModel, control);
                 if (memberItem != null && !RegionMapper.AddToRegion(regions, memberItem))
                 {
                     item.Members.Add(memberItem);

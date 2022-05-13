@@ -109,6 +109,8 @@
     <Compile Include="$(MSBuildThisFileDirectory)Helpers\VisibilityHelper.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Helpers\WpfHelper.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ICodeViewUserControl.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Languages\VisualBasic\SyntaxMapperVB.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Languages\XML\Mappers\SyntaxMapperXML.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Mappers\BaseMapper.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Mappers\ClassMapper.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Mappers\DelegateEventMapper.cs" />
@@ -157,6 +159,9 @@
     <Compile Include="$(MSBuildThisFileDirectory)ViewModels\BookmarkStylesWindowViewModel.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ViewModels\FilterWindowViewModel.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ViewModels\OptionsWindowViewModel.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Languages\XML\Mappers\BaseMapperXML.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Languages\XML\Mappers\SyntaxMapperXML.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Languages\XML\Models\XmlElementItem.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Windows\BookmarkStylesWindow.xaml.cs">
       <DependentUpon>BookmarkStylesWindow.xaml</DependentUpon>
     </Compile>
@@ -168,7 +173,7 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="$(MSBuildThisFileDirectory)ToolWindow\VSPackage.resx">
+  <EmbeddedResource Include="$(MSBuildThisFileDirectory)ToolWindow\VSPackage.resx">
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="$(MSBuildThisFileDirectory)VSPackage.resx">

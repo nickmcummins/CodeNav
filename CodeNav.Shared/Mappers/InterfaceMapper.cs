@@ -2,6 +2,7 @@
 
 using CodeNav.Helpers;
 using CodeNav.Models;
+using CodeNav.Shared.Languages.VisualBasic;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.VisualStudio.Imaging;
@@ -202,7 +203,7 @@ namespace CodeNav.Mappers
 
             foreach (var interfaceMember in member.Members)
             {
-                var memberItem = SyntaxMapper.MapMember(interfaceMember, tree, semanticModel, control);
+                var memberItem = SyntaxMapperVB.MapMember(interfaceMember, tree, semanticModel, control);
                 if (memberItem != null && !RegionMapper.AddToRegion(regions, memberItem))
                 {
                     item.Members.Add(memberItem);

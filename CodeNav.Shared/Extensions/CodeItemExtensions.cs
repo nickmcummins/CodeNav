@@ -2,6 +2,7 @@
 
 using CodeNav.Models;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 
 namespace CodeNav.Extensions
@@ -58,6 +59,12 @@ namespace CodeNav.Extensions
             }
 
             items.Add(item);
+        }
+
+
+        public static string GetFilenameWithoutPath(this string filePath)
+        {
+            return filePath.Split(Path.PathSeparator).Last();
         }
     }
 }

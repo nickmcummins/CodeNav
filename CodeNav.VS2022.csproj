@@ -79,7 +79,7 @@
     <WarningLevel>4</WarningLevel>
     <DeployExtension Condition=" '$(AppVeyor)' != '' Or '$(TF_BUILD)' != '' ">False</DeployExtension>
   </PropertyGroup>
-  <ItemGroup>
+  <ItemGroup Label="Compile">
     <Compile Include="CodeNavToolWindowCommandTable.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -119,30 +119,55 @@
     <Compile Include="Helpers\VisibilityHelper.cs" />
     <Compile Include="Helpers\WpfHelper.cs" />
     <Compile Include="ICodeViewUserControl.cs" />
-    <Compile Include="Languages\CSS\Mappers\BaseMapper.cs" />
-    <Compile Include="Languages\CSS\Mappers\SyntaxMapper.cs" />
+    <Compile Include="Languages\CSharp\Mappers\BaseMapperCS.cs" />
+    <Compile Include="Languages\CSharp\Mappers\ClassMapperCS.cs" />
+    <Compile Include="Languages\CSharp\Mappers\DelegateEventMapperCS.cs" />
+    <Compile Include="Languages\CSharp\Mappers\EnumMapperCS.cs" />
+    <Compile Include="Languages\CSharp\Mappers\FieldMapperCS.cs" />
+    <Compile Include="Languages\CSharp\Mappers\IdMapperCS.cs" />
+    <Compile Include="Languages\CSharp\Mappers\InterfaceMapperCS.cs" />
+    <Compile Include="Languages\CSharp\Mappers\MethodMapperCS.cs" />
+    <Compile Include="Languages\CSharp\Mappers\NamespaceMapperCS.cs" />
+    <Compile Include="Languages\CSharp\Mappers\ParameterMapperCS.cs" />
+    <Compile Include="Languages\CSharp\Mappers\PropertyMapperCS.cs" />
+    <Compile Include="Languages\CSharp\Mappers\StatementMapperCS.cs" />
+    <Compile Include="Languages\CSharp\Mappers\StructMapperCS.cs" />
+    <Compile Include="Languages\CSharp\Mappers\SyntaxMapperCS.cs" />
+    <Compile Include="Languages\CSharp\Mappers\TooltipMapperCS.cs" />
+    <Compile Include="Languages\CSharp\Mappers\TypeMapperCS.cs" />
+    <Compile Include="Languages\CSS\Mappers\BaseMapperCSS.cs" />
+    <Compile Include="Languages\CSS\Mappers\SyntaxMapperCSS.cs" />
     <Compile Include="Languages\CSS\Models\CodeStyleRuleItem.cs" />
     <Compile Include="Languages\JS\Mappers\BaseMapperJS.cs" />
     <Compile Include="Languages\JS\Mappers\FunctionMapperJS.cs" />
+    <Compile Include="Languages\JS\Mappers\IdMapperJS.cs" />
     <Compile Include="Languages\JS\Mappers\SyntaxMapperJS.cs" />
+    <Compile Include="Languages\VisualBasic\Mappers\BaseMapperVB.cs" />
+    <Compile Include="Languages\VisualBasic\Mappers\DelegateEventMapperVB.cs" />
+    <Compile Include="Languages\VisualBasic\Mappers\EnumMapperVB.cs" />
+    <Compile Include="Languages\VisualBasic\Mappers\FieldMapperVB.cs" />
+    <Compile Include="Languages\VisualBasic\Mappers\IdMapperVB.cs" />
+    <Compile Include="Languages\VisualBasic\Mappers\InterfaceMapperVB.cs" />
+    <Compile Include="Languages\VisualBasic\Mappers\MethodMapperVB.cs" />
+    <Compile Include="Languages\VisualBasic\Mappers\SyntaxMapperVB.cs" />
+    <Compile Include="Languages\VisualBasic\Mappers\TooltipMapperVB.cs" />
+    <Compile Include="Languages\VisualBasic\Mappers\TypeMapperVB.cs" />
     <Compile Include="Mappers\BaseMapper.cs" />
-    <Compile Include="Mappers\ClassMapper.cs" />
-    <Compile Include="Mappers\DelegateEventMapper.cs" />
+    <Compile Include="Languages\VisualBasic\Mappers\ClassMapperVB.cs" />
     <Compile Include="Mappers\EnumMapper.cs" />
     <Compile Include="Mappers\FieldMapper.cs" />
     <Compile Include="Mappers\FontStyleMapper.cs" />
     <Compile Include="Mappers\IconMapper.cs" />
     <Compile Include="Mappers\IdMapper.cs" />
-    <Compile Include="Mappers\IndexerMapper.cs" />
+    <Compile Include="Languages\CSharp\Mappers\IndexerMapperCS.cs" />
     <Compile Include="Mappers\InterfaceMapper.cs" />
-    <Compile Include="Mappers\MethodMapper.cs" />
-    <Compile Include="Mappers\NamespaceMapper.cs" />
-    <Compile Include="Mappers\ParameterMapper.cs" />
-    <Compile Include="Mappers\PropertyMapper.cs" />
-    <Compile Include="Mappers\RecordMapper.cs" />
+    <Compile Include="Languages\VisualBasic\Mappers\NamespaceMapperVB.cs" />
+    <Compile Include="Languages\VisualBasic\Mappers\ParameterMapperVB.cs" />
+    <Compile Include="Languages\VisualBasic\Mappers\PropertyMapperVB.cs" />
+    <Compile Include="Languages\CSharp\Mappers\RecordMapperCS.cs" />
     <Compile Include="Mappers\RegionMapper.cs" />
-    <Compile Include="Mappers\StatementMapper.cs" />
-    <Compile Include="Mappers\StructMapper.cs" />
+    <Compile Include="Languages\VisualBasic\Mappers\StatementMapperVB.cs" />
+    <Compile Include="Languages\VisualBasic\Mappers\StructMapperVB.cs" />
     <Compile Include="Mappers\SyntaxMapper.cs" />
     <Compile Include="Mappers\TooltipMapper.cs" />
     <Compile Include="Mappers\TriviaSummaryMapper.cs" />

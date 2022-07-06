@@ -10,7 +10,7 @@ using Colors = System.Windows.Media.Colors;
 
 namespace CodeNav.Languages.CSS.Mappers
 {
-    public static class BaseMapper
+    public static class BaseMapperCSS
     {
         public static T MapBase<T>(Rule member, string id, ICodeViewUserControl control) where T : CodeItem
         {

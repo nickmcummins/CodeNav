@@ -103,7 +103,7 @@ namespace CodeNav.Languages.JS.Mappers
                 item.Kind = CodeItemKindEnum.Method;
                 item.Parameters = $"({string.Join(", ", parameters.Select(p => p.IdentifierStr))})";
                 item.Tooltip = TooltipMapper.Map(item.Access, string.Empty, item.Name, item.Parameters);
-                item.Id = IdMapper.MapId(item.FullName, parameters);
+                item.Id = IdMapperJS.MapId(item.FullName, parameters);
                 item.Moniker = IconMapper.MapMoniker(item.Kind, item.Access);
 
                 item.Members = children.Cast<CodeItem>().ToList();
@@ -116,7 +116,7 @@ namespace CodeNav.Languages.JS.Mappers
             functionItem.Kind = CodeItemKindEnum.Method;
             functionItem.Parameters = $"({string.Join(", ", parameters.Select(p => p.IdentifierStr))})";
             functionItem.Tooltip = TooltipMapper.Map(functionItem.Access, string.Empty, functionItem.Name, functionItem.Parameters);
-            functionItem.Id = IdMapper.MapId(functionItem.FullName, parameters);
+            functionItem.Id = IdMapperJS.MapId(functionItem.FullName, parameters);
             functionItem.Moniker = IconMapper.MapMoniker(functionItem.Kind, functionItem.Access);
 
             return new List<CodeItem> { functionItem };

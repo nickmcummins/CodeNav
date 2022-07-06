@@ -12,10 +12,9 @@ using Colors = System.Windows.Media.Colors;
 
 namespace CodeNav.Languages.CSS.Mappers
 {
-    public static class SyntaxMapper
+    public static class SyntaxMapperCSS
     {
-        public static List<CodeItem?> Map(Document document, ICodeViewUserControl control)
-            => Map(document.FilePath, control);
+        public static List<CodeItem?> Map(Document document, ICodeViewUserControl control) => Map(document.FilePath, control);
 
         public static List<CodeItem?> Map(string? filePath, ICodeViewUserControl control)
         {
@@ -73,7 +72,7 @@ namespace CodeNav.Languages.CSS.Mappers
 
         private static List<CodeItem> MapStyleRule(StyleRule styleRule, ICodeViewUserControl control)
         {
-            var item = BaseMapper.MapBase<CodeStyleRuleItem>(styleRule, styleRule.SelectorText, control);
+            var item = BaseMapperCSS.MapBase<CodeStyleRuleItem>(styleRule, styleRule.SelectorText, control);
 
             item.Kind = CodeItemKindEnum.StyleRule;
             item.Moniker = IconMapper.MapMoniker(item.Kind, item.Access);
@@ -83,7 +82,7 @@ namespace CodeNav.Languages.CSS.Mappers
 
         private static List<CodeItem> MapPageRule(Rule rule, ICodeViewUserControl control)
         {
-            var item = BaseMapper.MapBase<CodeStyleRuleItem>(rule, "page", control);
+            var item = BaseMapperCSS.MapBase<CodeStyleRuleItem>(rule, "page", control);
 
             item.Kind = CodeItemKindEnum.PageRule;
             item.Moniker = IconMapper.MapMoniker(item.Kind, item.Access);
@@ -98,7 +97,7 @@ namespace CodeNav.Languages.CSS.Mappers
                 return new List<CodeItem>();
             }
 
-            var item = BaseMapper.MapBase<CodeStyleRuleItem>(rule, namespaceRule.Prefix, control);
+            var item = BaseMapperCSS.MapBase<CodeStyleRuleItem>(rule, namespaceRule.Prefix, control);
 
             item.Kind = CodeItemKindEnum.NamespaceRule;
             item.Moniker = IconMapper.MapMoniker(item.Kind, item.Access);
@@ -113,7 +112,7 @@ namespace CodeNav.Languages.CSS.Mappers
                 return new List<CodeItem>();
             }
 
-            var item = BaseMapper.MapBase<CodeClassItem>(rule, mediaRule.Media.MediaText, control);
+            var item = BaseMapperCSS.MapBase<CodeClassItem>(rule, mediaRule.Media.MediaText, control);
 
             item.Kind = CodeItemKindEnum.MediaRule;
             item.Moniker = IconMapper.MapMoniker(item.Kind, item.Access);
@@ -130,7 +129,7 @@ namespace CodeNav.Languages.CSS.Mappers
                 return new List<CodeItem>();
             }
 
-            var item = BaseMapper.MapBase<CodeStyleRuleItem>(rule, $"{fontRule.Family} {fontRule.Weight}" , control);
+            var item = BaseMapperCSS.MapBase<CodeStyleRuleItem>(rule, $"{fontRule.Family} {fontRule.Weight}" , control);
 
             item.Kind = CodeItemKindEnum.FontFaceRule;
             item.Moniker = IconMapper.MapMoniker(item.Kind, item.Access);

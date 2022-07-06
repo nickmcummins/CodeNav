@@ -2,40 +2,32 @@
 using CodeNav.Models;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Text;
 using System;
 using System.Linq;
 using System.Windows.Media;
 using VisualBasic = Microsoft.CodeAnalysis.VisualBasic;
-using VisualBasicSyntax = Microsoft.CodeAnalysis.VisualBasic.Syntax;
 
 namespace CodeNav.Mappers
 {
-    public static class BaseMapper
+    public class BaseMapper
     {
-        public static T MapBase<T>(SyntaxNode source, SyntaxToken identifier, SyntaxTokenList modifiers,
-            ICodeViewUserControl control, SemanticModel semanticModel) where T : CodeItem
-            => MapBase<T>(source, identifier.Text, modifiers, control, semanticModel);
+        public static T MapBase<T>(SyntaxNode source, SyntaxToken identifier, SyntaxTokenList modifiers, ICodeViewUserControl control, SemanticModel semanticModel) where T : CodeItem
+        {
+            return MapBase<T>(source, identifier.Text, modifiers, control, semanticModel);
+        }
 
-        public static T MapBase<T>(SyntaxNode source, NameSyntax name,
-            ICodeViewUserControl control, SemanticModel semanticModel) where T : CodeItem
-            => MapBase<T>(source, name.ToString(), new SyntaxTokenList(), control, semanticModel);
+        public static T MapBase<T>(SyntaxNode source, string name, ICodeViewUserControl control, SemanticModel semanticModel) where T : CodeItem
+        {
+            return MapBase<T>(source, name, new SyntaxTokenList(), control, semanticModel);
+        }
 
-        public static T MapBase<T>(SyntaxNode source, VisualBasicSyntax.NameSyntax name,
-            ICodeViewUserControl control, SemanticModel semanticModel) where T : CodeItem
-            => MapBase<T>(source, name.ToString(), new SyntaxTokenList(), control, semanticModel);
+        public static T MapBase<T>(SyntaxNode source, SyntaxToken identifier, ICodeViewUserControl control, SemanticModel semanticModel) where T : CodeItem
+        {
+            return MapBase<T>(source, identifier.Text, new SyntaxTokenList(), control, semanticModel);
+        }
 
-        public static T MapBase<T>(SyntaxNode source, string name,
-            ICodeViewUserControl control, SemanticModel semanticModel) where T : CodeItem
-            => MapBase<T>(source, name, new SyntaxTokenList(), control, semanticModel);
-
-        public static T MapBase<T>(SyntaxNode source, SyntaxToken identifier,
-            ICodeViewUserControl control, SemanticModel semanticModel) where T : CodeItem
-            => MapBase<T>(source, identifier.Text, new SyntaxTokenList(), control, semanticModel);
-
-        private static T MapBase<T>(SyntaxNode source, string name, SyntaxTokenList modifiers,
-            ICodeViewUserControl control, SemanticModel semanticModel) where T : CodeItem
+        protected static T MapBase<T>(SyntaxNode source, string name, SyntaxTokenList modifiers, ICodeViewUserControl control, SemanticModel semanticModel) where T : CodeItem
         {
             var element = Activator.CreateInstance<T>();
 
@@ -73,17 +65,13 @@ namespace CodeNav.Mappers
             }
         }
 
-        private static LinePosition GetStartLinePosition(SyntaxNode source) =>
-            source.SyntaxTree.GetLineSpan(source.Span).StartLinePosition;
+        private static LinePosition GetStartLinePosition(SyntaxNode source) => source.SyntaxTree.GetLineSpan(source.Span).StartLinePosition;
 
-        private static LinePosition GetEndLinePosition(SyntaxNode source) =>
-            source.SyntaxTree.GetLineSpan(source.Span).EndLinePosition;
+        private static LinePosition GetEndLinePosition(SyntaxNode source) => source.SyntaxTree.GetLineSpan(source.Span).EndLinePosition;
 
-        private static int GetStartLine(SyntaxNode source) =>
-            source.SyntaxTree.GetLineSpan(source.Span).StartLinePosition.Line + 1;
+        private static int GetStartLine(SyntaxNode source) => source.SyntaxTree.GetLineSpan(source.Span).StartLinePosition.Line + 1;
 
-        private static int GetEndLine(SyntaxNode source) =>
-            source.SyntaxTree.GetLineSpan(source.Span).EndLinePosition.Line + 1;
+        private static int GetEndLine(SyntaxNode source) => source.SyntaxTree.GetLineSpan(source.Span).EndLinePosition.Line + 1;
 
         private static CodeItemAccessEnum MapAccess(SyntaxTokenList modifiers, SyntaxNode source)
         {
@@ -113,17 +101,6 @@ namespace CodeNav.Mappers
                 return CodeItemAccessEnum.Internal;
             }
 
-            return MapDefaultAccess(source);
-        }
-
-        /// <summary>
-        /// When no access modifier is given map to the default access modifier
-        /// https://stackoverflow.com/questions/2521459/what-are-the-default-access-modifiers-in-c
-        /// </summary>
-        /// <param name="source"></param>
-        /// <returns></returns>
-        private static CodeItemAccessEnum MapDefaultAccess(SyntaxNode source)
-        {
             if (source.Parent.IsKind(SyntaxKind.CompilationUnit))
             {
                 switch (source.Kind())
@@ -148,6 +125,5 @@ namespace CodeNav.Mappers
                 }
             }
         }
-
     }
 }

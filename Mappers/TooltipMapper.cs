@@ -1,24 +1,11 @@
-﻿using System.Linq;
-using CodeNav.Models;
+﻿using CodeNav.Models;
 using Microsoft.CodeAnalysis;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
-using VisualBasicSyntax = Microsoft.CodeAnalysis.VisualBasic.Syntax;
+using System.Linq;
 
 namespace CodeNav.Mappers
 {
-    public static class TooltipMapper
+    public class TooltipMapper
     {
-        public static string Map(CodeItemAccessEnum access, string type, string name, ParameterListSyntax parameters)
-        {
-            return Map(access, type, name, ParameterMapper.MapParameters(parameters, true));
-        }
-
-        public static string Map(CodeItemAccessEnum access, string type, string name, 
-            VisualBasicSyntax.ParameterListSyntax parameters, SemanticModel semanticModel)
-        {
-            return Map(access, type, name, ParameterMapper.MapParameters(parameters, semanticModel, true));
-        }
-
         public static string Map(CodeItemAccessEnum access, string type, string name, string extra)
         {
             var accessString = access == CodeItemAccessEnum.Unknown ? string.Empty : access.ToString();

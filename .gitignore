@@ -19,3 +19,5 @@
 /CodeNav.VS2022/bin
 /CodeNav.VS2022/*.user
 /CodeNav.VS2019/*.user
+/bin
+/obj

@@ -19,27 +19,12 @@ namespace CodeNav.Models
         public List<CodeItem> Members { get; set; }
 
         public string Parameters { get; set; } = string.Empty;
-
         private Color _borderColor;
-        public Color BorderColor
-        {
-            get
-            {
-                return _borderColor;
-            }
-            set
-            {
-                SetProperty(ref _borderColor, value);
-                NotifyPropertyChanged("BorderBrush");
-            }
+        public Color BorderColor {
+            get { return _borderColor; }
+            set { SetProperty(ref _borderColor, value); NotifyPropertyChanged("BorderBrush");}
         }
-        public SolidColorBrush BorderBrush
-        {
-            get
-            {
-                return ColorHelper.ToBrush(_borderColor);
-            }
-        }
+        public SolidColorBrush BorderBrush => ColorHelper.ToBrush(_borderColor);
 
         public event EventHandler? IsExpandedChanged;
         private bool _isExpanded;
@@ -60,14 +45,6 @@ namespace CodeNav.Models
 		/// Do we have any members that are not null and should be visible?
 		/// If we don't hide the expander +/- symbol and the header border
 		/// </summary>
-		public Visibility HasMembersVisibility
-        {
-            get
-            {
-                return Members.Any(m => m != null && m.IsVisible == Visibility.Visible) 
-                    ? Visibility.Visible 
-                    : Visibility.Collapsed;
-            }
-        }
+		public Visibility HasMembersVisibility => Members.Any(m => m != null && m.IsVisible == Visibility.Visible) ? Visibility.Visible : Visibility.Collapsed;
     }
 }

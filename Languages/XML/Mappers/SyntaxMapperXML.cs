@@ -39,20 +39,10 @@ namespace CodeNav.Languages.XML.Mappers
                 new CodeNamespaceItem
                 {
                     Id = $"Namespace{filePath}",
+                    Name = Path.GetFileNameWithoutExtension(filePath),
+                    FullName = Path.GetFileNameWithoutExtension(filePath),
                     Kind = CodeItemKindEnum.Namespace,
-                    Members = new List<CodeItem>
-                    {
-                        new CodeClassItem
-                        {
-                            Id = filePath!,
-                            Kind = CodeItemKindEnum.Class,
-                            Access = CodeItemAccessEnum.Public,
-                            Moniker = IconMapper.MapMoniker(CodeItemKindEnum.Class, CodeItemAccessEnum.Public),
-                            Name = Path.GetFileNameWithoutExtension(filePath),
-                            BorderColor = Colors.DarkGray,
-                            Members = MapMembers(xmlString, xmlTree, control)
-                        }
-                    }
+                    Members = MapMembers(xmlString, xmlTree, control)
                 }
             };
         }

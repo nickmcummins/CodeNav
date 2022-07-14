@@ -2,6 +2,7 @@
 using Microsoft.VisualStudio.Imaging;
 using Microsoft.VisualStudio.Imaging.Interop;
 using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 
@@ -9,6 +10,8 @@ namespace CodeNav.Mappers
 {
     public static class IconMapper
     {
+        public static readonly IDictionary<string, ImageMoniker> MonikersByName = typeof(KnownMonikers).GetProperties().ToDictionary(m => m.Name, m => (ImageMoniker)m.GetValue(null, null));
+
         public static ImageMoniker MapMoniker(CodeItemKindEnum kind, CodeItemAccessEnum access)
         {
             string monikerString;
@@ -81,15 +84,8 @@ namespace CodeNav.Mappers
                     break;
             }
 
-            var monikers = typeof(KnownMonikers).GetProperties();
+            return MonikersByName.TryGetValue(monikerString, out var moniker) ? moniker : KnownMonikers.QuestionMark;
 
-            var imageMoniker = monikers.FirstOrDefault(m => monikerString.Equals(m.Name))?.GetValue(null, null);
-            if (imageMoniker != null)
-            {
-                return (ImageMoniker)imageMoniker;
-            }
-
-            return KnownMonikers.QuestionMark;
         }
 
         private static string GetEnumDescription(this Enum value)

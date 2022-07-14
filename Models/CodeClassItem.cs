@@ -46,5 +46,16 @@ namespace CodeNav.Models
 		/// If we don't hide the expander +/- symbol and the header border
 		/// </summary>
 		public Visibility HasMembersVisibility => Members.Any(m => m != null && m.IsVisible == Visibility.Visible) ? Visibility.Visible : Visibility.Collapsed;
+
+        public override string ToString()
+        {
+            var ss = new List<string>(Members.Count + 1);
+            ss.Add($"ClassItem(name={Name},kind={Kind},startLine={StartLine.GetValueOrDefault()},endLine={EndLine.GetValueOrDefault()})");
+            foreach (var member in Members)
+            {
+                ss.Add($"{member}");
+            }
+            return string.Join("\n", ss);
+        }
     }
 }

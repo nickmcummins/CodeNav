@@ -1,22 +1,23 @@
 ﻿#nullable enable
 
-using System;
-using System.Collections.Generic;
-using System.IO;
+using CodeNav.Helpers;
+using CodeNav.Languages.CSharp.Mappers;
+using CodeNav.Languages.CSS.Mappers;
+using CodeNav.Languages.JS.Mappers;
+using CodeNav.Languages.VisualBasic.Mappers;
+using CodeNav.Languages.XML.Mappers;
 using CodeNav.Models;
+using CodeNav.Shared.Helpers;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
+using System;
+using System.Collections.Generic;
+using System.IO;
 using System.Linq;
-using CodeNav.Helpers;
+using System.Threading.Tasks;
 using VisualBasic = Microsoft.CodeAnalysis.VisualBasic;
 using VisualBasicSyntax = Microsoft.CodeAnalysis.VisualBasic.Syntax;
-using System.Threading.Tasks;
-using CodeNav.Shared.Helpers;
-using CodeNav.Languages.JS.Mappers;
-using CodeNav.Languages.CSharp.Mappers;
-using CodeNav.Languages.VisualBasic.Mappers;
-using CodeNav.Languages.CSS.Mappers;
 
 namespace CodeNav.Mappers
 {
@@ -61,16 +62,20 @@ namespace CodeNav.Mappers
                 return new List<CodeItem?>();
             }
 
+            var fileExtension = Path.GetExtension(codeAnalysisDocument.FilePath);
             if (Path.GetExtension(codeAnalysisDocument.FilePath).Equals(".js"))
             {
                 return SyntaxMapperJS.Map(codeAnalysisDocument, control);
             }
 
-            if (Path.GetExtension(codeAnalysisDocument.FilePath) == ".css")
+            if (fileExtension == ".css")
             {
                 return SyntaxMapperCSS.Map(codeAnalysisDocument, control);
             }
-
+            if (fileExtension == ".xml" || fileExtension == ".csproj")
+            {
+                return SyntaxMapperXML.Map(codeAnalysisDocument.FilePath, control);
+            }
             var tree = await codeAnalysisDocument.GetSyntaxTreeAsync();
 
             if (tree == null)
@@ -133,6 +138,10 @@ namespace CodeNav.Mappers
             else if (fileExtension == ".css")
             {
                 return SyntaxMapperCSS.Map(filePath, control);
+            }
+            else if (fileExtension == ".xml" || fileExtension == ".csproj")
+            {
+                return SyntaxMapperXML.Map(filePath, control);
             }
             else if (fileExtension == ".cs")
             {

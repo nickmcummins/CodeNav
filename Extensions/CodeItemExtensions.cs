@@ -3,6 +3,7 @@
 using CodeNav.Models;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 
 namespace CodeNav.Extensions
 {
@@ -58,6 +59,13 @@ namespace CodeNav.Extensions
             }
 
             items.Add(item);
+        }
+
+        public static string Times(this string str, int num)
+        {
+            var strNumTimes = new StringBuilder();
+            for (var i = 0; i < num; i++) { strNumTimes.Append(str); }
+            return strNumTimes.ToString();
         }
     }
 }

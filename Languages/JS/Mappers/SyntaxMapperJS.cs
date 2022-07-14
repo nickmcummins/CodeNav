@@ -16,8 +16,7 @@ namespace CodeNav.Languages.JS.Mappers
     {
         private static ICodeViewUserControl? _control;
 
-        public static List<CodeItem?> Map(Document document, ICodeViewUserControl control)
-            => Map(document.FilePath, control);
+        public static List<CodeItem?> Map(Document document, ICodeViewUserControl control) => Map(document.FilePath, control);
 
         public static List<CodeItem?> Map(string? filePath, ICodeViewUserControl control)
         {

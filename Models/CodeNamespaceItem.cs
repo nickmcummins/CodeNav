@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Windows;
-using System.Windows.Controls;
 
 namespace CodeNav.Models
 {
@@ -12,13 +11,17 @@ namespace CodeNav.Models
         }
 
         public Visibility IgnoreVisibility { get; set; }
+        public Visibility NotIgnoreVisibility => IgnoreVisibility == Visibility.Visible ? Visibility.Collapsed : Visibility.Visible;
 
-        public Visibility NotIgnoreVisibility
+        public override string ToString()
         {
-            get
+            var ss = new List<string>(Members.Count + 1);
+            ss.Add($"NamespaceItem(name={Name},startLine={StartLine.GetValueOrDefault()},endLine={EndLine.GetValueOrDefault()})");
+            foreach (var member in Members)
             {
-                return IgnoreVisibility == Visibility.Visible ? Visibility.Collapsed : Visibility.Visible;
+                ss.Add($"    {member}");
             }
+            return string.Join("\n", ss);
         }
     }
 }

@@ -94,6 +94,7 @@
       <DependentUpon>CodeViewUserControlTop.xaml</DependentUpon>
     </Compile>
     <Compile Include="Comparers\CodeItemComparer.cs" />
+    <Compile Include="Constants.cs" />
     <Compile Include="Controls\FilterToolbar.xaml.cs">
       <DependentUpon>FilterToolbar.xaml</DependentUpon>
     </Compile>
@@ -152,6 +153,10 @@
     <Compile Include="Languages\VisualBasic\Mappers\SyntaxMapperVB.cs" />
     <Compile Include="Languages\VisualBasic\Mappers\TooltipMapperVB.cs" />
     <Compile Include="Languages\VisualBasic\Mappers\TypeMapperVB.cs" />
+    <Compile Include="Languages\XML\Mappers\BaseMapperXML.cs" />
+    <Compile Include="Languages\XML\Mappers\SyntaxMapperXML.cs" />
+    <Compile Include="Languages\XML\Models\XmlElementItem.cs" />
+    <Compile Include="Languages\XML\Models\XmlElementLeafItem.cs" />
     <Compile Include="Mappers\BaseMapper.cs" />
     <Compile Include="Languages\VisualBasic\Mappers\ClassMapperVB.cs" />
     <Compile Include="Mappers\EnumMapper.cs" />
@@ -365,6 +370,9 @@
     </PackageReference>
     <PackageReference Include="ExCSS">
       <Version>4.1.3</Version>
+    </PackageReference>
+    <PackageReference Include="GuiLabs.Language.Xml">
+      <Version>[1.2.58]</Version>
     </PackageReference>
     <PackageReference Include="Microsoft.ApplicationInsights">
       <Version>2.21.0-beta2</Version>

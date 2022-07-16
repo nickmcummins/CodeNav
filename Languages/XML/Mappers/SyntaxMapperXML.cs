@@ -14,6 +14,7 @@ using System.Windows.Media;
 using static CodeNav.Languages.XML.Mappers.BaseMapperXML;
 using Colors = System.Windows.Media.Colors;
 using static CodeNav.Constants;
+using System.Xml;
 
 namespace CodeNav.Languages.XML.Mappers
 {
@@ -69,11 +70,16 @@ namespace CodeNav.Languages.XML.Mappers
 
         public static List<CodeItem> MapElement(string sourceString, XmlElementSyntax xmlElement, int depth, ICodeViewUserControl? control)
         {
-            CodeItem element = xmlElement.Elements.Any() ? new XmlElementItem() : new XmlElementLeafItem();
+            var element = new XmlElementItem();
             element.Kind = CodeItemKindEnum.Property;
             element.Name = GetFullName(xmlElement);
             element.FullName = element.Name;
             element.Id = element.Name;
+            var textChildren = xmlElement.ChildNodes.Where(node => node.Kind == SyntaxKind.XmlText);
+            if (textChildren.Any())
+            {
+                element.Parameters = ((XmlTextSyntax)textChildren.FirstOrDefault()).Value;
+            }
             element.Tooltip = element.Name;
             element.StartLine = GetLineNumber(sourceString, xmlElement.FullSpan.Start);
             element.EndLine = GetLineNumber(sourceString, xmlElement.FullSpan.End);
@@ -89,20 +95,36 @@ namespace CodeNav.Languages.XML.Mappers
             element.Kind = CodeItemKindEnum.Property;
 
             var members = xmlElement.Elements.SelectMany(child => MapMember(sourceString, child, depth + 1, control));
-            if (xmlElement.Elements.Any())
-            {
-                ((XmlElementItem)element).BorderColor = Colors.DarkGray;
-                ((XmlElementItem)element).Members = members.ToList();
-                ((XmlElementItem)element).Depth = depth;
-            }
+            element.BorderColor = Colors.DarkGray;
+            element.Members = members.ToList();
+            element.Depth = depth;
+            
 
             return new List<CodeItem>() {  element };
         }
 
         public static List<CodeItem> MapEmptyElement(string sourceString, XmlEmptyElementSyntax xmlEmptyElement, int depth, ICodeViewUserControl? control)
         {
-            var emptyElementItem = new XmlElementItem();
-            return new List<CodeItem>() { emptyElementItem };
+            var elementWithNoChildren = new XmlElementLeafItem();
+            elementWithNoChildren.Kind = CodeItemKindEnum.Property;
+            elementWithNoChildren.Name = GetFullName(xmlEmptyElement);
+            elementWithNoChildren.FullName = elementWithNoChildren.Name;
+            elementWithNoChildren.Id = elementWithNoChildren.Name;
+            elementWithNoChildren.Tooltip = elementWithNoChildren.Name;
+            elementWithNoChildren.StartLine = GetLineNumber(sourceString, xmlEmptyElement.FullSpan.Start);
+            elementWithNoChildren.EndLine = GetLineNumber(sourceString, xmlEmptyElement.FullSpan.End);
+            elementWithNoChildren.Access = CodeItemAccessEnum.Public;
+            elementWithNoChildren.Control = control;
+            elementWithNoChildren.Span = new Microsoft.CodeAnalysis.Text.TextSpan(xmlEmptyElement.Span.Start, xmlEmptyElement.Span.End - xmlEmptyElement.Span.Start);
+            elementWithNoChildren.Moniker = KnownMonikers.XMLElement;
+            elementWithNoChildren.FontSize = SettingsHelper.Font.SizeInPoints;
+            elementWithNoChildren.ParameterFontSize = SettingsHelper.Font.SizeInPoints - 1;
+            elementWithNoChildren.FontFamily = new FontFamily(SettingsHelper.Font.FontFamily.Name);
+            elementWithNoChildren.FontStyle = FontStyleMapper.Map(SettingsHelper.Font.Style);
+            elementWithNoChildren.FilePath = control?.CodeDocumentViewModel.FilePath ?? string.Empty;
+            elementWithNoChildren.Kind = CodeItemKindEnum.Property;
+            
+            return new List<CodeItem>() { elementWithNoChildren };
         }
     }
 }

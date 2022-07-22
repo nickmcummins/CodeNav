@@ -2,22 +2,19 @@
 using CodeNav.Mappers;
 using CodeNav.Models;
 using Microsoft.Language.Xml;
-using Microsoft.VisualStudio.Imaging;
 using System;
 using System.Linq;
 using System.Windows.Media;
-using System.Xml;
 using static CodeNav.Constants;
 
 namespace CodeNav.Languages.XML.Mappers
 {
     public static class BaseMapperXML
     {
-        public static T MapBase<T>(string sourceString, XmlElementSyntax xmlElement, ICodeViewUserControl? control) where T : CodeItem
+        public static T MapBase<T>(string sourceString, SyntaxNode xmlElement, ICodeViewUserControl? control) where T : CodeItem
         {
             var element = Activator.CreateInstance<T>();
-
-            element.Name = GetFullName(xmlElement);
+            element.Name = GetFullName((IXmlElement)xmlElement);
             element.FullName = element.Name;
             element.Id = element.Name;
             element.Tooltip = element.Name;
@@ -26,21 +23,15 @@ namespace CodeNav.Languages.XML.Mappers
             element.EndLine = GetLineNumber(sourceString, xmlElement.Span.End);
             element.EndLinePosition = new Microsoft.CodeAnalysis.Text.LinePosition(element.EndLine.GetValueOrDefault(), 0);
             element.ForegroundColor = Colors.Black;
-
             element.Access = CodeItemAccessEnum.Public;
             element.Control = control;
             element.Span = new Microsoft.CodeAnalysis.Text.TextSpan(xmlElement.Span.Start, xmlElement.Span.End - xmlElement.Span.Start);
-            element.Moniker = KnownMonikers.XMLElement;
             element.FontSize = SettingsHelper.Font.SizeInPoints;
             element.ParameterFontSize = SettingsHelper.Font.SizeInPoints - 1;
             element.FontFamily = new FontFamily(SettingsHelper.Font.FontFamily.Name);
             element.FontStyle = FontStyleMapper.Map(SettingsHelper.Font.Style);
-            element.Kind = CodeItemKindEnum.Property;
-
-            element.FilePath = control?.CodeDocumentViewModel.FilePath ?? string.Empty;
 
             return element;
-
         }
 
         public static string GetFullName(IXmlElement xmlElement)

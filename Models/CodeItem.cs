@@ -20,6 +20,8 @@ namespace CodeNav.Models
     [DataContract]
     public class CodeItem : ObservableObject
     {
+        public static List<CodeItem?> EmptyList = Enumerable.Empty<CodeItem?>().ToList();
+
         public string Name { get; set; } = string.Empty;
 
         public LinePosition? StartLinePosition { get; set; }

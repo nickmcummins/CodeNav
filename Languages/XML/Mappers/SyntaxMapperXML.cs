@@ -7,7 +7,6 @@ using Microsoft.VisualStudio.Imaging;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using static CodeNav.Constants;
 using Colors = System.Windows.Media.Colors;
 
 namespace CodeNav.Languages.XML.Mappers
@@ -15,6 +14,7 @@ namespace CodeNav.Languages.XML.Mappers
     public static class SyntaxMapperXML
     {
         private static ICodeViewUserControl? _control;
+
         public static List<CodeItem?> Map(Document document, ICodeViewUserControl control) => Map(document.FilePath, control);
 
         public static List<CodeItem?> Map(string? filePath, ICodeViewUserControl control)
@@ -74,7 +74,7 @@ namespace CodeNav.Languages.XML.Mappers
             var textChildren = xmlElement.ChildNodes.Where(node => node.Kind == SyntaxKind.XmlText);
             if (textChildren.Any())
             {
-                element.Parameters = ((XmlTextSyntax)textChildren.FirstOrDefault()).Value;
+                element.Parameters = ((XmlTextSyntax)textChildren.FirstOrDefault()).Value.Trim();
             }
 
             var members = xmlElement.Elements.SelectMany(child => MapMember(sourceString, child, depth + 1, control));

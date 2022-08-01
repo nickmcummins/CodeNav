@@ -1,9 +1,13 @@
 ﻿#nullable enable
 
 using CodeNav.Models;
+using Microsoft.CodeAnalysis.Text;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using YamlDotNet.Core;
+using YamlDotNet.RepresentationModel;
+using YamlElement = System.ValueTuple<YamlDotNet.RepresentationModel.YamlNode, YamlDotNet.RepresentationModel.YamlNode, int>;
 
 namespace CodeNav.Extensions
 {
@@ -66,6 +70,23 @@ namespace CodeNav.Extensions
             var strNumTimes = new StringBuilder();
             for (var i = 0; i < num; i++) { strNumTimes.Append(str); }
             return strNumTimes.ToString();
+        }
+
+        public static Mark Start(this YamlElement yamlElement)
+        {
+            var (key, value, _) = yamlElement;
+            return key.Start;
+        }
+
+        public static Mark End(this YamlElement yamlElement)
+        {
+            var (key, value, _) = yamlElement;
+            return value.End;
+        }
+
+        public static LinePosition StartLinePosition(this YamlElement yamlElement)
+        {
+            return new LinePosition(yamlElement.Start().Line, yamlElement.Start().Column);
         }
     }
 }

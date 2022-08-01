@@ -6,6 +6,7 @@ using CodeNav.Languages.CSS.Mappers;
 using CodeNav.Languages.JS.Mappers;
 using CodeNav.Languages.VisualBasic.Mappers;
 using CodeNav.Languages.XML.Mappers;
+using CodeNav.Languages.YAML.Mappers;
 using CodeNav.Models;
 using CodeNav.Shared.Helpers;
 using Microsoft.CodeAnalysis;
@@ -142,6 +143,10 @@ namespace CodeNav.Mappers
             else if (fileExtension == ".xml" || fileExtension == ".csproj")
             {
                 return SyntaxMapperXML.Map(filePath, control);
+            }
+            else if (fileExtension == ".yaml" || fileExtension == ".yml")
+            {
+                return SyntaxMapperYAML.Map(filePath, control);
             }
             else if (fileExtension == ".cs")
             {

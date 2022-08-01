@@ -3,12 +3,13 @@ using CodeNav.Helpers;
 using CodeNav.Mappers;
 using CodeNav.Models;
 using Microsoft.CodeAnalysis;
+using System.Linq;
 using System.Windows.Media;
 using VisualBasicSyntax = Microsoft.CodeAnalysis.VisualBasic.Syntax;
 
 namespace CodeNav.Languages.VisualBasic.Mappers
 {
-    public class EnumMapperVB : EnumMapper
+    public class EnumMapperVB
     {
         public static CodeItem? MapEnumMember(VisualBasicSyntax.EnumMemberDeclarationSyntax? member, ICodeViewUserControl control, SemanticModel semanticModel)
         {
@@ -49,6 +50,12 @@ namespace CodeNav.Languages.VisualBasic.Mappers
             }
 
             return item;
+        }
+
+        private static string MapMembersToString(SyntaxList<VisualBasicSyntax.StatementSyntax> members)
+        {
+            var memberList = (from VisualBasicSyntax.EnumMemberDeclarationSyntax member in members select member.Identifier.Text).ToList();
+            return $"{string.Join(", ", memberList)}";
         }
     }
 }

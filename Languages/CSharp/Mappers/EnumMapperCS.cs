@@ -4,11 +4,12 @@ using CodeNav.Mappers;
 using CodeNav.Models;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
+using System.Linq;
 using System.Windows.Media;
 
 namespace CodeNav.Languages.CSharp.Mappers
 {
-    public class EnumMapperCS : EnumMapper
+    public class EnumMapperCS
     {
         public static CodeItem? MapEnumMember(EnumMemberDeclarationSyntax? member, ICodeViewUserControl control, SemanticModel semanticModel)
         {
@@ -49,6 +50,12 @@ namespace CodeNav.Languages.CSharp.Mappers
             }
 
             return item;
+        }
+
+        private static string MapMembersToString(SeparatedSyntaxList<EnumMemberDeclarationSyntax> members)
+        {
+            var memberList = (from EnumMemberDeclarationSyntax member in members select member.Identifier.Text).ToList();
+            return $"{string.Join(", ", memberList)}";
         }
     }
 }

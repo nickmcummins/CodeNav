@@ -16,14 +16,14 @@ namespace CodeNav.Languages.CSS.Mappers
     {
         public static List<CodeItem?> Map(Document document, ICodeViewUserControl control) => Map(document.FilePath, control);
 
-        public static List<CodeItem?> Map(string? filePath, ICodeViewUserControl control)
+        public static List<CodeItem?> Map(string? filePath, ICodeViewUserControl control, string? text = null)
         {
             if (!File.Exists(filePath))
             {
                 return new List<CodeItem?>();
             }
 
-            var text = File.ReadAllText(filePath);
+            text ??= File.ReadAllText(filePath);
 
             var ast = new StylesheetParser().Parse(text);
 

@@ -136,43 +136,23 @@ namespace CodeNav.Mappers
             switch (fileExtension.ToLower())
             {
                 case ".js":
-                    return SyntaxMapperJS.Map(filePath, control);
+                    return SyntaxMapperJS.Map(filePath, control, text);
                 case ".json":
-                    return SyntaxMapperJSON.Map(filePath, control);
+                    return SyntaxMapperJSON.Map(filePath, control, text);
                 case ".css":
-                    return SyntaxMapperCSS.Map(filePath, control);
+                    return SyntaxMapperCSS.Map(filePath, control, text);
                 case ".xml":
                 case ".csproj":
-                    return SyntaxMapperXML.Map(filePath, control);
+                case ".config":
+                case ".xaml":
+                    return SyntaxMapperXML.Map(filePath, control, text);
                 case ".yaml":
                 case ".yml":
-                    return SyntaxMapperYAML.Map(filePath, control);
+                    return SyntaxMapperYAML.Map(filePath, control, text);
                 case ".cs":
-                    {
-                        var tree = CSharpSyntaxTree.ParseText(text);
-                        var semanticModel = SyntaxHelper.GetCSharpSemanticModel(tree);
-                        var root = (CompilationUnitSyntax)await tree.GetRootAsync();
-
-                        if (semanticModel == null)
-                        {
-                            return new List<CodeItem?>();
-                        }
-
-                        return root.Members.Select(member => SyntaxMapperCS.MapMember(member, tree, semanticModel, control)).ToList();
-                    }
+                    return SyntaxMapperCS.Map(text, control);
                 case ".vb":
-                {
-                    var tree = VisualBasic.VisualBasicSyntaxTree.ParseText(text);
-                    var semanticModel = SyntaxHelper.GetVBSemanticModel(tree);
-                    var root = (VisualBasicSyntax.CompilationUnitSyntax)await tree.GetRootAsync();
-
-                    if (semanticModel == null)
-                    {
-                        return new List<CodeItem?>();
-                    }
-
-                    return root.Members.Select(member => SyntaxMapperVB.MapMember(member, tree, semanticModel, control)).ToList();
-                }
+                    return SyntaxMapperVB.Map(text, control);
                 default: 
                     return CodeItem.EmptyList;
             }

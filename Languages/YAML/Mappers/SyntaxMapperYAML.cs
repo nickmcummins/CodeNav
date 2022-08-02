@@ -21,11 +21,11 @@ namespace CodeNav.Languages.YAML.Mappers
     {
         private static ICodeViewUserControl? _control;
 
-        public static List<CodeItem?> Map(string filePath, ICodeViewUserControl control)
+        public static List<CodeItem?> Map(string filePath, ICodeViewUserControl control, string? yamlString = null)
         {
             _control = control;
 
-            var yamlString = File.ReadAllText(filePath);
+            yamlString ??= File.ReadAllText(filePath);
 
             var stream = new YamlStream();
             stream.Load(ParserForText(yamlString));
@@ -40,6 +40,7 @@ namespace CodeNav.Languages.YAML.Mappers
                     FullName = Path.GetFileName(filePath),
                     Parameters = filePath,
                     Kind = CodeItemKindEnum.Namespace,
+                    Moniker = KnownMonikers.YamlFile,
                     BorderColor = Colors.DarkGray,
                     ParameterFontSize = SettingsHelper.Font.SizeInPoints - 1,
                     Members = ((YamlMappingNode)yamlDocument.RootNode).Children.SelectMany(child => MapMember((child.Key, child.Value, 0))).ToList()

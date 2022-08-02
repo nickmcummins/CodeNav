@@ -1,4 +1,5 @@
-﻿using CodeNav.Languages.XML.Models;
+﻿using CodeNav.Helpers;
+using CodeNav.Languages.XML.Models;
 using CodeNav.Models;
 using ExCSS;
 using Microsoft.CodeAnalysis;
@@ -17,7 +18,7 @@ namespace CodeNav.Languages.XML.Mappers
 
         public static List<CodeItem?> Map(Document document, ICodeViewUserControl control) => Map(document.FilePath, control);
 
-        public static List<CodeItem?> Map(string? filePath, ICodeViewUserControl control)
+        public static List<CodeItem?> Map(string? filePath, ICodeViewUserControl control, string? xmlString = null)
         {
             _control = control;
             if (string.IsNullOrWhiteSpace(filePath) || !File.Exists(filePath)) 
@@ -25,7 +26,7 @@ namespace CodeNav.Languages.XML.Mappers
                 return CodeItem.EmptyList;
             }
 
-            var xmlString = File.ReadAllText(filePath);
+            xmlString ??= File.ReadAllText(filePath);
 
             var xmlTree = Parser.ParseText(xmlString);
 
@@ -34,10 +35,13 @@ namespace CodeNav.Languages.XML.Mappers
                 new CodeNamespaceItem
                 {
                     Id = $"Namespace{filePath}",
-                    Name = Path.GetFileNameWithoutExtension(filePath),
-                    FullName = Path.GetFileNameWithoutExtension(filePath),
+                    Name = Path.GetFileName(filePath),
+                    FullName = Path.GetFileName(filePath),
+                    Parameters = filePath,
                     Kind = CodeItemKindEnum.Namespace,
-                    BorderColor = Colors.DarkGray,
+                    Moniker = KnownMonikers.XMLFile,
+                    BorderColor = Colors.DarkGray, 
+                    ParameterFontSize = SettingsHelper.Font.SizeInPoints - 1,
                     Members = MapMembers(xmlString, xmlTree, control)
                 }
             };

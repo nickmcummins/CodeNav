@@ -1,5 +1,6 @@
 ﻿using CodeNav.Mappers;
 using CodeNav.Models;
+using CodeNav.Shared.Helpers;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
@@ -25,6 +26,20 @@ namespace CodeNav.Languages.CSharp.Mappers
             var semanticModel = compilation.GetSemanticModel(tree);
 
             var root = (CompilationUnitSyntax)tree.GetRoot(); //
+
+            return root.Members.Select(member => MapMember(member, tree, semanticModel, control)).ToList();
+        }
+
+        public static List<CodeItem?> Map(string text, ICodeViewUserControl control)
+        {
+            var tree = CSharpSyntaxTree.ParseText(text);
+            var semanticModel = SyntaxHelper.GetCSharpSemanticModel(tree);
+            var root = (CompilationUnitSyntax)tree.GetRoot();
+
+            if (semanticModel == null)
+            {
+                return CodeItem.EmptyList;
+            }
 
             return root.Members.Select(member => MapMember(member, tree, semanticModel, control)).ToList();
         }

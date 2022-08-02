@@ -1,5 +1,6 @@
 ﻿using CodeNav.Mappers;
 using CodeNav.Models;
+using CodeNav.Shared.Helpers;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.VisualBasic;
 using System.Collections.Generic;
@@ -8,6 +9,7 @@ using System.Linq;
 using VisualBasicCompilation = Microsoft.CodeAnalysis.VisualBasic.VisualBasicCompilation;
 using VisualBasicSyntax = Microsoft.CodeAnalysis.VisualBasic.Syntax;
 using VisualBasicSyntaxKind = Microsoft.CodeAnalysis.VisualBasic.SyntaxKind;
+using VisualBasic = Microsoft.CodeAnalysis.VisualBasic;
 
 namespace CodeNav.Languages.VisualBasic.Mappers
 {
@@ -22,6 +24,20 @@ namespace CodeNav.Languages.VisualBasic.Mappers
             var semanticModel = compilation.GetSemanticModel(tree);
 
             var root = (VisualBasicSyntax.CompilationUnitSyntax)tree.GetRoot();
+
+            return root.Members.Select(member => MapMember(member, tree, semanticModel, control)).ToList();
+        }
+
+        public static List<CodeItem?> Map(string text, ICodeViewUserControl control)
+        {
+            var tree = VisualBasicSyntaxTree.ParseText(text);
+            var semanticModel = SyntaxHelper.GetVBSemanticModel(tree);
+            var root = (VisualBasicSyntax.CompilationUnitSyntax)tree.GetRoot();
+
+            if (semanticModel == null)
+            {
+                return new List<CodeItem?>();
+            }
 
             return root.Members.Select(member => MapMember(member, tree, semanticModel, control)).ToList();
         }

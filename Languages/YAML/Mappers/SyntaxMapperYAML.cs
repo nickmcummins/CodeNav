@@ -35,8 +35,9 @@ namespace CodeNav.Languages.YAML.Mappers
                 new CodeNamespaceItem
                 {
                     Id = $"Namespace{filePath}",
-                    Name = filePath,
-                    FullName = filePath,
+                    Name = Path.GetFileName(filePath),
+                    FullName = Path.GetFileName(filePath),
+                    Parameters = filePath,
                     Kind = CodeItemKindEnum.Namespace,
                     BorderColor = Colors.DarkGray,
                     Members = ((YamlMappingNode)yamlDocument.RootNode).Children.SelectMany(child => MapMember((child.Key, child.Value, 0))).ToList()
@@ -44,22 +45,29 @@ namespace CodeNav.Languages.YAML.Mappers
             };
         }
 
-        private static List<CodeItem> MapMember(YamlElement yamlElement)
+        private static List<CodeItem> MapMember(YamlElement yamlElement, string? name = null)
         {
             var (key, value, depth) = yamlElement;
+            List<CodeItem> member = null;
             switch (value.NodeType)
             {
                 case YamlNodeType.Scalar:
-                    return MapScalar((key, value as YamlScalarNode, depth));
+                    member = MapScalar((key, value as YamlScalarNode, depth));
+                    break;
                 case YamlNodeType.Sequence:
-                    return MapSequence((key, value as YamlSequenceNode, depth));
+                    member = MapSequence((key, value as YamlSequenceNode, depth));
+                    break;
                 case YamlNodeType.Mapping:
-                    return MapObject((key, value as YamlMappingNode, depth));
+                    member = MapObject((key, value as YamlMappingNode, depth));
+                    break;
                 default:
                     break;
             }
-
-            return CodeItem.EmptyList;
+            if (name != null)
+            {
+                member.First().Name = name;
+            }
+            return member ?? CodeItem.EmptyList;
         }
 
         private static List<CodeItem> MapScalar(YamlScalarElement yamlScalarElement)
@@ -76,11 +84,11 @@ namespace CodeNav.Languages.YAML.Mappers
         private static List<CodeItem> MapSequence(YamlSequenceElement yamlSequenceElement)
         {
             var (key, sequenceNode, depth) = yamlSequenceElement;
-            var sequence = BaseMapperYAML.MapBase<YamlObjectItem>("Sequence Item", yamlSequenceElement, _control);
+            var sequence = BaseMapperYAML.MapBase<YamlObjectItem>(((YamlScalarNode)key).Value, yamlSequenceElement, _control);
             sequence.Depth = depth;
             sequence.Moniker = KnownMonikers.ListProperty;
             sequence.Kind = CodeItemKindEnum.Property;
-            sequence.Members = sequenceNode.Children.SelectMany(sequenceItem => MapMember((sequenceItem, sequenceItem, depth + 1))).ToList();
+            sequence.Members = sequenceNode.Children.SelectMany(sequenceItem => MapMember((key, sequenceItem, depth + 1), "Sequence Item")).ToList();
 
             return new List<CodeItem>() { sequence };
         }

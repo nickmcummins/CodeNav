@@ -1,4 +1,5 @@
-﻿using CodeNav.Languages.YAML.Models;
+﻿using CodeNav.Helpers;
+using CodeNav.Languages.YAML.Models;
 using CodeNav.Models;
 using Microsoft.VisualStudio.Imaging;
 using System;
@@ -40,6 +41,7 @@ namespace CodeNav.Languages.YAML.Mappers
                     Parameters = filePath,
                     Kind = CodeItemKindEnum.Namespace,
                     BorderColor = Colors.DarkGray,
+                    ParameterFontSize = SettingsHelper.Font.SizeInPoints - 1,
                     Members = ((YamlMappingNode)yamlDocument.RootNode).Children.SelectMany(child => MapMember((child.Key, child.Value, 0))).ToList()
                 }
             };

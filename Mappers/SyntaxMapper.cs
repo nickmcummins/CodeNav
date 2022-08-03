@@ -9,16 +9,13 @@ using CodeNav.Languages.VisualBasic.Mappers;
 using CodeNav.Languages.XML.Mappers;
 using CodeNav.Languages.YAML.Mappers;
 using CodeNav.Models;
-using CodeNav.Shared.Helpers;
 using Microsoft.CodeAnalysis;
-using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
-using VisualBasic = Microsoft.CodeAnalysis.VisualBasic;
 using VisualBasicSyntax = Microsoft.CodeAnalysis.VisualBasic.Syntax;
 
 namespace CodeNav.Mappers
@@ -61,28 +58,34 @@ namespace CodeNav.Mappers
         {
             if (codeAnalysisDocument == null)
             {
-                return new List<CodeItem?>();
+                return CodeItem.EmptyList;
             }
 
             var fileExtension = Path.GetExtension(codeAnalysisDocument.FilePath);
-            if (Path.GetExtension(codeAnalysisDocument.FilePath).Equals(".js"))
+            switch (fileExtension.ToLower())
             {
-                return SyntaxMapperJS.Map(codeAnalysisDocument, control);
+                case ".js":
+                    return SyntaxMapperJS.Map(codeAnalysisDocument.FilePath, control);
+                case ".json":
+                    return SyntaxMapperJSON.Map(codeAnalysisDocument.FilePath, control);
+                case ".css":
+                    return SyntaxMapperCSS.Map(codeAnalysisDocument.FilePath, control);
+                case ".xml":
+                case ".csproj":
+                case ".config":
+                case ".xaml":
+                    return SyntaxMapperXML.Map(codeAnalysisDocument.FilePath, control);
+                case ".yaml":
+                case ".yml":
+                    return SyntaxMapperYAML.Map(codeAnalysisDocument.FilePath, control);
+                default:
+                    break;
             }
 
-            if (fileExtension == ".css")
-            {
-                return SyntaxMapperCSS.Map(codeAnalysisDocument, control);
-            }
-            if (fileExtension == ".xml" || fileExtension == ".csproj")
-            {
-                return SyntaxMapperXML.Map(codeAnalysisDocument.FilePath, control);
-            }
             var tree = await codeAnalysisDocument.GetSyntaxTreeAsync();
-
             if (tree == null)
             {
-                return new List<CodeItem?>();
+                return CodeItem.EmptyList;
             }
 
             var semanticModel = await codeAnalysisDocument.GetSemanticModelAsync();
@@ -91,23 +94,21 @@ namespace CodeNav.Mappers
             switch (LanguageHelper.GetLanguage(root.Language))
             {
                 case LanguageEnum.CSharp:
-                    if (!(root is CompilationUnitSyntax rootSyntax) ||
-                        semanticModel == null)
+                    if (root is not CompilationUnitSyntax rootSyntax || semanticModel == null)
                     {
-                        return new List<CodeItem?>();
+                        return CodeItem.EmptyList;
                     }
 
                     return rootSyntax.Members.Select(member => SyntaxMapperCS.MapMember(member, tree, semanticModel, control)).ToList();
                 case LanguageEnum.VisualBasic:
-                    if (!(root is VisualBasicSyntax.CompilationUnitSyntax vbRootSyntax) ||
-                        semanticModel == null)
+                    if (root is not VisualBasicSyntax.CompilationUnitSyntax vbRootSyntax || semanticModel == null)
                     {
-                        return new List<CodeItem?>();
+                        return CodeItem.EmptyList;
                     }
 
                     return vbRootSyntax.Members.Select(member => SyntaxMapperVB.MapMember(member, tree, semanticModel, control)).ToList();
                 default:
-                    return new List<CodeItem?>();
+                    return CodeItem.EmptyList;
             }
         }
 

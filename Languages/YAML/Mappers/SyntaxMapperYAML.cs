@@ -9,6 +9,7 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using System.Windows.Media;
 using YamlDotNet.Core;
+using YamlDotNet.Core.Tokens;
 using YamlDotNet.RepresentationModel;
 using YamlElement = System.ValueTuple<YamlDotNet.RepresentationModel.YamlNode, YamlDotNet.RepresentationModel.YamlNode, int>;
 using YamlMappingElement = System.ValueTuple<YamlDotNet.RepresentationModel.YamlNode, YamlDotNet.RepresentationModel.YamlMappingNode, int>;
@@ -55,32 +56,47 @@ namespace CodeNav.Languages.YAML.Mappers
             switch (value.NodeType)
             {
                 case YamlNodeType.Scalar:
-                    member = MapScalar((key, value as YamlScalarNode, depth));
+                    member = MapScalar((key, value as YamlScalarNode, depth), name == "Sequence Item");
                     break;
                 case YamlNodeType.Sequence:
                     member = MapSequence((key, value as YamlSequenceNode, depth));
                     break;
                 case YamlNodeType.Mapping:
+                {
                     member = MapObject((key, value as YamlMappingNode, depth));
+                    if (name != null)
+                    {
+                        member.First().Name = name;
+                    }
                     break;
+                }
                 default:
                     break;
-            }
-            if (name != null)
-            {
-                member.First().Name = name;
             }
             return member ?? CodeItem.EmptyList;
         }
 
-        private static List<CodeItem> MapScalar(YamlScalarElement yamlScalarElement)
+        private static List<CodeItem> MapScalar(YamlScalarElement yamlScalarElement, bool isSequenceItem = false)
         {
             var (key, value, depth) = yamlScalarElement;
-            var scalar = BaseMapperYAML.MapBase<YamlPropertyItem>(((YamlScalarNode)key).Value, yamlScalarElement, _control);
+            string name, parameters;
+            if (isSequenceItem)
+            {
+                name = value.Value;
+                parameters = string.Empty;
+
+            }
+            else
+            {
+                name = ((YamlScalarNode)key).Value;
+                parameters = value.Value.Split('\n').Count() <= 1 ? value.Value : string.Empty;
+
+            }
+            var scalar = BaseMapperYAML.MapBase<YamlPropertyItem>(name, yamlScalarElement, _control);
             scalar.Depth = depth;
             scalar.Kind = CodeItemKindEnum.Property;
-            scalar.Parameters = value.Value;
-
+            scalar.Parameters = parameters;
+            scalar.Moniker = KnownMonikers.Property;
             return new List<CodeItem>() { scalar };
         }
 
@@ -89,7 +105,7 @@ namespace CodeNav.Languages.YAML.Mappers
             var (key, sequenceNode, depth) = yamlSequenceElement;
             var sequence = BaseMapperYAML.MapBase<YamlObjectItem>(((YamlScalarNode)key).Value, yamlSequenceElement, _control);
             sequence.Depth = depth;
-            sequence.Moniker = KnownMonikers.ListProperty;
+            sequence.Moniker = KnownMonikers.MarkupTag;
             sequence.Kind = CodeItemKindEnum.Property;
             sequence.Members = sequenceNode.Children.SelectMany(sequenceItem => MapMember((key, sequenceItem, depth + 1), "Sequence Item")).ToList();
 
@@ -102,7 +118,7 @@ namespace CodeNav.Languages.YAML.Mappers
 
             var mapping = BaseMapperYAML.MapBase<YamlObjectItem>(((YamlScalarNode)key).Value, yamlMappingElement, _control);
             mapping.Depth = depth;
-            mapping.Moniker = KnownMonikers.ObjectPublic;
+            mapping.Moniker = KnownMonikers.MarkupTag;
             mapping.Kind = CodeItemKindEnum.Property;
             mapping.Members = mappingNode.Children.SelectMany(mappingChild => MapMember((mappingChild.Key, mappingChild.Value, depth + 1))).ToList();
 

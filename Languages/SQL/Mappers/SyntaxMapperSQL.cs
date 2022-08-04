@@ -1,5 +1,7 @@
 ﻿using CodeNav.Helpers;
+using CodeNav.Languages.SQL.Models;
 using CodeNav.Models;
+using Microsoft.SqlServer.Management.SqlParser.SqlCodeDom;
 using Microsoft.VisualStudio.Imaging;
 using System.Collections.Generic;
 using System.IO;
@@ -30,10 +32,32 @@ namespace CodeNav.Languages.SQL.Mappers
                     BorderColor = Colors.DarkGray,
                     Moniker = KnownMonikers.JSONScript,
                     ParameterFontSize = SettingsHelper.Font.SizeInPoints - 1,
-                    Members = Enumerable.Empty<CodeItem>().ToList()
+                    Members = sqlScript.Children.SelectMany(child => MapMember(child)).ToList()
                 }
             };
 
+        }
+
+        private static List<CodeItem> MapMember(SqlCodeObject member)
+        {
+            switch (member.GetType().Name)
+            {
+                case "SqlBatch":
+                    return member.Children.SelectMany(child => MapMember(child)).ToList();
+                    break;
+                case "SqlVariableDeclareStatement":
+                    return MapVariableDeclareStatement(member as SqlVariableDeclareStatement);
+            }
+
+            return CodeItem.EmptyList;
+        }
+
+        private static List<CodeItem> MapVariableDeclareStatement(SqlVariableDeclareStatement sqlVariableDeclareStatement)
+        {
+            var declareVariableBlock = BaseMapperSQL.MapBase<SqlBlockItem>(sqlVariableDeclareStatement, _control);
+            declareVariableBlock.Name = sqlVariableDeclareStatement.Sql.Length > 50 ? sqlVariableDeclareStatement.Sql.Substring(0, 50) : sqlVariableDeclareStatement.Sql;
+
+            return null;
         }
     }
 }

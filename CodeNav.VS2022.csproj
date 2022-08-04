@@ -148,6 +148,8 @@
     <Compile Include="Languages\JS\Mappers\IdMapperJS.cs" />
     <Compile Include="Languages\JS\Mappers\SyntaxMapperJS.cs" />
     <Compile Include="Languages\SQL\Mappers\SyntaxMapperSQL.cs" />
+    <Compile Include="Languages\SQL\Mappers\BaseMapperSQL.cs" />
+    <Compile Include="Languages\SQL\Models\SqlBlockItem.cs" />
     <Compile Include="Languages\VisualBasic\Mappers\BaseMapperVB.cs" />
     <Compile Include="Languages\VisualBasic\Mappers\DelegateEventMapperVB.cs" />
     <Compile Include="Languages\VisualBasic\Mappers\EnumMapperVB.cs" />
@@ -347,7 +349,7 @@
       <HintPath>C:\Program Files\Microsoft Visual Studio\2022\Preview\Common7\IDE\Extensions\Microsoft\Web Tools Shared\Microsoft.WebTools.Shared.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.SqlServer.Management.SqlParser">
-        <HintPath>C:\Program Files\Microsoft Visual Studio\2022\Preview\Common7\IDE\Extensions\Microsoft\SQLCommon\150\Microsoft.SqlServer.Management.SqlParser.dll</HintPath>
+      <HintPath>C:\Program Files\Microsoft Visual Studio\2022\Preview\Common7\IDE\Extensions\Microsoft\SQLCommon\150\Microsoft.SqlServer.Management.SqlParser.dll</HintPath>
     </Reference>
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />

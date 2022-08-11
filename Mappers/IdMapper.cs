@@ -24,7 +24,7 @@ namespace CodeNav.Mappers
 
         private static string MapParameters(ImmutableArray<IParameterSymbol> parameters, bool useLongNames = false, bool prettyPrint = true)
         {
-            var paramList = (from IParameterSymbol parameter in parameters select TypeMapperCS.Map(parameter.Type, useLongNames)).ToList();
+            var paramList = (from IParameterSymbol parameter in parameters select TypeMapperCS.Map(parameter.Type, useLongNames));
             return prettyPrint ? $"({string.Join(", ", paramList)})" : string.Join(string.Empty, paramList);
         }
     }

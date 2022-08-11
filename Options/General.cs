@@ -23,7 +23,7 @@ public class General : BaseOptionModel<General>
 
     public int AutoLoadLineThreshold { get; set; } = 0;
 
-    public string FontFamilyName { get; set; } = "Segoe UI";
+    public string FontFamilyName { get; set; } = "Arial";
 
     public float FontSize { get; set; } = 11.25f;
 

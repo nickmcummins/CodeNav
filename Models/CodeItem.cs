@@ -200,51 +200,48 @@ namespace CodeNav.Models
         #endregion
 
         #region Commands
-        public ICommand ClickItemCommand => new DelegateCommand(ClickItem);
+        public ICommand ClickItemCommand => new DelegateCommand(ClickItem, null, ThreadHelper.JoinableTaskFactory);
         public void ClickItem(object args)
         {
             HistoryHelper.AddItemToHistory(this);
             DocumentHelper.ScrollToLine(StartLinePosition, FilePath).FireAndForget();
         }
 
-        public ICommand GoToDefinitionCommand => new DelegateCommand(GoToDefinition);
+        public ICommand GoToDefinitionCommand => new DelegateCommand(GoToDefinition, null, ThreadHelper.JoinableTaskFactory);
         public void GoToDefinition(object args) => DocumentHelper.ScrollToLine(StartLinePosition).FireAndForget();
 
-        public ICommand ClearHistoryCommand => new DelegateCommand(ClearHistory);
+        public ICommand ClearHistoryCommand => new DelegateCommand(ClearHistory, null, ThreadHelper.JoinableTaskFactory);
         public void ClearHistory(object args) => HistoryHelper.ClearHistory(this);
 
-        public ICommand GoToEndCommand => new DelegateCommand(GoToEnd);
+        public ICommand GoToEndCommand => new DelegateCommand(GoToEnd, null, ThreadHelper.JoinableTaskFactory);
         public void GoToEnd(object args) => DocumentHelper.ScrollToLine(EndLinePosition).FireAndForget();
 
-        public ICommand SelectInCodeCommand => new DelegateCommand(SelectInCode);
+        public ICommand SelectInCodeCommand => new DelegateCommand(SelectInCode, null, ThreadHelper.JoinableTaskFactory);
         public void SelectInCode(object args) => DocumentHelper.SelectLines(Span).FireAndForget();
 
-        public ICommand CopyNameCommand => new DelegateCommand(CopyName);
+        public ICommand CopyNameCommand => new DelegateCommand(CopyName, null, ThreadHelper.JoinableTaskFactory);
         public void CopyName(object args) => Clipboard.SetText(Name);
 
-        public ICommand RefreshCommand => new DelegateCommand(RefreshCodeNav);
+        public ICommand RefreshCommand => new DelegateCommand(RefreshCodeNav, null, ThreadHelper.JoinableTaskFactory);
         public void RefreshCodeNav(object args) => Control?.UpdateDocument();
 
-        public ICommand ExpandAllCommand => new DelegateCommand(ExpandAll);
+        public ICommand ExpandAllCommand => new DelegateCommand(ExpandAll, null, ThreadHelper.JoinableTaskFactory);
         public void ExpandAll(object args) => Control?.ToggleAll(true, new List<CodeItem>() { this });
 
-        public ICommand CollapseAllCommand => new DelegateCommand(CollapseAll);
+        public ICommand CollapseAllCommand => new DelegateCommand(CollapseAll, null, ThreadHelper.JoinableTaskFactory);
         public void CollapseAll(object args) => Control?.ToggleAll(false, new List<CodeItem>() { this });
 
         /// <summary>
         /// Add a single bookmark
         /// </summary>
-        public ICommand BookmarkCommand => new DelegateCommand(Bookmark);
+        public ICommand BookmarkCommand => new DelegateCommand(Bookmark, null, ThreadHelper.JoinableTaskFactory);
         public void Bookmark(object args) => BookmarkAsync(args).FireAndForget();
 
         public async Task BookmarkAsync(object args)
         {
             try
             {
-                var bookmarkStyle = args as BookmarkStyle;
-
-                if (bookmarkStyle == null ||
-                    Control?.CodeDocumentViewModel == null)
+                if (args is not BookmarkStyle bookmarkStyle || Control?.CodeDocumentViewModel == null)
                 {
                     return;
                 }
@@ -270,7 +267,7 @@ namespace CodeNav.Models
         /// <summary>
         /// Delete a single bookmark
         /// </summary>
-        public ICommand DeleteBookmarkCommand => new DelegateCommand(DeleteBookmark);
+        public ICommand DeleteBookmarkCommand => new DelegateCommand(DeleteBookmark, null, ThreadHelper.JoinableTaskFactory);
         public void DeleteBookmark(object args)
         {
             try
@@ -292,7 +289,7 @@ namespace CodeNav.Models
         /// <summary>
         /// Clear all bookmarks
         /// </summary>
-        public ICommand ClearBookmarksCommand => new DelegateCommand(ClearBookmarks);
+        public ICommand ClearBookmarksCommand => new DelegateCommand(ClearBookmarks, null, ThreadHelper.JoinableTaskFactory);
         public void ClearBookmarks(object args)
         {
             try
@@ -309,10 +306,10 @@ namespace CodeNav.Models
             }
         }
 
-        public ICommand FilterBookmarksCommand => new DelegateCommand(FilterBookmarks);
+        public ICommand FilterBookmarksCommand => new DelegateCommand(FilterBookmarks, null, ThreadHelper.JoinableTaskFactory);
         public void FilterBookmarks(object args) => Control?.FilterBookmarks();
 
-        public ICommand CustomizeBookmarkStylesCommand => new DelegateCommand(CustomizeBookmarkStyles);
+        public ICommand CustomizeBookmarkStylesCommand => new DelegateCommand(CustomizeBookmarkStyles, null, ThreadHelper.JoinableTaskFactory);
         public void CustomizeBookmarkStyles(object args)
         {
             if (Control?.CodeDocumentViewModel == null)

@@ -9,9 +9,10 @@ namespace CodeNav.Languages.XML.Models
     {
         public string SourceString { get; set; }
         public int Depth { get; set; }
-        public string Parameters { get; set; } = string.Empty;
 
-        public XmlElementItem() : base() { }
+        public XmlElementItem() : base() {
+            Parameters = string.Empty;
+        }
 
         public override string ToString()
         {

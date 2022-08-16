@@ -69,10 +69,5 @@ namespace CodeNav
             // Force NotifyPropertyChanged
             CodeDocumentViewModel.CodeDocumentTop = new List<CodeItem>();
         }
-
-        public async Task RegisterDocumentEvents()
-        {
-            // Todo: Implement events
-        }
     }
 }

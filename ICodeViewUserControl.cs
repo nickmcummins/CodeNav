@@ -5,7 +5,6 @@ using CodeNav.Models.ViewModels;
 using Microsoft.VisualStudio.Text.Editor;
 using System;
 using System.Collections.Generic;
-using System.Threading.Tasks;
 using System.Windows.Media;
 
 namespace CodeNav
@@ -21,8 +20,6 @@ namespace CodeNav
         void ToggleAll(bool isExpanded, List<CodeItem>? root = null);
 
         void FilterBookmarks();
-
-        Task RegisterDocumentEvents();
 
         IDisposable? CaretPositionChangedSubscription { get; set; }
 

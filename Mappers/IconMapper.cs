@@ -38,7 +38,7 @@ namespace CodeNav.Mappers
                     else if (access == Protected) return DelegateProtected;
                     else if (access == CodeItemAccessEnum.Internal) return DelegateInternal;
                     else if (access == Sealed) return DelegateSealed;
-                    else return Delegate; break;
+                    else return Delegate; 
                 case CodeItemKindEnum.Enum:
                     if (access == Public) return EnumerationPublic;
                     else if (access == Private) return EnumerationPrivate;
@@ -75,7 +75,6 @@ namespace CodeNav.Mappers
                     else if (access == CodeItemAccessEnum.Internal) return MethodInternal;
                     else if (access == Sealed) return MethodSealed;
                     else return Method;
-                    break;
                 case CodeItemKindEnum.Property:
                 case CodeItemKindEnum.Indexer:
                     if (access == Public) return PropertyPublic;

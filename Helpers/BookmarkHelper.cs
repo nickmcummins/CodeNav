@@ -16,6 +16,15 @@ namespace CodeNav.Helpers
 {
     public static class BookmarkHelper
     {
+        private static readonly List<BookmarkStyle> DefaultBookmarkStyles = new BookmarkStyle[] {                 
+                new(Brushes.LightYellow.Color, Brushes.Black.Color),
+                new(Brushes.PaleVioletRed.Color, Brushes.White.Color),
+                new(Brushes.LightGreen.Color, Brushes.Black.Color),
+                new(Brushes.LightBlue.Color, Brushes.Black.Color),
+                new(Brushes.MediumPurple.Color, Brushes.White.Color),
+                new(Brushes.LightGray.Color, Brushes.Black.Color) }
+        .ToList();
+
         /// <summary>
         /// Apply bookmark style to all code items that are bookmarked
         /// </summary>
@@ -127,7 +136,7 @@ namespace CodeNav.Helpers
 
             if (storageItem == null)
             {
-                return GetDefaultBookmarkStyles();
+                return DefaultBookmarkStyles;
             }
 
             if (storageItem.BookmarkStyles?.Any(style => style.BackgroundColor.A != 0) == true)
@@ -137,7 +146,7 @@ namespace CodeNav.Helpers
 
             if (codeDocumentViewModel.BookmarkStyles?.Any() != true)
             {
-                codeDocumentViewModel.BookmarkStyles = GetDefaultBookmarkStyles();
+                codeDocumentViewModel.BookmarkStyles = DefaultBookmarkStyles;
             }
 
             return codeDocumentViewModel.BookmarkStyles;
@@ -176,16 +185,6 @@ namespace CodeNav.Helpers
                 b.ForegroundColor == bookmarkStyle.ForegroundColor);
         }
 
-        private static List<BookmarkStyle> GetDefaultBookmarkStyles()
-            => new List<BookmarkStyle>
-            {
-                new BookmarkStyle(Brushes.LightYellow.Color, Brushes.Black.Color),
-                new BookmarkStyle(Brushes.PaleVioletRed.Color, Brushes.White.Color),
-                new BookmarkStyle(Brushes.LightGreen.Color, Brushes.Black.Color),
-                new BookmarkStyle(Brushes.LightBlue.Color, Brushes.Black.Color),
-                new BookmarkStyle(Brushes.MediumPurple.Color, Brushes.White.Color),
-                new BookmarkStyle(Brushes.LightGray.Color, Brushes.Black.Color),
-            };
 
         public static async Task<Dictionary<string, int>> LoadBookmarksFromStorage(string filePath)
         {

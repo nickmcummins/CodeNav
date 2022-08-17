@@ -136,8 +136,7 @@ namespace CodeNav.Languages.CSharp.Mappers
                 return implementedInterfaces;
             }
 
-            if (symbol == null ||
-                !(symbol is INamedTypeSymbol classSymbol))
+            if (symbol == null || symbol is not INamedTypeSymbol classSymbol)
             {
                 return implementedInterfaces;
             }

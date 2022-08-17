@@ -47,7 +47,7 @@ namespace CodeNav.Models.ViewModels
                     result.Add(new CodeDepthGroupItem());
                 }
 
-                if (!(result[depth] is IMembers memberItem))
+                if (result[depth] is not IMembers memberItem)
                 {
                     continue;
                 }
@@ -58,23 +58,18 @@ namespace CodeNav.Models.ViewModels
                     hasMembersItem != null &&
                     (hasMembersItem.Members.Any(i => i.IsHighlighted) || item.IsHighlighted))
                 {
-                    depth++;
-                    TraverseDepth(hasMembersItem.Members, result, depth);
-                    depth--;
+                    TraverseDepth(hasMembersItem.Members, result, depth + 1);
                 }
             }
         }
 
         public bool ShowFilterToolbar => General.Instance.ShowFilterToolbar;
 
-        public Visibility ShowFilterToolbarVisibility => General.Instance.ShowFilterToolbar
-            ? Visibility.Visible
-            : Visibility.Collapsed;
+        public Visibility ShowFilterToolbarVisibility => General.Instance.ShowFilterToolbar ? Visibility.Visible : Visibility.Collapsed;
 
         public SortOrderEnum SortOrder;
 
-        public Visibility BookmarksAvailable
-            => Bookmarks.Any() ? Visibility.Visible : Visibility.Collapsed;
+        public Visibility BookmarksAvailable => Bookmarks.Any() ? Visibility.Visible : Visibility.Collapsed;
 
         public void AddBookmark(string id, int bookmarkStyleIndex)
         {
@@ -102,9 +97,7 @@ namespace CodeNav.Models.ViewModels
             NotifyPropertyChanged("BookmarksAvailable");
         }
 
-        public Visibility ClearFilterVisibility =>
-            string.IsNullOrEmpty(FilterText) ?
-            Visibility.Collapsed : Visibility.Visible;
+        public Visibility ClearFilterVisibility => string.IsNullOrEmpty(FilterText) ? Visibility.Collapsed : Visibility.Visible;
 
         private string _filterText = string.Empty;
         public string FilterText

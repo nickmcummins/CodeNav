@@ -19,17 +19,14 @@ namespace CodeNav.Extensions
         /// <param name="codeDocument">Nested list of CodeItems</param>
         /// <returns>Flat list of CodeItems</returns>
         public static IEnumerable<CodeItem> Flatten(this IEnumerable<CodeItem> codeDocument) 
-            => codeDocument
-                .SelectMany(codeItem => codeItem is IMembers codeMembersItem
-                    ? Flatten(codeMembersItem.Members) : new[] { codeItem }).Concat(codeDocument);
+            => codeDocument.SelectMany(codeItem => codeItem is IMembers codeMembersItem ? Flatten(codeMembersItem.Members) : new[] { codeItem }).Concat(codeDocument);
 
         /// <summary>
         /// Delete null items from a flat list of CodeItems
         /// </summary>
         /// <param name="codeDocument">Flat list of CodeItems</param>
         /// <returns>Flat list of CodeItems</returns>
-        public static IEnumerable<CodeItem> FilterNull(this IEnumerable<CodeItem> codeDocument)
-            => codeDocument.Where(codeItem => codeItem != null);
+        public static IEnumerable<CodeItem> FilterNull(this IEnumerable<CodeItem> codeDocument) => codeDocument.Where(codeItem => codeItem != null);
 
         /// <summary>
         /// Recursively delete null items from a nested list of CodeItems

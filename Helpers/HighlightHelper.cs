@@ -129,8 +129,7 @@ namespace CodeNav.Helpers
 
             var highlightBackgroundColor = general.HighlightColor;
 
-            if (highlightBackgroundColor.IsNamedColor &&
-                highlightBackgroundColor.Name.Equals("Transparent"))
+            if (highlightBackgroundColor.IsNamedColor && highlightBackgroundColor.Name.Equals("Transparent"))
             {
                 return ColorHelper.ToMediaColor(EnvironmentColors.SystemHighlightColorKey);
             }

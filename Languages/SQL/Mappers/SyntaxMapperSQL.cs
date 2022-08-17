@@ -44,7 +44,6 @@ namespace CodeNav.Languages.SQL.Mappers
             {
                 case "SqlBatch":
                     return member.Children.SelectMany(child => MapMember(child)).ToList();
-                    break;
                 case "SqlVariableDeclareStatement":
                     return MapVariableDeclareStatement(member as SqlVariableDeclareStatement);
             }

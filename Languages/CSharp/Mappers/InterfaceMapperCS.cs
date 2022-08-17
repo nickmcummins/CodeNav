@@ -82,7 +82,7 @@ namespace CodeNav.Languages.CSharp.Mappers
                 }
 
                 // Ignore interface members not directly implemented in the current class
-                if (!implementation.ContainingSymbol.Equals(implementingClass))
+                if (!implementation.ContainingSymbol.Equals(implementingClass, SymbolEqualityComparer.Default))
                 {
                     continue;
                 }
@@ -145,7 +145,7 @@ namespace CodeNav.Languages.CSharp.Mappers
             var interfacesList = new List<INamedTypeSymbol>();
             GetInterfaces(interfacesList, classSymbol.Interfaces);
 
-            foreach (INamedTypeSymbol implementedInterface in interfacesList.Distinct())
+            foreach (INamedTypeSymbol implementedInterface in interfacesList.Distinct(SymbolEqualityComparer.Default))
             {
                 implementedInterfaces.Add(MapImplementedInterface(implementedInterface.Name, implementedInterface.GetMembers(), classSymbol, member, control, semanticModel, tree));
             }

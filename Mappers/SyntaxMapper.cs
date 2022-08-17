@@ -56,28 +56,29 @@ namespace CodeNav.Mappers
         /// <returns>List of found code items</returns>
         public static async Task<List<CodeItem?>> MapDocument(Document codeAnalysisDocument, ICodeViewUserControl control)
         {
-            if (codeAnalysisDocument == null)
+            if (codeAnalysisDocument == null || codeAnalysisDocument.FilePath == null)
             {
                 return CodeItem.EmptyList;
             }
 
-            var fileExtension = Path.GetExtension(codeAnalysisDocument.FilePath);
+            string filepath = codeAnalysisDocument.FilePath;
+            var fileExtension = Path.GetExtension(filepath);
             switch (fileExtension.ToLower())
             {
                 case ".js":
-                    return SyntaxMapperJS.Map(codeAnalysisDocument.FilePath, control);
+                    return SyntaxMapperJS.Map(filepath, control);
                 case ".json":
-                    return SyntaxMapperJSON.Map(codeAnalysisDocument.FilePath, control);
+                    return SyntaxMapperJSON.Map(filepath, control);
                 case ".css":
-                    return SyntaxMapperCSS.Map(codeAnalysisDocument.FilePath, control);
+                    return SyntaxMapperCSS.Map(filepath, control);
                 case ".xml":
                 case ".csproj":
                 case ".config":
                 case ".xaml":
-                    return SyntaxMapperXML.Map(codeAnalysisDocument.FilePath, control);
+                    return SyntaxMapperXML.Map(filepath, control);
                 case ".yaml":
                 case ".yml":
-                    return SyntaxMapperYAML.Map(codeAnalysisDocument.FilePath, control);
+                    return SyntaxMapperYAML.Map(filepath, control);
                 default:
                     break;
             }
@@ -118,7 +119,7 @@ namespace CodeNav.Mappers
         /// <returns>List of found code items</returns>
         public static async Task<List<CodeItem?>> MapDocument(ICodeViewUserControl control)
         {
-            var filePath = await DocumentHelper.GetFilePath();
+            string filePath = await DocumentHelper.GetFilePath();
 
             if (string.IsNullOrEmpty(filePath))
             {

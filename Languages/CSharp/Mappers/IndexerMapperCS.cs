@@ -10,13 +10,8 @@ namespace CodeNav.Mappers
 {
     public class IndexerMapperCS
     {
-        public static CodeItem? MapIndexer(IndexerDeclarationSyntax? member, ICodeViewUserControl control, SemanticModel semanticModel)
+        public static CodeItem MapIndexer(IndexerDeclarationSyntax member, ICodeViewUserControl control, SemanticModel semanticModel)
         {
-            if (member == null)
-            {
-                return null;
-            }
-
             var item = BaseMapper.MapBase<CodeFunctionItem>(member, member.ThisKeyword, member.Modifiers, control, semanticModel);
             item.Type = TypeMapperCS.Map(member.Type);
             item.Parameters = ParameterMapperCS.MapParameters(member.ParameterList);

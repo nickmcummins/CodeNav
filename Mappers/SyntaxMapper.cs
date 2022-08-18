@@ -27,7 +27,7 @@ namespace CodeNav.Mappers
         /// </summary>
         /// <param name="control">CodeNav control that will show the result</param>
         /// <returns>List of found code items</returns>
-        public static async Task<List<CodeItem?>> MapDocument(ICodeViewUserControl control, string filePath = "")
+        public static async Task<List<CodeItem>> MapDocument(ICodeViewUserControl control, string filePath)
         {
             try
             {
@@ -46,7 +46,7 @@ namespace CodeNav.Mappers
                 LogHelper.Log("Error during mapping", e, null, language.ToString());
             }
 
-            return new List<CodeItem?>();
+            return CodeItem.EmptyList;
         }
 
         /// <summary>
@@ -54,7 +54,7 @@ namespace CodeNav.Mappers
         /// </summary>
         /// <param name="document">a CodeAnalysis document</param>
         /// <returns>List of found code items</returns>
-        public static async Task<List<CodeItem?>> MapDocument(Document codeAnalysisDocument, ICodeViewUserControl control)
+        public static async Task<List<CodeItem>> MapDocument(Document codeAnalysisDocument, ICodeViewUserControl control)
         {
             if (codeAnalysisDocument == null || codeAnalysisDocument.FilePath == null)
             {
@@ -100,7 +100,7 @@ namespace CodeNav.Mappers
                         return CodeItem.EmptyList;
                     }
 
-                    return rootSyntax.Members.Select(member => SyntaxMapperCS.MapMember(member, tree, semanticModel, control)).ToList();
+                    return rootSyntax.Members.Where(member => member != null).Select(member => SyntaxMapperCS.MapMember(member, tree, semanticModel, control)).ToList();
                 case LanguageEnum.VisualBasic:
                     if (root is not VisualBasicSyntax.CompilationUnitSyntax vbRootSyntax || semanticModel == null)
                     {
@@ -117,7 +117,7 @@ namespace CodeNav.Mappers
         /// Map the active document without workspace
         /// </summary>
         /// <returns>List of found code items</returns>
-        public static async Task<List<CodeItem?>> MapDocument(ICodeViewUserControl control)
+        public static async Task<List<CodeItem>> MapDocument(ICodeViewUserControl control)
         {
             string filePath = await DocumentHelper.GetFilePath();
 

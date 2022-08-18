@@ -14,20 +14,20 @@ namespace CodeNav.Languages.CSS.Mappers
 {
     public static class SyntaxMapperCSS
     {
-        public static List<CodeItem?> Map(Document document, ICodeViewUserControl control) => Map(document.FilePath, control);
+        public static List<CodeItem> Map(Document document, ICodeViewUserControl control) => Map(document.FilePath, control);
 
-        public static List<CodeItem?> Map(string? filePath, ICodeViewUserControl control, string? text = null)
+        public static List<CodeItem> Map(string? filePath, ICodeViewUserControl control, string? text = null)
         {
             if (!File.Exists(filePath))
             {
-                return new List<CodeItem?>();
+                return CodeItem.EmptyList;
             }
 
             text ??= File.ReadAllText(filePath);
 
             var ast = new StylesheetParser().Parse(text);
 
-            return new List<CodeItem?>
+            return new List<CodeItem>
             {
                 new CodeNamespaceItem
                 {
@@ -43,7 +43,7 @@ namespace CodeNav.Languages.CSS.Mappers
         {
             if (ast?.Children?.Any() != true)
             {
-                return new List<CodeItem>();
+                return CodeItem.EmptyList;
             }
 
             return ast.Children.SelectMany(c => MapMember(c, control)).ToList();
@@ -67,7 +67,8 @@ namespace CodeNav.Languages.CSS.Mappers
                     break;
             }
 
-            return new List<CodeItem>();
+            return CodeItem.EmptyList;
+
         }
 
         private static List<CodeItem> MapStyleRule(StyleRule styleRule, ICodeViewUserControl control)
@@ -94,7 +95,7 @@ namespace CodeNav.Languages.CSS.Mappers
         {
             if (!(rule is INamespaceRule namespaceRule))
             {
-                return new List<CodeItem>();
+                return CodeItem.EmptyList;
             }
 
             var item = BaseMapperCSS.MapBase<CodeStyleRuleItem>(rule, namespaceRule.Prefix, control);
@@ -109,7 +110,7 @@ namespace CodeNav.Languages.CSS.Mappers
         {
             if (!(rule is IMediaRule mediaRule))
             {
-                return new List<CodeItem>();
+                return CodeItem.EmptyList;
             }
 
             var item = BaseMapperCSS.MapBase<CodeClassItem>(rule, mediaRule.Media.MediaText, control);
@@ -124,9 +125,9 @@ namespace CodeNav.Languages.CSS.Mappers
 
         private static List<CodeItem> MapFontFaceRule(Rule rule, ICodeViewUserControl control)
         {
-            if (!(rule is IFontFaceRule fontRule))
+            if (rule is not IFontFaceRule fontRule)
             {
-                return new List<CodeItem>();
+                return CodeItem.EmptyList;
             }
 
             var item = BaseMapperCSS.MapBase<CodeStyleRuleItem>(rule, $"{fontRule.Family} {fontRule.Weight}" , control);

@@ -127,13 +127,13 @@ namespace CodeNav.Windows
             General.Instance.ShowMargin = true;
             General.Instance.FilterRules = string.Empty;
             General.Instance.SortOrder = (int)SortOrderEnum.Unknown;
-            General.Instance.HighlightColor = ColorHelper.Transparent();
+            General.Instance.HighlightColor = ColorHelper.Transparent;
             General.Instance.UseXMLComments = false;
             General.Instance.ShowHistoryIndicators = true;
             General.Instance.DisableHighlight = false;
             General.Instance.UpdateWhileTyping = false;
             General.Instance.AutoLoadLineThreshold = 0;
-            General.Instance.BackgroundColor = ColorHelper.Transparent();
+            General.Instance.BackgroundColor = ColorHelper.Transparent;
             General.Instance.Save();
 
             SettingsHelper.Refresh();

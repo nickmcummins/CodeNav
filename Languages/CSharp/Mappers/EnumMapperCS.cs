@@ -1,5 +1,4 @@
-﻿using CodeNav.Extensions;
-using CodeNav.Helpers;
+﻿using CodeNav.Helpers;
 using CodeNav.Mappers;
 using CodeNav.Models;
 using Microsoft.CodeAnalysis;
@@ -13,11 +12,6 @@ namespace CodeNav.Languages.CSharp.Mappers
     {
         public static CodeItem? MapEnumMember(EnumMemberDeclarationSyntax? member, ICodeViewUserControl control, SemanticModel semanticModel)
         {
-            if (member == null)
-            {
-                return null;
-            }
-
             var item = BaseMapper.MapBase<CodeItem>(member, member.Identifier, control, semanticModel);
             item.Kind = CodeItemKindEnum.EnumMember;
             item.Moniker = IconMapper.MapMoniker(item.Kind, item.Access);
@@ -28,11 +22,6 @@ namespace CodeNav.Languages.CSharp.Mappers
 
         public static CodeClassItem? MapEnum(EnumDeclarationSyntax? member, ICodeViewUserControl control, SemanticModel semanticModel, SyntaxTree tree)
         {
-            if (member == null)
-            {
-                return null;
-            }
-
             var item = BaseMapper.MapBase<CodeClassItem>(member, member.Identifier, member.Modifiers, control, semanticModel);
             item.Kind = CodeItemKindEnum.Enum;
             item.Moniker = IconMapper.MapMoniker(item.Kind, item.Access);
@@ -44,9 +33,9 @@ namespace CodeNav.Languages.CSharp.Mappers
                 item.Tooltip = TriviaSummaryMapper.Map(member);
             }
 
-            foreach (var enumMember in member.Members)
+            foreach (var enumMember in member.Members.Where(enumMember => enumMember != null))
             {
-                item.Members.AddIfNotNull(SyntaxMapperCS.MapMember(enumMember, tree, semanticModel, control));
+                item.Members.Add(SyntaxMapperCS.MapMember(enumMember, tree, semanticModel, control));
             }
 
             return item;

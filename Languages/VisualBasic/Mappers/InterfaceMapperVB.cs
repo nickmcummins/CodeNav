@@ -103,7 +103,7 @@ namespace CodeNav.Languages.VisualBasic.Mappers
                 var reference = implementation.DeclaringSyntaxReferences.First();
                 var declarationSyntax = reference.GetSyntax();
 
-                if (!(declarationSyntax is MemberDeclarationSyntax memberDeclaration))
+                if (declarationSyntax is not MemberDeclarationSyntax memberDeclaration)
                 {
                     continue;
                 }

@@ -11,13 +11,8 @@ namespace CodeNav.Languages.CSharp.Mappers
 {
     public class NamespaceMapperCS
     {
-        public static CodeNamespaceItem? MapNamespace(NamespaceDeclarationSyntax? member, ICodeViewUserControl control, SemanticModel semanticModel, SyntaxTree tree)
+        public static CodeNamespaceItem MapNamespace(NamespaceDeclarationSyntax? member, ICodeViewUserControl control, SemanticModel semanticModel, SyntaxTree tree)
         {
-            if (member == null)
-            {
-                return null;
-            }
-
             var item = BaseMapperCS.MapBase<CodeNamespaceItem>(member, member.Name, control, semanticModel);
             item.Kind = CodeItemKindEnum.Namespace;
             item.Moniker = IconMapper.MapMoniker(item.Kind, item.Access);
@@ -55,12 +50,8 @@ namespace CodeNav.Languages.CSharp.Mappers
             return item;
         }
 
-        public static CodeNamespaceItem? MapNamespace(BaseNamespaceDeclarationSyntax? member, ICodeViewUserControl control, SemanticModel semanticModel, SyntaxTree tree)
+        public static CodeNamespaceItem MapNamespace(BaseNamespaceDeclarationSyntax? member, ICodeViewUserControl control, SemanticModel semanticModel, SyntaxTree tree)
         {
-            if (member == null)
-            {
-                return null;
-            }
 
             var item = BaseMapperCS.MapBase<CodeNamespaceItem>(member, member.Name, control, semanticModel);
             item.Kind = CodeItemKindEnum.Namespace;

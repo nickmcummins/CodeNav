@@ -16,23 +16,22 @@ namespace CodeNav.Languages.JS.Mappers
     {
         private static ICodeViewUserControl? _control;
 
-        public static List<CodeItem?> Map(Document document, ICodeViewUserControl control) => Map(document.FilePath, control);
+        public static List<CodeItem> Map(Document document, ICodeViewUserControl control) => Map(document.FilePath, control);
 
-        public static List<CodeItem?> Map(string? filePath, ICodeViewUserControl control, string? jsString = null)
+        public static List<CodeItem> Map(string? filePath, ICodeViewUserControl control, string? jsString = null)
         {
             _control = control;
 
-            if (string.IsNullOrEmpty(filePath) ||
-                !File.Exists(filePath))
+            if (string.IsNullOrEmpty(filePath) || !File.Exists(filePath))
             {
-                return new List<CodeItem?>();
+                return CodeItem.EmptyList;
             }
 
             jsString ??= File.ReadAllText(filePath);
 
             var ast = new TypeScriptAST(jsString, filePath);
 
-            return new List<CodeItem?>
+            return new List<CodeItem>
             {
                 new CodeNamespaceItem
                 {
@@ -76,21 +75,21 @@ namespace CodeNav.Languages.JS.Mappers
                     break;
             }
 
-            return new List<CodeItem>();
+            return CodeItem.EmptyList;
         }
 
         private static List<CodeItem> MapMembers(TypeScriptAST ast)
         {
             if (ast?.RootNode?.Children?.Any() != true)
             {
-                return new List<CodeItem>();
+                return CodeItem.EmptyList;
             }
 
             var members = ast.RootNode.Children.SelectMany(MapMember);
 
             if (members == null)
             {
-                return new List<CodeItem>();
+                return CodeItem.EmptyList;
             }
 
             return members.ToList();
@@ -100,17 +99,17 @@ namespace CodeNav.Languages.JS.Mappers
         {
             if (expression == null)
             {
-                return new List<CodeItem>();
+                return CodeItem.EmptyList;
             }
 
             if (expression.Right.Kind != SyntaxKind.FunctionExpression)
             {
-                return new List<CodeItem>();
+                return CodeItem.EmptyList;
             }
 
             if (!(expression.Right is FunctionExpression function))
             {
-                return new List<CodeItem>();
+                return CodeItem.EmptyList;
             }
 
             return FunctionMapperJS.MapFunction(function, function.Parameters, expression.First.IdentifierStr, _control);
@@ -120,7 +119,7 @@ namespace CodeNav.Languages.JS.Mappers
         {
             if (variable == null)
             {
-                return new List<CodeItem>();
+                return CodeItem.EmptyList;
             }
 
             var declarator = variable.DeclarationList.Declarations.First();
@@ -142,7 +141,7 @@ namespace CodeNav.Languages.JS.Mappers
 
             if (variable.Parent.Kind != SyntaxKind.SourceFile)
             {
-                return new List<CodeItem>();
+                return CodeItem.EmptyList;
             }
 
             var item = BaseMapperJS.MapBase<CodeItem>(variable, declarator.IdentifierStr, _control);

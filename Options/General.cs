@@ -29,9 +29,9 @@ public class General : BaseOptionModel<General>
 
     public FontStyle FontStyle { get; set; } = FontStyle.Regular;
 
-    public Color HighlightColor { get; set; } = ColorHelper.Transparent();
+    public Color HighlightColor { get; set; } = ColorHelper.Transparent;
 
-    public Color BackgroundColor { get; set; } = ColorHelper.Transparent();
+    public Color BackgroundColor { get; set; } = ColorHelper.Transparent;
 
     public double Width { get; set; } = 200;
 

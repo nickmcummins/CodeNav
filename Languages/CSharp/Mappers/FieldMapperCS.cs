@@ -7,13 +7,8 @@ namespace CodeNav.Languages.CSharp.Mappers
 {
     public class FieldMapperCS : FieldMapper
     {
-        public static CodeItem? MapField(FieldDeclarationSyntax? member, ICodeViewUserControl control, SemanticModel semanticModel)
+        public static CodeItem MapField(FieldDeclarationSyntax? member, ICodeViewUserControl control, SemanticModel semanticModel)
         {
-            if (member == null)
-            {
-                return null;
-            }
-
             return MapField(member, member.Declaration.Variables.First().Identifier, member.Modifiers, control, semanticModel);
         }
     }

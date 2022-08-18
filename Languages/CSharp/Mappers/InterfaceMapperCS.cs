@@ -15,13 +15,8 @@ namespace CodeNav.Languages.CSharp.Mappers
     public class InterfaceMapperCS : InterfaceMapper
     {
 
-        public static CodeInterfaceItem? MapInterface(InterfaceDeclarationSyntax? member, ICodeViewUserControl control, SemanticModel semanticModel, SyntaxTree tree)
+        public static CodeInterfaceItem MapInterface(InterfaceDeclarationSyntax? member, ICodeViewUserControl control, SemanticModel semanticModel, SyntaxTree tree)
         {
-            if (member == null)
-            {
-                return null;
-            }
-
             var item = BaseMapper.MapBase<CodeInterfaceItem>(member, member.Identifier, member.Modifiers, control, semanticModel);
             item.Kind = CodeItemKindEnum.Interface;
             item.BorderColor = Colors.DarkGray;
@@ -34,7 +29,7 @@ namespace CodeNav.Languages.CSharp.Mappers
 
             var regions = RegionMapper.MapRegions(tree, member.Span, control);
 
-            foreach (var interfaceMember in member.Members)
+            foreach (var interfaceMember in member.Members.Where(interfaceMember => interfaceMember != null))
             {
                 var memberItem = SyntaxMapperCS.MapMember(interfaceMember, tree, semanticModel, control);
                 if (memberItem != null && !RegionMapper.AddToRegion(regions, memberItem))
@@ -98,7 +93,7 @@ namespace CodeNav.Languages.CSharp.Mappers
                 var reference = implementation.DeclaringSyntaxReferences.First();
                 var declarationSyntax = reference.GetSyntax();
 
-                if (!(declarationSyntax is MemberDeclarationSyntax memberDeclaration))
+                if (declarationSyntax is not MemberDeclarationSyntax memberDeclaration)
                 {
                     continue;
                 }

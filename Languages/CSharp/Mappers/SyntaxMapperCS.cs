@@ -17,7 +17,7 @@ namespace CodeNav.Languages.CSharp.Mappers
         /// </summary>
         /// <param name="filePath">filepath of the input document</param>
         /// <returns>List of found code items</returns>
-        public static List<CodeItem?> MapDocumentCS(string filePath, ICodeViewUserControl control)
+        public static List<CodeItem> MapDocumentCS(string filePath, ICodeViewUserControl control)
         {
             var tree = CSharpSyntaxTree.ParseText(File.ReadAllText(filePath));
 
@@ -27,10 +27,10 @@ namespace CodeNav.Languages.CSharp.Mappers
 
             var root = (CompilationUnitSyntax)tree.GetRoot(); //
 
-            return root.Members.Select(member => MapMember(member, tree, semanticModel, control)).ToList();
+            return root.Members.Where(member => member != null).Select(member => MapMember(member, tree, semanticModel, control)).ToList();
         }
 
-        public static List<CodeItem?> Map(string text, ICodeViewUserControl control)
+        public static List<CodeItem> Map(string text, ICodeViewUserControl control)
         {
             var tree = CSharpSyntaxTree.ParseText(text);
             var semanticModel = SyntaxHelper.GetCSharpSemanticModel(tree);
@@ -41,16 +41,11 @@ namespace CodeNav.Languages.CSharp.Mappers
                 return CodeItem.EmptyList;
             }
 
-            return root.Members.Select(member => MapMember(member, tree, semanticModel, control)).ToList();
+            return root.Members.Where(member => member != null).Select(member => MapMember(member, tree, semanticModel, control)).ToList();
         }
 
-        public static CodeItem? MapMember(SyntaxNode member, SyntaxTree tree, SemanticModel semanticModel, ICodeViewUserControl control, bool mapBaseClass = true)
+        public static CodeItem MapMember(SyntaxNode member, SyntaxTree tree, SemanticModel semanticModel, ICodeViewUserControl control, bool mapBaseClass = true)
         {
-            if (member == null)
-            {
-                return null;
-            }
-
             switch (member.Kind())
             {
                 case SyntaxKind.MethodDeclaration:

@@ -17,12 +17,7 @@ namespace CodeNav.Languages.CSharp.Mappers
     {
         public static List<CodeItem> MapStatement(StatementSyntax? statement, ICodeViewUserControl control, SemanticModel semanticModel)
         {
-            if (statement == null)
-            {
-                return new List<CodeItem>();
-            }
-
-            CodeItem? item;
+            CodeItem item;
 
             switch (statement.Kind())
             {
@@ -56,7 +51,7 @@ namespace CodeNav.Languages.CSharp.Mappers
             }
         }
 
-        public static List<CodeItem> MapStatement(BlockSyntax? statement, ICodeViewUserControl control, SemanticModel semanticModel) => MapStatement(statement as StatementSyntax, control, semanticModel);
+        public static List<CodeItem> MapStatement(BlockSyntax statement, ICodeViewUserControl control, SemanticModel semanticModel) => MapStatement(statement as StatementSyntax, control, semanticModel);
 
         public static List<CodeItem> MapStatements(SyntaxList<StatementSyntax> statements, ICodeViewUserControl control, SemanticModel semanticModel)
         {
@@ -67,7 +62,7 @@ namespace CodeNav.Languages.CSharp.Mappers
                 return list;
             }
 
-            foreach (var statement in statements)
+            foreach (var statement in statements.Where(statement => statement != null))
             {
                 list.AddRange(MapStatement(statement, control, semanticModel));
             }
@@ -75,13 +70,8 @@ namespace CodeNav.Languages.CSharp.Mappers
             return list;
         }
 
-        private static CodeItem? MapSwitch(SwitchStatementSyntax? statement, ICodeViewUserControl control, SemanticModel semanticModel)
+        private static CodeItem MapSwitch(SwitchStatementSyntax statement, ICodeViewUserControl control, SemanticModel semanticModel)
         {
-
-            if (statement == null)
-            {
-                return null;
-            }
 
             var item = BaseMapper.MapBase<CodeClassItem>(statement, statement.Expression.ToString(), control, semanticModel);
             item.Name = $"Switch {item.Name}";
@@ -99,13 +89,8 @@ namespace CodeNav.Languages.CSharp.Mappers
             return item;
         }
 
-        private static CodeItem? MapSwitchSection(SwitchSectionSyntax? section, ICodeViewUserControl control, SemanticModel semanticModel)
+        private static CodeItem MapSwitchSection(SwitchSectionSyntax section, ICodeViewUserControl control, SemanticModel semanticModel)
         {
-            if (section == null)
-            {
-                return null;
-            }
-
             var item = BaseMapper.MapBase<CodePropertyItem>(section, section.Labels.First().ToString(), control, semanticModel);
             item.Tooltip = TooltipMapper.Map(item.Access, item.Type, item.Name, string.Empty);
             item.Id = item.FullName;

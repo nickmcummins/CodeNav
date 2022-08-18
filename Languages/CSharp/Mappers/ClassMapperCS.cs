@@ -15,13 +15,8 @@ namespace CodeNav.Languages.CSharp.Mappers
 {
     public class ClassMapperCS
     {
-        public static CodeClassItem? MapClass(ClassDeclarationSyntax? member, ICodeViewUserControl control, SemanticModel semanticModel, SyntaxTree tree, bool mapBaseClass)
+        public static CodeClassItem MapClass(ClassDeclarationSyntax member, ICodeViewUserControl control, SemanticModel semanticModel, SyntaxTree tree, bool mapBaseClass)
         {
-            if (member == null)
-            {
-                return null;
-            }
-
             var item = BaseMapper.MapBase<CodeClassItem>(member, member.Identifier, member.Modifiers, control, semanticModel);
             item.Kind = CodeItemKindEnum.Class;
             item.Moniker = IconMapper.MapMoniker(item.Kind, item.Access);
@@ -44,7 +39,7 @@ namespace CodeNav.Languages.CSharp.Mappers
             }
 
             // Map class members
-            foreach (var classMember in member.Members)
+            foreach (var classMember in member.Members.Where(classMember => classMember != null))
             {
                 var memberItem = SyntaxMapperCS.MapMember(classMember, tree, semanticModel, control);
                 if (memberItem != null && !InterfaceMapper.IsPartOfImplementedInterface(implementedInterfaces, memberItem)
@@ -143,7 +138,7 @@ namespace CodeNav.Languages.CSharp.Mappers
                 return;
             }
 
-            foreach (var inheritedMember in baseTypeMembers)
+            foreach (var inheritedMember in baseTypeMembers.Value.Where(inheritedMember => inheritedMember != null))
             {
                 var syntaxNode = inheritedMember.DeclaringSyntaxReferences.FirstOrDefault()?.GetSyntax();
 

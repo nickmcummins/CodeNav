@@ -1,26 +1,17 @@
 ﻿using CodeNav.Helpers;
 using CodeNav.Mappers;
 using CodeNav.Models;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Microsoft.CodeAnalysis.CSharp;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
+using System.Linq;
 
 namespace CodeNav.Languages.CSharp.Mappers
 {
     public class PropertyMapperCS
     {
-        public static CodePropertyItem? MapProperty(PropertyDeclarationSyntax? member, ICodeViewUserControl control, SemanticModel semanticModel)
+        public static CodePropertyItem MapProperty(PropertyDeclarationSyntax? member, ICodeViewUserControl control, SemanticModel semanticModel)
         {
-            if (member == null)
-            {
-                return null;
-            }
-
             var item = BaseMapper.MapBase<CodePropertyItem>(member, member.Identifier, member.Modifiers, control, semanticModel);
             item.Type = TypeMapperCS.Map(member.Type);
 

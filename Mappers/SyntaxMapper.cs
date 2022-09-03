@@ -122,7 +122,8 @@ namespace CodeNav.Mappers
         /// <returns>List of found code items</returns>
         public static async Task<List<CodeItem?>> MapDocument(ICodeViewUserControl control)
         {
-            string filePath = await DocumentHelper.GetFilePath();
+            var documentView = await DocumentHelper.GetDocumentView();
+            string filePath = await DocumentHelper.GetFilePath(documentView);
 
             if (string.IsNullOrEmpty(filePath))
             {
@@ -131,7 +132,7 @@ namespace CodeNav.Mappers
 
             var fileExtension = Path.GetExtension(filePath);
 
-            var text = await DocumentHelper.GetText();
+            var text = await DocumentHelper.GetText(documentView);
 
             if (string.IsNullOrEmpty(text))
             {
@@ -150,6 +151,9 @@ namespace CodeNav.Mappers
                 case ".csproj":
                 case ".config":
                 case ".xaml":
+                case ".vsixmanifest":
+                case ".vstheme":
+                case ".runsettings":
                     return SyntaxMapperXML.Map(filePath, control, text);
                 case ".yaml":
                 case ".yml":

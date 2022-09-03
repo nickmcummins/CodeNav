@@ -16,12 +16,14 @@ namespace CodeNav.Helpers
 {
     public static class OutliningHelper
     {
-        public static async Task<IOutliningManager?> GetOutliningManager()
+        public static async Task<IOutliningManager?> GetOutliningManager(DocumentView? documentView = null)
         {
             var componentModel = await VS.Services.GetComponentModelAsync();
             var outliningManagerService = componentModel.GetService<IOutliningManagerService>();
-
-            var documentView = await VS.Documents.GetActiveDocumentViewAsync();
+            if (documentView == null)
+            {
+                documentView = await VS.Documents.GetActiveDocumentViewAsync();
+            }
             var textView = documentView?.TextView;
 
             if (outliningManagerService == null ||
@@ -146,7 +148,7 @@ namespace CodeNav.Helpers
 
             try
             {
-                var outliningManager = await GetOutliningManager();
+                var outliningManager = await GetOutliningManager(documentView);
 
                 if (outliningManager == null)
                 {

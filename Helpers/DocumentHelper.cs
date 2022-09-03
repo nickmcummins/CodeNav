@@ -50,11 +50,14 @@ namespace CodeNav.Helpers
             return null;
         }
 
-        public static async Task<string> GetFilePath()
+        public static async Task<string> GetFilePath(DocumentView? documentView = null)
         {
             try
             {
-                var documentView = await VS.Documents.GetActiveDocumentViewAsync();
+                if (documentView == null)
+                {
+                    documentView = await VS.Documents.GetActiveDocumentViewAsync();
+                }
                 return documentView?.Document?.FilePath ?? string.Empty;
             }
             catch (Exception)
@@ -65,11 +68,14 @@ namespace CodeNav.Helpers
             return string.Empty;
         }
 
-        public static async Task<string> GetText()
+        public static async Task<string> GetText(DocumentView? documentView = null)
         {
             try
             {
-                var documentView = await VS.Documents.GetActiveDocumentViewAsync();
+                if (documentView == null)
+                {
+                    documentView = await VS.Documents.GetActiveDocumentViewAsync();
+                }
                 return documentView?.TextBuffer?.CurrentSnapshot?.GetText() ?? string.Empty;
             }
             catch (Exception)
@@ -181,10 +187,8 @@ namespace CodeNav.Helpers
             return workspace.CurrentSolution.GetDocument(documentId);
         }
 
-        public static async Task<bool> IsLargeDocument()
+        public static async Task<bool> IsLargeDocument(General? general)
         {
-            var general = await General.GetLiveInstanceAsync();
-
             if (general.AutoLoadLineThreshold == 0)
             {
                 return false;
@@ -208,7 +212,8 @@ namespace CodeNav.Helpers
 
             try
             {
-                if (await IsLargeDocument())
+                var general = await General.GetLiveInstanceAsync();
+                if (await IsLargeDocument(general))
                 {
                     codeDocumentViewModel.CodeDocument = PlaceholderHelper.CreateLineThresholdPassedItem();
                     return;
@@ -232,7 +237,6 @@ namespace CodeNav.Helpers
                 var items = codeItems.FilterNullItems();
 
                 // Sort items
-                var general = await General.GetLiveInstanceAsync();
                 codeDocumentViewModel.SortOrder = (SortOrderEnum)general.SortOrder;
                 SortHelper.Sort(items, (SortOrderEnum)general.SortOrder);
 

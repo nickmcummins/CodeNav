@@ -12,28 +12,18 @@ namespace CodeNav.Languages.CSharp.Mappers
 {
     public class MethodMapperCS
     {
-        public static CodeItem? MapMethod(MethodDeclarationSyntax? member, ICodeViewUserControl control, SemanticModel semanticModel)
+        public static CodeItem MapMethod(MethodDeclarationSyntax member, ICodeViewUserControl control, SemanticModel semanticModel)
         {
-            if (member == null)
-            {
-                return null;
-            }
-
             return MapMethod(member, member.Identifier, member.Modifiers, member.Body, member.ReturnType as ITypeSymbol, member.ParameterList, CodeItemKindEnum.Method, control, semanticModel);
         }
 
-        public static CodeItem? MapMethod(LocalFunctionStatementSyntax member, ICodeViewUserControl control, SemanticModel semanticModel)
+        public static CodeItem MapMethod(LocalFunctionStatementSyntax member, ICodeViewUserControl control, SemanticModel semanticModel)
         {
             return MapMethod(member, member.Identifier, member.Modifiers, member.Body, member.ReturnType as ITypeSymbol, member.ParameterList, CodeItemKindEnum.LocalFunction, control, semanticModel);
         }
 
-        public static CodeItem? MapConstructor(ConstructorDeclarationSyntax? member, ICodeViewUserControl control, SemanticModel semanticModel)
+        public static CodeItem MapConstructor(ConstructorDeclarationSyntax member, ICodeViewUserControl control, SemanticModel semanticModel)
         {
-            if (member == null)
-            {
-                return null;
-            }
-
             var item = BaseMapper.MapBase<CodeFunctionItem>(member, member.Identifier, member.Modifiers, control, semanticModel);
             item.Parameters = ParameterMapperCS.MapParameters(member.ParameterList);
             item.Tooltip = TooltipMapperCS.Map(item.Access, item.Type, item.Name, member.ParameterList);
@@ -45,13 +35,8 @@ namespace CodeNav.Languages.CSharp.Mappers
             return item;
         }
 
-        protected static CodeItem? MapMethod(SyntaxNode node, SyntaxToken identifier, SyntaxTokenList modifiers, BlockSyntax? body, ITypeSymbol? returnType, ParameterListSyntax parameterList, CodeItemKindEnum kind, ICodeViewUserControl control, SemanticModel semanticModel)
+        protected static CodeItem MapMethod(SyntaxNode node, SyntaxToken identifier, SyntaxTokenList modifiers, BlockSyntax body, ITypeSymbol? returnType, ParameterListSyntax parameterList, CodeItemKindEnum kind, ICodeViewUserControl control, SemanticModel semanticModel)
         {
-            if (node == null)
-            {
-                return null;
-            }
-
             CodeItem item;
 
             var statementsCodeItems = StatementMapperCS.MapStatement(body, control, semanticModel);

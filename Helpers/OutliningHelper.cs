@@ -99,8 +99,7 @@ namespace CodeNav.Helpers
             document
                 .ForEach(root => root
                     .Descendants()
-                    .Where(i => i.StartLine == startLine)
-                    .Where(i => i is IMembers)
+                    .Where(i => i.StartLine == startLine && i is IMembers)
                     .Cast<IMembers>()
                     .ForEach(i => i.IsExpanded = isExpanded));
         }

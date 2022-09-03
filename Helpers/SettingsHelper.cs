@@ -10,6 +10,7 @@ namespace CodeNav.Helpers
 {
     public static class SettingsHelper
     {
+        public static readonly System.Windows.Media.FontFamily DefaultFontFamily = new System.Windows.Media.FontFamily(General.Instance.FontFamilyName);
         private static bool? _useXmlComments;
         public static bool UseXMLComments
         {
@@ -39,11 +40,7 @@ namespace CodeNav.Helpers
         }
 
         private static ObservableCollection<FilterRule>? _filterRules;
-        public static ObservableCollection<FilterRule> FilterRules
-        {
-            get => LoadFilterRules();
-            set => _filterRules = value;
-        }
+        public static ObservableCollection<FilterRule> FilterRules { get => LoadFilterRules(); set => _filterRules = value; }
 
         public static void SaveFilterRules(ObservableCollection<FilterRule> filterRules)
         {

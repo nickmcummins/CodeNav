@@ -27,7 +27,7 @@ namespace CodeNav.Mappers
         /// </summary>
         /// <param name="control">CodeNav control that will show the result</param>
         /// <returns>List of found code items</returns>
-        public static async Task<List<CodeItem?>> MapDocument(ICodeViewUserControl control, string filePath = "")
+        public static async Task<List<CodeItem>> MapDocument(ICodeViewUserControl control, string filePath = "")
         {
             try
             {
@@ -46,7 +46,7 @@ namespace CodeNav.Mappers
                 LogHelper.Log("Error during mapping", e, null, language.ToString());
             }
 
-            return new List<CodeItem?>();
+            return new List<CodeItem>();
         }
 
         /// <summary>
@@ -54,7 +54,7 @@ namespace CodeNav.Mappers
         /// </summary>
         /// <param name="document">a CodeAnalysis document</param>
         /// <returns>List of found code items</returns>
-        public static async Task<List<CodeItem?>> MapDocument(Document codeAnalysisDocument, ICodeViewUserControl control)
+        public static async Task<List<CodeItem>> MapDocument(Document codeAnalysisDocument, ICodeViewUserControl control)
         {
             if (codeAnalysisDocument == null || codeAnalysisDocument.FilePath == null)
             {

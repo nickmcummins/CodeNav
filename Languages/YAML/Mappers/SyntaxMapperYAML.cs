@@ -22,7 +22,7 @@ namespace CodeNav.Languages.YAML.Mappers
     {
         private static ICodeViewUserControl? _control;
 
-        public static List<CodeItem?> Map(string filePath, ICodeViewUserControl control, string? yamlString = null)
+        public static List<CodeItem> Map(string filePath, ICodeViewUserControl control, string? yamlString = null)
         {
             _control = control;
 
@@ -32,7 +32,7 @@ namespace CodeNav.Languages.YAML.Mappers
             stream.Load(ParserForText(yamlString));
             var yamlDocument = stream.Documents[0];
 
-            return new List<CodeItem?>
+            return new List<CodeItem>
             {
                 new CodeNamespaceItem
                 {

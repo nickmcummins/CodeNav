@@ -18,21 +18,21 @@ namespace CodeNav.Languages.JS.Mappers
 
         public static List<CodeItem?> Map(Document document, ICodeViewUserControl control) => Map(document.FilePath, control);
 
-        public static List<CodeItem?> Map(string? filePath, ICodeViewUserControl control, string? jsString = null)
+        public static List<CodeItem> Map(string? filePath, ICodeViewUserControl control, string? jsString = null)
         {
             _control = control;
 
             if (string.IsNullOrEmpty(filePath) ||
                 !File.Exists(filePath))
             {
-                return new List<CodeItem?>();
+                return new List<CodeItem>();
             }
 
             jsString ??= File.ReadAllText(filePath);
 
             var ast = new TypeScriptAST(jsString, filePath);
 
-            return new List<CodeItem?>
+            return new List<CodeItem>
             {
                 new CodeNamespaceItem
                 {

@@ -11,13 +11,8 @@ namespace CodeNav.Mappers
 {
     public class FieldMapper
     {
-        protected static CodeItem? MapField(SyntaxNode? member, SyntaxToken identifier, SyntaxTokenList modifiers, ICodeViewUserControl control, SemanticModel semanticModel)
+        protected static CodeItem MapField(SyntaxNode member, SyntaxToken identifier, SyntaxTokenList modifiers, ICodeViewUserControl control, SemanticModel semanticModel)
         {
-            if (member == null)
-            {
-                return null;
-            }
-
             var item = BaseMapper.MapBase<CodeItem>(member, identifier, modifiers, control, semanticModel);
             item.Kind = IsConstant(modifiers) ? CodeItemKindEnum.Constant : CodeItemKindEnum.Variable;
             item.Moniker = IconMapper.MapMoniker(item.Kind, item.Access);

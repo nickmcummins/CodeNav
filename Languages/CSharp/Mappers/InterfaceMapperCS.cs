@@ -15,13 +15,8 @@ namespace CodeNav.Languages.CSharp.Mappers
     public class InterfaceMapperCS : InterfaceMapper
     {
 
-        public static CodeInterfaceItem? MapInterface(InterfaceDeclarationSyntax? member, ICodeViewUserControl control, SemanticModel semanticModel, SyntaxTree tree)
+        public static CodeInterfaceItem MapInterface(InterfaceDeclarationSyntax member, ICodeViewUserControl control, SemanticModel semanticModel, SyntaxTree tree)
         {
-            if (member == null)
-            {
-                return null;
-            }
-
             var item = BaseMapper.MapBase<CodeInterfaceItem>(member, member.Identifier, member.Modifiers, control, semanticModel);
             item.Kind = CodeItemKindEnum.Interface;
             item.BorderColor = Colors.DarkGray;

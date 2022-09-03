@@ -16,9 +16,9 @@ namespace CodeNav.Languages.XML.Mappers
     {
         private static ICodeViewUserControl? _control;
 
-        public static List<CodeItem?> Map(Document document, ICodeViewUserControl control) => Map(document.FilePath, control);
+        public static List<CodeItem> Map(Document document, ICodeViewUserControl control) => Map(document.FilePath, control);
 
-        public static List<CodeItem?> Map(string? filePath, ICodeViewUserControl control, string? xmlString = null)
+        public static List<CodeItem> Map(string? filePath, ICodeViewUserControl control, string? xmlString = null)
         {
             _control = control;
             if (string.IsNullOrWhiteSpace(filePath) || !File.Exists(filePath)) 

@@ -29,7 +29,7 @@ namespace CodeNav.Languages.XML.Mappers
             element.Span = new Microsoft.CodeAnalysis.Text.TextSpan(xmlElement.Span.Start, xmlElement.Span.End - xmlElement.Span.Start);
             element.FontSize = SettingsHelper.Font.SizeInPoints;
             element.ParameterFontSize = SettingsHelper.Font.SizeInPoints - 1;
-            element.FontFamily = new FontFamily(SettingsHelper.Font.FontFamily.Name);
+            element.FontFamily = SettingsHelper.DefaultFontFamily;
             element.FontStyle = FontStyleMapper.Map(SettingsHelper.Font.Style);
             return element;
         }

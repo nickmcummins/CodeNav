@@ -17,14 +17,14 @@ namespace CodeNav.Languages.JSON.Mappers
     public class SyntaxMapperJSON
     {
         private static ICodeViewUserControl? _control;
-        public static List<CodeItem?> Map(string filePath, ICodeViewUserControl control, string? jsonString = null)
+        public static List<CodeItem> Map(string filePath, ICodeViewUserControl control, string? jsonString = null)
         {
             _control = control;
             jsonString ??= File.ReadAllText(filePath);
 
             var jsonDocument = JsonNodeParser.Parse(jsonString);
             var rootNode = jsonDocument.TopLevelValue;
-            return new List<CodeItem?>()
+            return new List<CodeItem>()
             {
                 new CodeNamespaceItem
                 {
@@ -36,7 +36,7 @@ namespace CodeNav.Languages.JSON.Mappers
                     BorderColor = Colors.DarkGray,
                     Moniker = KnownMonikers.JSONScript,
                     ParameterFontSize = SettingsHelper.Font.SizeInPoints - 1,
-                    Members = ((ObjectNode)rootNode).Members.SelectMany(child => MapMember((jsonString, child))).ToList()
+                    Members = ((ObjectNode)rootNode).Members.Where(member => member is not null).SelectMany(child => MapMember((jsonString, child))).ToList()
                 }
             };
 

@@ -33,7 +33,7 @@ namespace CodeNav.Languages.CSS.Mappers
             element.Access = CodeItemAccessEnum.Public;
             element.FontSize = SettingsHelper.Font.SizeInPoints;
             element.ParameterFontSize = SettingsHelper.Font.SizeInPoints - 1;
-            element.FontFamily = new FontFamily(SettingsHelper.Font.FontFamily.Name);
+            element.FontFamily = SettingsHelper.DefaultFontFamily;
             element.FontStyle = FontStyleMapper.Map(SettingsHelper.Font.Style);
             element.Control = control;
             element.FilePath = control.CodeDocumentViewModel.FilePath;

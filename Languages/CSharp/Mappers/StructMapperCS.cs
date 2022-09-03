@@ -10,13 +10,8 @@ namespace CodeNav.Languages.CSharp.Mappers
 {
     public class StructMapperCS
     {
-        public static CodeClassItem? MapStruct(StructDeclarationSyntax? member, ICodeViewUserControl control, SemanticModel semanticModel, SyntaxTree tree)
+        public static CodeClassItem MapStruct(StructDeclarationSyntax member, ICodeViewUserControl control, SemanticModel semanticModel, SyntaxTree tree)
         {
-            if (member == null)
-            {
-                return null;
-            }
-
             var item = BaseMapper.MapBase<CodeClassItem>(member, member.Identifier, member.Modifiers, control, semanticModel);
             item.Kind = CodeItemKindEnum.Struct;
             item.Moniker = IconMapper.MapMoniker(item.Kind, item.Access);

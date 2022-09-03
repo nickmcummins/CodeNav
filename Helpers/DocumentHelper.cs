@@ -227,21 +227,12 @@ namespace CodeNav.Helpers
 
                 var codeItems = await SyntaxMapper.MapDocument(control, filePath);
 
-                if (codeItems == null)
-                {
-                    // CodeNav for document updated, no results
-                    return;
-                }
-
-                // Filter all null items from the code document
-                var items = codeItems.FilterNullItems();
-
                 // Sort items
                 codeDocumentViewModel.SortOrder = (SortOrderEnum)general.SortOrder;
-                SortHelper.Sort(items, (SortOrderEnum)general.SortOrder);
+                SortHelper.Sort(codeItems, (SortOrderEnum)general.SortOrder);
 
                 // Set the new list of codeitems as DataContext
-                codeDocumentViewModel.CodeDocument = items;
+                codeDocumentViewModel.CodeDocument = codeItems;
 
                 // Apply highlights
                 HighlightHelper.UnHighlight(codeDocumentViewModel);

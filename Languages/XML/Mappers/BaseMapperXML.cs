@@ -1,4 +1,5 @@
 ﻿using CodeNav.Helpers;
+using CodeNav.Languages.XML.Models;
 using CodeNav.Mappers;
 using CodeNav.Models;
 using Microsoft.Language.Xml;
@@ -11,16 +12,16 @@ namespace CodeNav.Languages.XML.Mappers
 {
     public static class BaseMapperXML
     {
-        public static T MapBase<T>(string sourceString, SyntaxNode xmlElement, ICodeViewUserControl? control) where T : CodeItem
+        public static T MapBase<T>(XmlSourceFile xmlSourceFile, SyntaxNode xmlElement, ICodeViewUserControl? control) where T : CodeItem
         {
             var element = Activator.CreateInstance<T>();
             element.Name = GetFullName((IXmlElement)xmlElement);
             element.FullName = element.Name;
             element.Id = element.Name;
             element.Tooltip = element.Name;
-            element.StartLine = GetLineNumber(sourceString, xmlElement.Span.Start);
+            element.StartLine = GetLineNumber(xmlSourceFile, xmlElement.Span.Start);
             element.StartLinePosition = new Microsoft.CodeAnalysis.Text.LinePosition(element.StartLine.GetValueOrDefault() - 1, 0);
-            element.EndLine = GetLineNumber(sourceString, xmlElement.Span.End);
+            element.EndLine = GetLineNumber(xmlSourceFile, xmlElement.Span.End);
             element.EndLinePosition = new Microsoft.CodeAnalysis.Text.LinePosition(element.EndLine.GetValueOrDefault(), 0);
             element.ForegroundColor = Colors.Black;
             element.Access = CodeItemAccessEnum.Public;
@@ -30,7 +31,6 @@ namespace CodeNav.Languages.XML.Mappers
             element.ParameterFontSize = SettingsHelper.Font.SizeInPoints - 1;
             element.FontFamily = new FontFamily(SettingsHelper.Font.FontFamily.Name);
             element.FontStyle = FontStyleMapper.Map(SettingsHelper.Font.Style);
-
             return element;
         }
 
@@ -41,9 +41,9 @@ namespace CodeNav.Languages.XML.Mappers
             return $"{xmlElement.Name}{attributes}";
         }
 
-        public static int GetLineNumber(string sourceStr, int pos)
+        public static int GetLineNumber(XmlSourceFile xmlSourceFile, int pos)
         {
-            return sourceStr.Take(pos).Count(c => c == '\n') + 1;
+            return xmlSourceFile.LineRanges.Query(pos).First() + 1;
         }
     }
 }

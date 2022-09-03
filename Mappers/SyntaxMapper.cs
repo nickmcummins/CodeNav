@@ -75,6 +75,9 @@ namespace CodeNav.Mappers
                 case ".csproj":
                 case ".config":
                 case ".xaml":
+                case ".vsixmanifest":
+                case ".vstheme":
+                case ".runsettings":
                     return SyntaxMapperXML.Map(filepath, control);
                 case ".yaml":
                 case ".yml":

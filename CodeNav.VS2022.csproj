@@ -164,6 +164,7 @@
     <Compile Include="Languages\XML\Mappers\SyntaxMapperXML.cs" />
     <Compile Include="Languages\XML\Models\XmlElementItem.cs" />
     <Compile Include="Languages\XML\Models\XmlElementLeafItem.cs" />
+    <Compile Include="Languages\XML\Models\XmlSourceFile.cs" />
     <Compile Include="Languages\YAML\Mappers\BaseMapperYAML.cs" />
     <Compile Include="Languages\YAML\Mappers\SyntaxMapperYAML.cs" />
     <Compile Include="Languages\YAML\Models\YamlObjectItem.cs" />
@@ -414,6 +415,9 @@
       <Version>17.4.1074-preview2</Version>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
+    <PackageReference Include="RangeTree">
+      <Version>3.0.1</Version>
     </PackageReference>
     <PackageReference Include="System.Reactive">
       <Version>5.0.0</Version>

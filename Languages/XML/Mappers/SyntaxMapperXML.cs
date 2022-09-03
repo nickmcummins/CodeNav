@@ -28,6 +28,7 @@ namespace CodeNav.Languages.XML.Mappers
 
             xmlString ??= File.ReadAllText(filePath);
 
+            var xmlSourceFile = new XmlSourceFile(xmlString);
             var xmlTree = Parser.ParseText(xmlString);
 
             return new List<CodeItem?>
@@ -42,20 +43,20 @@ namespace CodeNav.Languages.XML.Mappers
                     Moniker = KnownMonikers.XMLFile,
                     BorderColor = Colors.DarkGray, 
                     ParameterFontSize = SettingsHelper.Font.SizeInPoints - 1,
-                    Members = MapMembers(xmlString, xmlTree, control)
+                    Members = MapMembers(xmlSourceFile, xmlTree, control)
                 }
             };
         }
 
 
-        public static List<CodeItem> MapMember(string sourceString, IXmlElementSyntax xmlElement, int depth, ICodeViewUserControl? control)
+        public static List<CodeItem> MapMember(XmlSourceFile xmlSourceFile, IXmlElementSyntax xmlElement, int depth, ICodeViewUserControl? control)
         {
             switch (xmlElement.GetType().Name)
             {
                 case "XmlEmptyElementSyntax":
-                    return MapEmptyElement(sourceString, xmlElement as XmlEmptyElementSyntax, depth + 1, control);
+                    return MapEmptyElement(xmlSourceFile, xmlElement as XmlEmptyElementSyntax, depth + 1, control);
                 case "XmlElementSyntax":
-                    return MapElement(sourceString, xmlElement as XmlElementSyntax, depth + 1, control);
+                    return MapElement(xmlSourceFile, xmlElement as XmlElementSyntax, depth + 1, control);
                 default:
                     break;
             }
@@ -63,15 +64,15 @@ namespace CodeNav.Languages.XML.Mappers
             return CodeItem.EmptyList;
         }
 
-        public static List<CodeItem> MapMembers(string sourceString, XmlDocumentSyntax ast, ICodeViewUserControl? control)
+        public static List<CodeItem> MapMembers(XmlSourceFile xmlSourceFile,XmlDocumentSyntax ast, ICodeViewUserControl? control)
         {
-            var members = MapMember(sourceString, (XmlElementSyntax)ast.Root, 0, control);
+            var members = MapMember(xmlSourceFile, (XmlElementSyntax)ast.Root, 0, control);
             return members.ToList();
         }
 
-        public static List<CodeItem> MapElement(string sourceString, XmlElementSyntax xmlElement, int depth, ICodeViewUserControl? control)
+        public static List<CodeItem> MapElement(XmlSourceFile xmlSourceFile, XmlElementSyntax xmlElement, int depth, ICodeViewUserControl? control)
         {
-            var element = BaseMapperXML.MapBase<XmlElementItem>(sourceString, xmlElement, control);
+            var element = BaseMapperXML.MapBase<XmlElementItem>(xmlSourceFile, xmlElement, control);
             element.Moniker = KnownMonikers.XMLElement;
             element.Kind = CodeItemKindEnum.Property;
             element.FilePath = control?.CodeDocumentViewModel.FilePath ?? string.Empty;
@@ -81,20 +82,20 @@ namespace CodeNav.Languages.XML.Mappers
                 element.Parameters = ((XmlTextSyntax)textChildren.FirstOrDefault()).Value.Trim();
             }
 
-            var members = xmlElement.Elements.SelectMany(child => MapMember(sourceString, child, depth + 1, control));
+            var members = xmlElement.Elements.SelectMany(child => MapMember(xmlSourceFile, child, depth + 1, control));
             element.Members = members.ToList();
 
             return new List<CodeItem>() { element };
         }
 
-        public static List<CodeItem> MapEmptyElement(string sourceString, XmlEmptyElementSyntax xmlEmptyElement, int depth, ICodeViewUserControl? control)
+        public static List<CodeItem> MapEmptyElement(XmlSourceFile xmlSourceFile, XmlEmptyElementSyntax xmlEmptyElement, int depth, ICodeViewUserControl? control)
         {
-            var elementWithNoChildren = BaseMapperXML.MapBase<XmlElementLeafItem>(sourceString, xmlEmptyElement, control);
+            var elementWithNoChildren = BaseMapperXML.MapBase<XmlElementLeafItem>(xmlSourceFile, xmlEmptyElement, control);
 
             elementWithNoChildren.Moniker = KnownMonikers.XMLElement;
             elementWithNoChildren.Kind = CodeItemKindEnum.Property;
             elementWithNoChildren.FilePath = control?.CodeDocumentViewModel.FilePath ?? string.Empty;
-            
+
             return new List<CodeItem>() { elementWithNoChildren };
         }
     }

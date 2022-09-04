@@ -35,6 +35,7 @@ namespace CodeNav.Languages.JSON.Mappers
             element.ParameterFontSize = SettingsHelper.Font.SizeInPoints - 1;
             element.FontFamily = SettingsHelper.DefaultFontFamily;
             element.FontStyle = FontStyleMapper.Map(SettingsHelper.Font.Style);
+            element.FilePath = control?.CodeDocumentViewModel.FilePath ?? string.Empty;
 
             return element;
         }
@@ -60,6 +61,7 @@ namespace CodeNav.Languages.JSON.Mappers
             element.ParameterFontSize = SettingsHelper.Font.SizeInPoints - 1;
             element.FontFamily = SettingsHelper.DefaultFontFamily;
             element.FontStyle = FontStyleMapper.Map(SettingsHelper.Font.Style);
+            element.FilePath = control?.CodeDocumentViewModel.FilePath ?? string.Empty;
 
             return element;
         }

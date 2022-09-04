@@ -103,6 +103,7 @@
     <Compile Include="Controls\MainToolbar.xaml.cs">
       <DependentUpon>MainToolbar.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Exception\CodeNavException.cs" />
     <Compile Include="Helpers\BookmarkHelper.cs" />
     <Compile Include="Extensions\CodeItemExtensions.cs" />
     <Compile Include="Helpers\ColorHelper.cs" />

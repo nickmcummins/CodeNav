@@ -74,7 +74,7 @@ namespace CodeNav.Languages.XML.Mappers
             var element = BaseMapperXML.MapBase<XmlElementItem>(xmlSourceFile, xmlElement, control);
             element.Moniker = KnownMonikers.XMLElement;
             element.Kind = CodeItemKindEnum.Property;
-            element.FilePath = control?.CodeDocumentViewModel.FilePath ?? string.Empty;
+            
             var textChildren = xmlElement.ChildNodes.Where(node => node.Kind == SyntaxKind.XmlText);
             if (textChildren.Any())
             {

@@ -49,11 +49,11 @@ namespace CodeNav.Helpers
             return null;
         }
 
-        public static async Task<string> GetFilePath(DocumentView? documentView = null)
+        public static async Task<string> GetFilePath()
         {
             try
             {
-                documentView ??= await VS.Documents.GetActiveDocumentViewAsync();
+                var documentView = await VS.Documents.GetActiveDocumentViewAsync();
                 return documentView?.Document?.FilePath ?? string.Empty;
             }
             catch (Exception)

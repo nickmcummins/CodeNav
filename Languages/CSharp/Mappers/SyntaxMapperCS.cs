@@ -6,16 +6,27 @@ using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace CodeNav.Languages.CSharp.Mappers
 {
     public class SyntaxMapperCS
     {
-        public static List<CodeItem> Map(string text, ICodeViewUserControl control)
+        public static async Task<List<CodeItem>> MapAsync(string text, Document? codeAnalysisDocument = null, ICodeViewUserControl? control = null)
         {
-            var tree = CSharpSyntaxTree.ParseText(text);
-            var semanticModel = SyntaxHelper.GetCSharpSemanticModel(tree);
-            var root = (CompilationUnitSyntax)tree.GetRoot();
+            SyntaxTree tree;
+
+            if (codeAnalysisDocument != null)
+            {
+                tree = await codeAnalysisDocument.GetSyntaxTreeAsync();
+            }
+            else
+            {
+                tree = CSharpSyntaxTree.ParseText(text);
+            }
+            var semanticModel = await codeAnalysisDocument.GetSemanticModelAsync();
+
+            var root = (CompilationUnitSyntax)await tree.GetRootAsync();
 
             if (semanticModel == null)
             {
@@ -27,6 +38,7 @@ namespace CodeNav.Languages.CSharp.Mappers
                 .Select(member => MapMember(member, tree, semanticModel, control))
                 .ToList();
         }
+
 
         public static CodeItem MapMember(SyntaxNode member, SyntaxTree tree, SemanticModel semanticModel, ICodeViewUserControl control, bool mapBaseClass = true)
         {

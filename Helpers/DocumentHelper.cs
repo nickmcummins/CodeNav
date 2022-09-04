@@ -1,6 +1,5 @@
 ﻿#nullable enable
 
-using CodeNav.Extensions;
 using CodeNav.Mappers;
 using CodeNav.Models;
 using CodeNav.Models.ViewModels;
@@ -54,10 +53,7 @@ namespace CodeNav.Helpers
         {
             try
             {
-                if (documentView == null)
-                {
-                    documentView = await VS.Documents.GetActiveDocumentViewAsync();
-                }
+                documentView ??= await VS.Documents.GetActiveDocumentViewAsync();
                 return documentView?.Document?.FilePath ?? string.Empty;
             }
             catch (Exception)
@@ -72,10 +68,7 @@ namespace CodeNav.Helpers
         {
             try
             {
-                if (documentView == null)
-                {
-                    documentView = await VS.Documents.GetActiveDocumentViewAsync();
-                }
+                documentView ??= await VS.Documents.GetActiveDocumentViewAsync();
                 return documentView?.TextBuffer?.CurrentSnapshot?.GetText() ?? string.Empty;
             }
             catch (Exception)
@@ -117,8 +110,7 @@ namespace CodeNav.Helpers
                     documentView = await VS.Documents.OpenInPreviewTabAsync(filePath);
                 }
 
-                if (documentView?.TextBuffer == null ||
-                    documentView?.TextView == null)
+                if (documentView?.TextBuffer == null || documentView.TextView == null)
                 {
                     return;
                 }
@@ -140,8 +132,7 @@ namespace CodeNav.Helpers
             {
                 var documentView = await VS.Documents.GetActiveDocumentViewAsync();
 
-                if (documentView?.TextBuffer == null ||
-                    documentView?.TextView == null)
+                if (documentView?.TextBuffer == null || documentView.TextView == null)
                 {
                     return;
                 }
@@ -161,11 +152,6 @@ namespace CodeNav.Helpers
         public static async Task<Document?> GetCodeAnalysisDocument(string filePath = "")
         {
             var workspace = await GetVisualStudioWorkspace();
-
-            if (workspace == null)
-            {
-                return null;
-            }
 
             if (string.IsNullOrEmpty(filePath))
             {
@@ -187,7 +173,7 @@ namespace CodeNav.Helpers
             return workspace.CurrentSolution.GetDocument(documentId);
         }
 
-        public static async Task<bool> IsLargeDocument(General? general)
+        public static async Task<bool> IsLargeDocument(General general)
         {
             if (general.AutoLoadLineThreshold == 0)
             {
@@ -212,7 +198,7 @@ namespace CodeNav.Helpers
 
             try
             {
-                var general = await General.GetLiveInstanceAsync();
+                General general = await General.GetLiveInstanceAsync();
                 if (await IsLargeDocument(general))
                 {
                     codeDocumentViewModel.CodeDocument = PlaceholderHelper.CreateLineThresholdPassedItem();

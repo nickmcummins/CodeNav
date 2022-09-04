@@ -4,7 +4,6 @@ using CodeNav.Models;
 using ExCSS;
 using Microsoft.CodeAnalysis.Text;
 using System;
-using System.Windows.Media;
 using TextSpan = Microsoft.CodeAnalysis.Text.TextSpan;
 using Colors = System.Windows.Media.Colors;
 

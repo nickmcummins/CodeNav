@@ -5,34 +5,12 @@ using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 
 namespace CodeNav.Languages.CSharp.Mappers
 {
     public class SyntaxMapperCS
     {
-        /// <summary>
-        /// Map a document from filepath, used for unit testing
-        /// </summary>
-        /// <param name="filePath">filepath of the input document</param>
-        /// <returns>List of found code items</returns>
-        public static List<CodeItem> MapDocumentCS(string filePath, ICodeViewUserControl control)
-        {
-            var tree = CSharpSyntaxTree.ParseText(File.ReadAllText(filePath));
-
-            var mscorlib = MetadataReference.CreateFromFile(typeof(object).Assembly.Location);
-            var compilation = CSharpCompilation.Create("CodeNavCompilation", new[] { tree }, new[] { mscorlib });
-            var semanticModel = compilation.GetSemanticModel(tree);
-
-            var root = (CompilationUnitSyntax)tree.GetRoot(); //
-
-            return root.Members
-                .Where(member => member is not null)
-                .Select(member => MapMember(member, tree, semanticModel, control))
-                .ToList();
-        }
-
         public static List<CodeItem> Map(string text, ICodeViewUserControl control)
         {
             var tree = CSharpSyntaxTree.ParseText(text);

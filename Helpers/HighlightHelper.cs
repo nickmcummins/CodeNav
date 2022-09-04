@@ -13,9 +13,9 @@ namespace CodeNav.Helpers
 {
     public static class HighlightHelper
     {
-        private static Color _foregroundColor = ColorHelper.ToMediaColor(EnvironmentColors.ToolWindowTabSelectedTextColorKey);
-        private static Color _borderColor = ColorHelper.ToMediaColor(EnvironmentColors.FileTabButtonDownSelectedActiveColorKey);
-        private static Color _regularForegroundColor = ColorHelper.ToMediaColor(EnvironmentColors.ToolWindowTextColorKey);
+        private static readonly Color _foregroundColor = ColorHelper.ToMediaColor(EnvironmentColors.ToolWindowTabSelectedTextColorKey);
+        private static readonly Color _borderColor = ColorHelper.ToMediaColor(EnvironmentColors.FileTabButtonDownSelectedActiveColorKey);
+        private static readonly Color _regularForegroundColor = ColorHelper.ToMediaColor(EnvironmentColors.ToolWindowTextColorKey);
 
         /// <summary>
         /// Highlight code items that contain the current line number
@@ -26,11 +26,6 @@ namespace CodeNav.Helpers
         public static void HighlightCurrentItem(CodeDocumentViewModel codeDocumentViewModel,
             Color backgroundColor, int lineNumber)
         {
-            if (codeDocumentViewModel == null)
-            {
-                return;
-            }
-
             try
             {
                 UnHighlight(codeDocumentViewModel);
@@ -50,8 +45,6 @@ namespace CodeNav.Helpers
         public static void UnHighlight(CodeDocumentViewModel codeDocumentViewModel)
             => codeDocumentViewModel.CodeDocument
                 .Flatten()
-                .FilterNull()
-                .ToList()
                 .ForEach(item =>
                 {
                     item.FontWeight = FontWeights.Regular;
@@ -74,15 +67,12 @@ namespace CodeNav.Helpers
         /// Highlighting changes the foreground, fontweight and background of a code item
         /// Deepest highlighted code item will be scrolled to, to ensure it is in view
         /// </remarks>
-        /// <param name="document">Code document</param>
-        /// <param name="ids">List of unique code item ids</param>
-        private static void Highlight(CodeDocumentViewModel codeDocumentViewModel,
-            int lineNumber, Color backgroundColor)
+        /// <param name="codeDocumentViewModel">Code document</param>
+        private static void Highlight(CodeDocumentViewModel codeDocumentViewModel, int lineNumber, Color backgroundColor)
         {
             var itemsToHighlight = codeDocumentViewModel
                 .CodeDocument
                 .Flatten()
-                .FilterNull()
                 .Where(item => item.StartLine <= lineNumber && item.EndLine >= lineNumber)
                 .OrderBy(item => item.StartLine);
 

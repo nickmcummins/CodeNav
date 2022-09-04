@@ -118,6 +118,8 @@ namespace CodeNav.Models
             set => SetProperty(ref _fontSize, value);
         }
 
+        public string Type { get; set; } = string.Empty;
+        public string Parameters { get; set; } = string.Empty;
         private float _parameterFontSize;
         public float ParameterFontSize
         {

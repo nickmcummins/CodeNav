@@ -26,20 +26,13 @@ namespace CodeNav.Mappers
         {
             var regionList = new List<CodeRegionItem>();
 
-            if (tree == null)
+            var filterRule = SettingsHelper.FilterRules.LastOrDefault(f => f.Kind == CodeItemKindEnum.Region || f.Kind == CodeItemKindEnum.All);
+
+            if (filterRule != null && filterRule.Ignore)
             {
                 return regionList;
             }
-
-            if (SettingsHelper.FilterRules != null)
-            {
-                var filterRule = SettingsHelper.FilterRules.LastOrDefault(f => f.Kind == CodeItemKindEnum.Region || f.Kind == CodeItemKindEnum.All);
-
-                if (filterRule != null && filterRule.Ignore)
-                {
-                    return regionList;
-                }
-            }
+            
 
             var root = tree.GetRoot();
             
@@ -64,8 +57,7 @@ namespace CodeNav.Mappers
                              span.Contains(j.Span)))
             {
                 var region = regionList
-                    .LastOrDefault(x => x.StartLine < GetStartLine(endRegionDirective) &&
-                                        x.EndLine == null);
+                    .LastOrDefault(x => x.StartLine < GetStartLine(endRegionDirective) && x.EndLine == null);
                 
                 if (region == null)
                 {
@@ -96,7 +88,7 @@ namespace CodeNav.Mappers
             {
                 if (IsContainedWithin(region, startLine, endLine) && 
                     regionList.Any(otherBiggerRegion => IsContainedWithin(region, otherBiggerRegion) &&
-                        (startLine != int.MinValue ? otherBiggerRegion.EndLine - otherBiggerRegion.StartLine < endLine - startLine : true)) == false)
+                        (startLine == int.MinValue || otherBiggerRegion.EndLine - otherBiggerRegion.StartLine < endLine - startLine)) == false)
                 {
                     region.Members = ToHierarchy(regionList, region.StartLine, region.EndLine).Cast<CodeItem>().ToList();
 
@@ -176,25 +168,20 @@ namespace CodeNav.Mappers
         /// <param name="regions"></param>
         /// <param name="item"></param>
         /// <returns></returns>
-        public static bool AddToRegion(List<CodeRegionItem> regions, CodeItem item)
+        public static bool AddToRegion(IEnumerable<CodeRegionItem> regions, CodeItem item)
         {
-            if (item?.StartLine == null) return false;
+            if (item.StartLine == null) return false;
             
-            foreach (var region in regions)
+            foreach (var region in regions.Where(region => region?.Kind == CodeItemKindEnum.Region))
             {
-                if (region?.Kind == CodeItemKindEnum.Region)
+                if (AddToRegion(region.Members, item))
                 {
-                    if (AddToRegion(region.Members, item))
-                    {
-                        return true;
-                    }
-
-                    if (item.StartLine >= region.StartLine && item.StartLine <= region.EndLine)
-                    {
-                        region.Members.Add(item);
-                        return true;
-                    }
+                    return true;
                 }
+
+                if (!(item.StartLine >= region.StartLine) || !(item.StartLine <= region.EndLine)) continue;
+                region.Members.Add(item);
+                return true;
             }
             return false;
         }

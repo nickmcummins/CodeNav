@@ -69,6 +69,8 @@
     <DeployExtension Condition=" '$(AppVeyor)' != '' Or '$(TF_BUILD)' != '' ">False</DeployExtension>
     <GenerateSerializationAssemblies>Off</GenerateSerializationAssemblies>
     <DeployExtension>True</DeployExtension>
+    <CreateVsixContainer>False</CreateVsixContainer>
+    <PlatformTarget>x64</PlatformTarget>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -78,6 +80,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <DeployExtension Condition=" '$(AppVeyor)' != '' Or '$(TF_BUILD)' != '' ">False</DeployExtension>
+    <PlatformTarget>x64</PlatformTarget>
   </PropertyGroup>
   <ItemGroup Label="CompileIncludes">
     <Compile Include="CodeNavToolWindowCommandTable.cs">
@@ -93,7 +96,6 @@
     <Compile Include="CodeViewUserControlTop.xaml.cs">
       <DependentUpon>CodeViewUserControlTop.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Comparers\CodeItemComparer.cs" />
     <Compile Include="Constants.cs" />
     <Compile Include="Controls\FilterToolbar.xaml.cs">
       <DependentUpon>FilterToolbar.xaml</DependentUpon>
@@ -164,7 +166,6 @@
     <Compile Include="Languages\XML\Mappers\SyntaxMapperXML.cs" />
     <Compile Include="Languages\XML\Models\XmlElementItem.cs" />
     <Compile Include="Languages\XML\Models\XmlElementLeafItem.cs" />
-    <Compile Include="Languages\XML\Models\XmlSourceFile.cs" />
     <Compile Include="Languages\YAML\Mappers\BaseMapperYAML.cs" />
     <Compile Include="Languages\YAML\Mappers\SyntaxMapperYAML.cs" />
     <Compile Include="Languages\YAML\Models\YamlObjectItem.cs" />
@@ -191,6 +192,7 @@
     <Compile Include="Models\BookmarkStyle.cs" />
     <Compile Include="Models\CodeClassItem.cs" />
     <Compile Include="Models\CodeDepthGroupItem.cs" />
+    <Compile Include="Models\LineMappedSourceFile.cs" />
     <Compile Include="Resources\CodeNavToolWindowCommandTable.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -412,18 +414,18 @@
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
     <PackageReference Include="Microsoft.VSSDK.BuildTools">
-      <Version>17.4.1074-preview2</Version>
+      <Version>17.4.1092-preview2</Version>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
     <PackageReference Include="RangeTree">
-      <Version>3.0.1</Version>
+      <Version>3.0.2</Version>
     </PackageReference>
     <PackageReference Include="System.Reactive">
       <Version>5.0.0</Version>
     </PackageReference>
     <PackageReference Include="System.ServiceModel.Primitives">
-      <Version>4.10.0-preview1.22261.2</Version>
+      <Version>4.10.0</Version>
     </PackageReference>
     <PackageReference Include="TypeScriptAST">
       <Version>1.0.2</Version>

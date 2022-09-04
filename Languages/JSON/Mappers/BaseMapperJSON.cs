@@ -3,11 +3,11 @@ using CodeNav.Mappers;
 using CodeNav.Models;
 using Microsoft.CodeAnalysis.Text;
 using System;
-using System.Linq;
+using static CodeNav.Mappers.BaseMapper;
 using System.Windows.Media;
 using static CodeNav.Constants;
-using JsonNode = System.ValueTuple<string, Microsoft.WebTools.Languages.Json.Parser.Nodes.MemberNode>;
-using JsonObjectNode = System.ValueTuple<string, Microsoft.WebTools.Languages.Json.Parser.Nodes.ObjectNode>;
+using JsonNode = System.ValueTuple<CodeNav.Models.LineMappedSourceFile, Microsoft.WebTools.Languages.Json.Parser.Nodes.MemberNode>;
+using JsonObjectNode = System.ValueTuple<CodeNav.Models.LineMappedSourceFile, Microsoft.WebTools.Languages.Json.Parser.Nodes.ObjectNode>;
 
 namespace CodeNav.Languages.JSON.Mappers
 {
@@ -62,11 +62,6 @@ namespace CodeNav.Languages.JSON.Mappers
             element.FontStyle = FontStyleMapper.Map(SettingsHelper.Font.Style);
 
             return element;
-        }
-
-        public static int GetLineNumber(string sourceStr, int pos)
-        {
-            return sourceStr.Take(pos).Count(c => c == '\n') + 1;
         }
     }
 }

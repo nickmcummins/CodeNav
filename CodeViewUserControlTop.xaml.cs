@@ -11,7 +11,6 @@ using Microsoft.VisualStudio.PlatformUI;
 using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Text.Editor;
 using Microsoft.VisualStudio.Text.Outlining;
-using Task = System.Threading.Tasks.Task;
 
 namespace CodeNav
 {

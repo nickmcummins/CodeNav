@@ -45,11 +45,6 @@ namespace CodeNav.Helpers
 
             var root = await tree.GetRootAsync();
 
-            if (root == null)
-            {
-                return LanguageEnum.Unknown;
-            }
-
             return GetLanguage(root.Language);
         }
     }

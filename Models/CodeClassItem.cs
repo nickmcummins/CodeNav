@@ -18,7 +18,6 @@ namespace CodeNav.Models
 
         public List<CodeItem> Members { get; set; }
 
-        public string Parameters { get; set; } = string.Empty;
         private Color _borderColor;
         public Color BorderColor {
             get { return _borderColor; }

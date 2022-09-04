@@ -9,7 +9,6 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using System.Windows.Media;
 using YamlDotNet.Core;
-using YamlDotNet.Core.Tokens;
 using YamlDotNet.RepresentationModel;
 using YamlElement = System.ValueTuple<YamlDotNet.RepresentationModel.YamlNode, YamlDotNet.RepresentationModel.YamlNode, int>;
 using YamlMappingElement = System.ValueTuple<YamlDotNet.RepresentationModel.YamlNode, YamlDotNet.RepresentationModel.YamlMappingNode, int>;
@@ -20,6 +19,7 @@ namespace CodeNav.Languages.YAML.Mappers
 {
     public static class SyntaxMapperYAML
     {
+        private static readonly Regex Index = new Regex(@"^(\s*)", RegexOptions.Compiled);
         private static ICodeViewUserControl? _control;
 
         public static List<CodeItem> Map(string filePath, ICodeViewUserControl control, string? yamlString = null)
@@ -43,6 +43,8 @@ namespace CodeNav.Languages.YAML.Mappers
                     Kind = CodeItemKindEnum.Namespace,
                     Moniker = KnownMonikers.YamlFile,
                     BorderColor = Colors.DarkGray,
+                    FontFamily = SettingsHelper.DefaultFontFamily,
+                    FontSize = SettingsHelper.Font.SizeInPoints,
                     ParameterFontSize = SettingsHelper.Font.SizeInPoints - 1,
                     Members = ((YamlMappingNode)yamlDocument.RootNode).Children.SelectMany(child => MapMember((child.Key, child.Value, 0))).ToList()
                 }
@@ -70,8 +72,6 @@ namespace CodeNav.Languages.YAML.Mappers
                     }
                     break;
                 }
-                default:
-                    break;
             }
             return member ?? CodeItem.EmptyList;
         }
@@ -92,12 +92,18 @@ namespace CodeNav.Languages.YAML.Mappers
                 parameters = value.Value.Split('\n').Count() <= 1 ? value.Value : string.Empty;
 
             }
-            var scalar = BaseMapperYAML.MapBase<YamlPropertyItem>(name, yamlScalarElement, _control);
-            scalar.Depth = depth;
-            scalar.Kind = CodeItemKindEnum.Property;
-            scalar.Parameters = parameters;
-            scalar.Moniker = KnownMonikers.Property;
-            return new List<CodeItem>() { scalar };
+
+            if (name != null)
+            {
+                var scalar = BaseMapperYAML.MapBase<YamlPropertyItem>(name, yamlScalarElement, _control);
+                scalar.Depth = depth;
+                scalar.Kind = CodeItemKindEnum.Property;
+                scalar.Parameters = parameters;
+                scalar.Moniker = KnownMonikers.Property;
+                return new List<CodeItem>() { scalar };
+            }
+
+            throw new System.Exception($"name of scalar property cannot be null");
         }
 
         private static List<CodeItem> MapSequence(YamlSequenceElement yamlSequenceElement)
@@ -142,18 +148,16 @@ namespace CodeNav.Languages.YAML.Mappers
 
             if (lines.Count > 0)
             {
-                var indent = Regex.Match(lines[0], @"^(\s*)");
+                var indent = Index.Match(lines[0]);
                 if (!indent.Success)
                 {
                     throw new ArgumentException("Invalid indentation");
                 }
 
-                lines = lines
-                    .Select(l => l.Substring(indent.Groups[1].Length))
-                    .ToList();
+                return string.Join("\n", lines.Select(l => l.Substring(indent.Groups[1].Length)));
             }
 
-            return string.Join("\n", lines.ToArray());
+            return string.Join("\n", lines);
         }
     }
 }

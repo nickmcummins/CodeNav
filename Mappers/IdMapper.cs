@@ -1,12 +1,9 @@
 ﻿#nullable enable
 
 using CodeNav.Languages.CSharp.Mappers;
-using CodeNav.Languages.VisualBasic.Mappers;
 using Microsoft.CodeAnalysis;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
 using System.Collections.Immutable;
 using System.Linq;
-using Zu.TypeScript.TsTypes;
 using VisualBasicSyntax = Microsoft.CodeAnalysis.VisualBasic.Syntax;
 
 namespace CodeNav.Mappers

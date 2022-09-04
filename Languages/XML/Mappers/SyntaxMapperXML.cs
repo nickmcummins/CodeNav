@@ -1,7 +1,6 @@
 ﻿using CodeNav.Helpers;
 using CodeNav.Languages.XML.Models;
 using CodeNav.Models;
-using ExCSS;
 using Microsoft.CodeAnalysis;
 using Microsoft.Language.Xml;
 using Microsoft.VisualStudio.Imaging;
@@ -28,7 +27,7 @@ namespace CodeNav.Languages.XML.Mappers
 
             xmlString ??= File.ReadAllText(filePath);
 
-            var xmlSourceFile = new XmlSourceFile(xmlString);
+            var xmlSourceFile = new LineMappedSourceFile(xmlString);
             var xmlTree = Parser.ParseText(xmlString);
 
             return new List<CodeItem?>
@@ -41,7 +40,9 @@ namespace CodeNav.Languages.XML.Mappers
                     Parameters = filePath,
                     Kind = CodeItemKindEnum.Namespace,
                     Moniker = KnownMonikers.XMLFile,
-                    BorderColor = Colors.DarkGray, 
+                    BorderColor = Colors.DarkGray,
+                    FontSize = SettingsHelper.Font.SizeInPoints,
+                    FontFamily = SettingsHelper.DefaultFontFamily,
                     ParameterFontSize = SettingsHelper.Font.SizeInPoints - 1,
                     Members = MapMembers(xmlSourceFile, xmlTree, control)
                 }
@@ -49,7 +50,7 @@ namespace CodeNav.Languages.XML.Mappers
         }
 
 
-        public static List<CodeItem> MapMember(XmlSourceFile xmlSourceFile, IXmlElementSyntax xmlElement, int depth, ICodeViewUserControl? control)
+        public static List<CodeItem> MapMember(LineMappedSourceFile xmlSourceFile, IXmlElementSyntax xmlElement, int depth, ICodeViewUserControl? control)
         {
             switch (xmlElement.GetType().Name)
             {
@@ -57,20 +58,18 @@ namespace CodeNav.Languages.XML.Mappers
                     return MapEmptyElement(xmlSourceFile, xmlElement as XmlEmptyElementSyntax, depth + 1, control);
                 case "XmlElementSyntax":
                     return MapElement(xmlSourceFile, xmlElement as XmlElementSyntax, depth + 1, control);
-                default:
-                    break;
             }
 
             return CodeItem.EmptyList;
         }
 
-        public static List<CodeItem> MapMembers(XmlSourceFile xmlSourceFile,XmlDocumentSyntax ast, ICodeViewUserControl? control)
+        public static List<CodeItem> MapMembers(LineMappedSourceFile xmlSourceFile,XmlDocumentSyntax ast, ICodeViewUserControl? control)
         {
             var members = MapMember(xmlSourceFile, (XmlElementSyntax)ast.Root, 0, control);
             return members.ToList();
         }
 
-        public static List<CodeItem> MapElement(XmlSourceFile xmlSourceFile, XmlElementSyntax xmlElement, int depth, ICodeViewUserControl? control)
+        public static List<CodeItem> MapElement(LineMappedSourceFile xmlSourceFile, XmlElementSyntax xmlElement, int depth, ICodeViewUserControl? control)
         {
             var element = BaseMapperXML.MapBase<XmlElementItem>(xmlSourceFile, xmlElement, control);
             element.Moniker = KnownMonikers.XMLElement;
@@ -88,7 +87,7 @@ namespace CodeNav.Languages.XML.Mappers
             return new List<CodeItem>() { element };
         }
 
-        public static List<CodeItem> MapEmptyElement(XmlSourceFile xmlSourceFile, XmlEmptyElementSyntax xmlEmptyElement, int depth, ICodeViewUserControl? control)
+        public static List<CodeItem> MapEmptyElement(LineMappedSourceFile xmlSourceFile, XmlEmptyElementSyntax xmlEmptyElement, int depth, ICodeViewUserControl? control)
         {
             var elementWithNoChildren = BaseMapperXML.MapBase<XmlElementLeafItem>(xmlSourceFile, xmlEmptyElement, control);
 

@@ -72,8 +72,6 @@ namespace CodeNav.Languages.JS.Mappers
                     return MapChildren(member);
                 case SyntaxKind.BinaryExpression:
                     return MapBinaryExpression(member as BinaryExpression);
-                default:
-                    break;
             }
 
             return new List<CodeItem>();
@@ -135,8 +133,6 @@ namespace CodeNav.Languages.JS.Mappers
                         return FunctionMapperJS.MapArrowFunctionExpression(declarator, _control);
                     case SyntaxKind.NewExpression:
                         return FunctionMapperJS.MapNewExpression(declarator, _control);
-                    default:
-                        break;
                 }
             }
 

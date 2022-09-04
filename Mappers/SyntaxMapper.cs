@@ -9,12 +9,11 @@ using CodeNav.Languages.VisualBasic.Mappers;
 using CodeNav.Languages.XML.Mappers;
 using CodeNav.Languages.YAML.Mappers;
 using CodeNav.Models;
+using Community.VisualStudio.Toolkit;
 using Microsoft.CodeAnalysis;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Threading.Tasks;
 using VisualBasicSyntax = Microsoft.CodeAnalysis.VisualBasic.Syntax;
 
@@ -33,12 +32,7 @@ namespace CodeNav.Mappers
             {
                 var codeAnalysisDocument = await DocumentHelper.GetCodeAnalysisDocument(filePath);
 
-                if (codeAnalysisDocument != null)
-                {
-                    return await MapDocument(codeAnalysisDocument, control);
-                }
-
-                return await MapDocument(control);
+                return await MapDocument(control, codeAnalysisDocument);
             }
             catch (Exception e)
             {
@@ -54,23 +48,44 @@ namespace CodeNav.Mappers
         /// </summary>
         /// <param name="document">a CodeAnalysis document</param>
         /// <returns>List of found code items</returns>
-        public static async Task<List<CodeItem>> MapDocument(Document codeAnalysisDocument, ICodeViewUserControl control)
+        public static async Task<List<CodeItem>> MapDocument(ICodeViewUserControl control, Document? codeAnalysisDocument = null)
         {
+            string? filepath;
+            DocumentView? documentView = null;
             if (codeAnalysisDocument == null || codeAnalysisDocument.FilePath == null)
+            {
+                documentView = await DocumentHelper.GetDocumentView();
+                filepath = await DocumentHelper.GetFilePath(documentView);
+            }
+            else 
+            {
+                filepath = codeAnalysisDocument.FilePath;
+            }
+
+            string text;
+            if (documentView is not null)
+            {
+                text = await DocumentHelper.GetText(documentView);
+            }
+            else if (filepath is not null)
+            {
+                text = File.ReadAllText(filepath);
+            }
+            else
             {
                 return CodeItem.EmptyList;
             }
 
-            string filepath = codeAnalysisDocument.FilePath;
             var fileExtension = Path.GetExtension(filepath);
             switch (fileExtension.ToLower())
             {
+                case ".ts":
                 case ".js":
-                    return SyntaxMapperJS.Map(filepath, control);
+                    return SyntaxMapperJS.Map(filepath, control, text);
                 case ".json":
-                    return SyntaxMapperJSON.Map(filepath, control);
+                    return SyntaxMapperJSON.Map(filepath, control, text);
                 case ".css":
-                    return SyntaxMapperCSS.Map(filepath, control);
+                    return SyntaxMapperCSS.Map(filepath, control, text);
                 case ".xml":
                 case ".csproj":
                 case ".config":
@@ -78,91 +93,15 @@ namespace CodeNav.Mappers
                 case ".vsixmanifest":
                 case ".vstheme":
                 case ".runsettings":
-                    return SyntaxMapperXML.Map(filepath, control);
+                    return SyntaxMapperXML.Map(filepath, control, text);
                 case ".yaml":
                 case ".yml":
-                    return SyntaxMapperYAML.Map(filepath, control);
-                default:
-                    break;
-            }
-
-            var tree = await codeAnalysisDocument.GetSyntaxTreeAsync();
-            if (tree == null)
-            {
-                return CodeItem.EmptyList;
-            }
-
-            var semanticModel = await codeAnalysisDocument.GetSemanticModelAsync();
-            var root = await tree.GetRootAsync();
-
-            switch (LanguageHelper.GetLanguage(root.Language))
-            {
-                case LanguageEnum.CSharp:
-                    if (root is not CompilationUnitSyntax rootSyntax || semanticModel == null)
-                    {
-                        return CodeItem.EmptyList;
-                    }
-
-                    return rootSyntax.Members.Select(member => SyntaxMapperCS.MapMember(member, tree, semanticModel, control)).ToList();
-                case LanguageEnum.VisualBasic:
-                    if (root is not VisualBasicSyntax.CompilationUnitSyntax vbRootSyntax || semanticModel == null)
-                    {
-                        return CodeItem.EmptyList;
-                    }
-
-                    return vbRootSyntax.Members.Select(member => SyntaxMapperVB.MapMember(member, tree, semanticModel, control)).ToList();
-                default:
-                    return CodeItem.EmptyList;
-            }
-        }
-
-        /// <summary>
-        /// Map the active document without workspace
-        /// </summary>
-        /// <returns>List of found code items</returns>
-        public static async Task<List<CodeItem?>> MapDocument(ICodeViewUserControl control)
-        {
-            var documentView = await DocumentHelper.GetDocumentView();
-            string filePath = await DocumentHelper.GetFilePath(documentView);
-
-            if (string.IsNullOrEmpty(filePath))
-            {
-                return CodeItem.EmptyList;
-            }
-
-            var fileExtension = Path.GetExtension(filePath);
-
-            var text = await DocumentHelper.GetText(documentView);
-
-            if (string.IsNullOrEmpty(text))
-            {
-                return CodeItem.EmptyList;
-            }
-
-            switch (fileExtension.ToLower())
-            {
-                case ".js":
-                    return SyntaxMapperJS.Map(filePath, control, text);
-                case ".json":
-                    return SyntaxMapperJSON.Map(filePath, control, text);
-                case ".css":
-                    return SyntaxMapperCSS.Map(filePath, control, text);
-                case ".xml":
-                case ".csproj":
-                case ".config":
-                case ".xaml":
-                case ".vsixmanifest":
-                case ".vstheme":
-                case ".runsettings":
-                    return SyntaxMapperXML.Map(filePath, control, text);
-                case ".yaml":
-                case ".yml":
-                    return SyntaxMapperYAML.Map(filePath, control, text);
+                    return SyntaxMapperYAML.Map(filepath, control, text);
                 case ".cs":
                     return SyntaxMapperCS.Map(text, control);
                 case ".vb":
                     return SyntaxMapperVB.Map(text, control);
-                default: 
+                default:
                     return CodeItem.EmptyList;
             }
         }

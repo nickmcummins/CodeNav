@@ -8,5 +8,7 @@
             get => _selectedIndex;
             set => SetProperty(ref _selectedIndex, value);
         }
+
+        public override string ToString() => $"codeDepthGroupItem(selectedIndex={SelectedIndex})";
     }
 }

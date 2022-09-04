@@ -1,4 +1,5 @@
 /.vs
+/.idea
 /CodeNav/*.user
 /CodeNav/bin
 /CodeNav/obj

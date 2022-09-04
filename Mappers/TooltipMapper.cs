@@ -1,5 +1,4 @@
 ﻿using CodeNav.Models;
-using Microsoft.CodeAnalysis;
 using System.Linq;
 
 namespace CodeNav.Mappers

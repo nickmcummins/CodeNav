@@ -9,7 +9,6 @@ using System.Linq;
 using VisualBasicCompilation = Microsoft.CodeAnalysis.VisualBasic.VisualBasicCompilation;
 using VisualBasicSyntax = Microsoft.CodeAnalysis.VisualBasic.Syntax;
 using VisualBasicSyntaxKind = Microsoft.CodeAnalysis.VisualBasic.SyntaxKind;
-using VisualBasic = Microsoft.CodeAnalysis.VisualBasic;
 
 namespace CodeNav.Languages.VisualBasic.Mappers
 {

@@ -5,7 +5,6 @@ using CodeNav.Models.ViewModels;
 using Community.VisualStudio.Toolkit;
 using Newtonsoft.Json;
 using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;

@@ -1,7 +1,7 @@
 ﻿#nullable enable
 
-using Community.VisualStudio.Toolkit;
 using Microsoft.ApplicationInsights;
+using Microsoft.ApplicationInsights.Extensibility;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -16,18 +16,17 @@ namespace CodeNav.Helpers
     {
         private static TelemetryClient? _client;
         private const string InstrumentationKey = "0913ac4a-1127-4d28-91cf-07673e70200f";
+        private static Version? _executingAssemblyVersion;
 
         public static void GetClient()
         {
-            _client = new TelemetryClient();
+            _client = new TelemetryClient(new TelemetryConfiguration() { ConnectionString = $"InstrumentationKey={InstrumentationKey}" });
             _client.Context.Session.Id = Guid.NewGuid().ToString();
-            _client.InstrumentationKey = InstrumentationKey;
             _client.Context.Component.Version = GetExecutingAssemblyVersion().ToString();
             _client.Context.User.Id = GetUserId();
         }
 
-        public static void Log(string message, Exception? exception = null, 
-            object? additional = null, string language = "")
+        public static void Log(string message, Exception? exception = null, object? additional = null, string language = "")
         {
             if (_client == null)
             {
@@ -42,12 +41,13 @@ namespace CodeNav.Helpers
             var properties = new Dictionary<string, string>
             {
                 { "version", GetExecutingAssemblyVersion().ToString() },
-                { "message", JsonConvert.SerializeObject(message) },
-                { "language", language },
-                { "additional", JsonConvert.SerializeObject(additional) },
-                { "vsVersion", VS.Shell.GetVsVersionAsync().Result?.ToString() ?? string.Empty }
+                { "message", message },
+                { "language", language }
             };
-
+            if (additional != null)
+            {
+                properties["additional"] = JsonConvert.SerializeObject(additional);
+            }
             if (exception == null)
             {
                 _client.TrackEvent(message, properties);
@@ -60,10 +60,13 @@ namespace CodeNav.Helpers
 
         private static Version GetExecutingAssemblyVersion()
         {
-            var ver = FileVersionInfo.GetVersionInfo(Assembly.GetExecutingAssembly().Location);
-
-            // read what's defined in [assembly: AssemblyFileVersion("1.2.3.4")]
-            return new Version(ver.ProductMajorPart, ver.ProductMinorPart, ver.ProductBuildPart, ver.ProductPrivatePart);
+            if (_executingAssemblyVersion == null)
+            {
+                var ver = FileVersionInfo.GetVersionInfo(Assembly.GetExecutingAssembly().Location);
+                // read what's defined in [assembly: AssemblyFileVersion("1.2.3.4")]
+                _executingAssemblyVersion = new Version(ver.ProductMajorPart, ver.ProductMinorPart, ver.ProductBuildPart, ver.ProductPrivatePart);
+            }
+            return _executingAssemblyVersion;
         }
 
         private static string GetUserId()

@@ -1,9 +1,9 @@
 ﻿using CodeNav.Helpers;
-using CodeNav.Languages.XML.Models;
 using CodeNav.Mappers;
 using CodeNav.Models;
 using Microsoft.Language.Xml;
 using System;
+using static CodeNav.Mappers.BaseMapper;
 using System.Linq;
 using System.Windows.Media;
 using static CodeNav.Constants;
@@ -12,7 +12,7 @@ namespace CodeNav.Languages.XML.Mappers
 {
     public static class BaseMapperXML
     {
-        public static T MapBase<T>(XmlSourceFile xmlSourceFile, SyntaxNode xmlElement, ICodeViewUserControl? control) where T : CodeItem
+        public static T MapBase<T>(LineMappedSourceFile xmlSourceFile, SyntaxNode xmlElement, ICodeViewUserControl? control) where T : CodeItem
         {
             var element = Activator.CreateInstance<T>();
             element.Name = GetFullName((IXmlElement)xmlElement);
@@ -39,11 +39,6 @@ namespace CodeNav.Languages.XML.Mappers
             var attributes = xmlElement.Attributes.Any() ? " " + string.Join(" ", xmlElement.Attributes.Select(attr => $"{attr.Key}={DoubleQuote}{attr.Value}{DoubleQuote}")) : string.Empty;
 
             return $"{xmlElement.Name}{attributes}";
-        }
-
-        public static int GetLineNumber(XmlSourceFile xmlSourceFile, int pos)
-        {
-            return xmlSourceFile.LineRanges.Query(pos).First() + 1;
         }
     }
 }

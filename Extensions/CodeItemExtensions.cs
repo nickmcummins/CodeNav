@@ -7,7 +7,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using YamlDotNet.Core;
-using YamlDotNet.RepresentationModel;
 using YamlElement = System.ValueTuple<YamlDotNet.RepresentationModel.YamlNode, YamlDotNet.RepresentationModel.YamlNode, int>;
 
 namespace CodeNav.Extensions
@@ -19,8 +18,13 @@ namespace CodeNav.Extensions
         /// </summary>
         /// <param name="codeDocument">Nested list of CodeItems</param>
         /// <returns>Flat list of CodeItems</returns>
-        public static IEnumerable<CodeItem> Flatten(this IEnumerable<CodeItem> codeDocument) 
-            => codeDocument.SelectMany(codeItem => codeItem is IMembers codeMembersItem ? Flatten(codeMembersItem.Members) : new[] { codeItem }).Concat(codeDocument);
+        public static IEnumerable<CodeItem> Flatten(this IEnumerable<CodeItem> codeDocument)
+        {
+            var codeItems = codeDocument as CodeItem[] ?? codeDocument.ToArray();
+            return codeItems
+                .SelectMany(codeItem => codeItem is IMembers codeMembersItem ? Flatten(codeMembersItem.Members) : new[] {codeItem})
+                .Concat(codeItems);
+        }
 
         /// <summary>
         /// Delete null items from a flat list of CodeItems
@@ -35,11 +39,6 @@ namespace CodeNav.Extensions
         /// <param name="items">Nested list of CodeItems</param>
         public static List<CodeItem> FilterNullItems(this List<CodeItem?> items)
         {
-            if (items == null)
-            {
-                return new List<CodeItem>();
-            }
-
             items.RemoveAll(item => item == null);
 
             foreach (var item in items)

@@ -73,6 +73,11 @@ namespace CodeNav.Mappers
 
         private static int GetEndLine(SyntaxNode source) => source.SyntaxTree.GetLineSpan(source.Span).EndLinePosition.Line + 1;
 
+        public static int GetLineNumber(LineMappedSourceFile lineMappedSource, int pos)
+        {
+            return lineMappedSource.LineRanges.Query(pos).First() + 1;
+        }
+
         private static CodeItemAccessEnum MapAccess(SyntaxTokenList modifiers, SyntaxNode source)
         {
             if (modifiers.Any(m => m.RawKind == (int)SyntaxKind.SealedKeyword ||

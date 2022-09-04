@@ -55,7 +55,6 @@ namespace CodeNav.Models.ViewModels
                 memberItem.Members.Add(item);
 
                 if (item is IMembers hasMembersItem &&
-                    hasMembersItem != null &&
                     (hasMembersItem.Members.Any(i => i.IsHighlighted) || item.IsHighlighted))
                 {
                     TraverseDepth(hasMembersItem.Members, result, depth + 1);
@@ -128,9 +127,9 @@ namespace CodeNav.Models.ViewModels
         public string FilePath = string.Empty;
 
         [DataMember]
-        public List<BookmarkStyle> BookmarkStyles = new List<BookmarkStyle>();
+        public List<BookmarkStyle> BookmarkStyles = new();
 
         [DataMember]
-        public SynchronizedCollection<CodeItem> HistoryItems = new SynchronizedCollection<CodeItem>();
+        public SynchronizedCollection<CodeItem> HistoryItems = new();
     }
 }

@@ -9,8 +9,8 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Windows.Media;
-using JsonMemberNode = System.ValueTuple<string, Microsoft.WebTools.Languages.Json.Parser.Nodes.MemberNode>;
-using JsonObjectNode = System.ValueTuple<string, Microsoft.WebTools.Languages.Json.Parser.Nodes.ObjectNode>;
+using JsonMemberNode = System.ValueTuple<CodeNav.Models.LineMappedSourceFile, Microsoft.WebTools.Languages.Json.Parser.Nodes.MemberNode>;
+using JsonObjectNode = System.ValueTuple<CodeNav.Models.LineMappedSourceFile, Microsoft.WebTools.Languages.Json.Parser.Nodes.ObjectNode>;
 
 namespace CodeNav.Languages.JSON.Mappers
 {
@@ -21,7 +21,7 @@ namespace CodeNav.Languages.JSON.Mappers
         {
             _control = control;
             jsonString ??= File.ReadAllText(filePath);
-
+            var lineMappedSource = new LineMappedSourceFile(jsonString);
             var jsonDocument = JsonNodeParser.Parse(jsonString);
             var rootNode = jsonDocument.TopLevelValue;
             return new List<CodeItem>()
@@ -35,8 +35,10 @@ namespace CodeNav.Languages.JSON.Mappers
                     Kind = CodeItemKindEnum.Namespace,
                     BorderColor = Colors.DarkGray,
                     Moniker = KnownMonikers.JSONScript,
+                    FontFamily = SettingsHelper.DefaultFontFamily,
+                    FontSize = SettingsHelper.Font.SizeInPoints,
                     ParameterFontSize = SettingsHelper.Font.SizeInPoints - 1,
-                    Members = ((ObjectNode)rootNode).Members.Where(member => member is not null).SelectMany(child => MapMember((jsonString, child))).ToList()
+                    Members = ((ObjectNode)rootNode).Members.Where(member => member is not null).SelectMany(child => MapMember((lineMappedSource, child))).ToList()
                 }
             };
 
@@ -56,8 +58,6 @@ namespace CodeNav.Languages.JSON.Mappers
                     return MapJsonArray(jsonMember);
                 case NodeKind.JSON_Object:
                     return MapJsonObject(jsonNode.Name.Text, (sourceStr, jsonNode.Value as ObjectNode));
-                default:
-                    break;
             }
 
             return CodeItem.EmptyList;

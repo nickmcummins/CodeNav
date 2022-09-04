@@ -63,8 +63,6 @@ namespace CodeNav.Languages.CSS.Mappers
                     return MapMediaRule(rule, control);
                 case Rule rule when rule.Type == RuleType.FontFace:
                     return MapFontFaceRule(rule, control);
-                default:
-                    break;
             }
 
             return new List<CodeItem>();

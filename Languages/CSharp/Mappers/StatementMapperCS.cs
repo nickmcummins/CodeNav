@@ -5,6 +5,7 @@ using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using System.Collections.Generic;
+using System.Linq;
 using System.Windows.Media;
 
 namespace CodeNav.Languages.CSharp.Mappers
@@ -58,7 +59,7 @@ namespace CodeNav.Languages.CSharp.Mappers
                 return list;
             }
 
-            foreach (var statement in statements)
+            foreach (var statement in statements.Where(s => s != null))
             {
                 list.AddRange(MapStatement(statement, control, semanticModel));
             }

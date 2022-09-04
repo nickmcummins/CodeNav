@@ -4,6 +4,7 @@ using CodeNav.Models;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.VisualStudio.Imaging;
+using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
 using System.Windows.Media;
@@ -37,11 +38,15 @@ namespace CodeNav.Languages.CSharp.Mappers
 
         protected static CodeItem MapMethod(SyntaxNode node, SyntaxToken identifier, SyntaxTokenList modifiers, BlockSyntax body, ITypeSymbol? returnType, ParameterListSyntax parameterList, CodeItemKindEnum kind, ICodeViewUserControl control, SemanticModel semanticModel)
         {
-            CodeItem item;
+            CodeItem item = null;
 
-            var statementsCodeItems = StatementMapperCS.MapStatement(body, control, semanticModel);
+            List<CodeItem> statementsCodeItems = new List<CodeItem>();
+            if (body != null)
+            {
+                statementsCodeItems.AddRange(StatementMapperCS.MapStatement(body, control, semanticModel));
+                VisibilityHelper.SetCodeItemVisibility(statementsCodeItems);
+            }
 
-            VisibilityHelper.SetCodeItemVisibility(statementsCodeItems);
 
             if (statementsCodeItems.Any(statement => statement.IsVisible == Visibility.Visible))
             {

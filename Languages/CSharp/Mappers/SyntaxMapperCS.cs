@@ -36,6 +36,7 @@ namespace CodeNav.Languages.CSharp.Mappers
             return root.Members
                 .Where(member => member is not null)
                 .Select(member => MapMember(member, tree, semanticModel, control))
+                .Where(member => member != null)
                 .ToList();
         }
 
@@ -74,7 +75,7 @@ namespace CodeNav.Languages.CSharp.Mappers
                 case SyntaxKind.IndexerDeclaration:
                     return IndexerMapperCS.MapIndexer(member as IndexerDeclarationSyntax, control, semanticModel);
                 default:
-                    throw new System.Exception($"Unable to map member of kind [{member.Kind()}.");
+                    return null;
             }
         }
     }

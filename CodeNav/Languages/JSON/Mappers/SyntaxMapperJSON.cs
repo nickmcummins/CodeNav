@@ -1,25 +1,20 @@
-﻿using CodeNav.Helpers;
-using CodeNav.Languages.JSON.Models;
-using CodeNav.Models;
-using Microsoft.VisualStudio.Imaging;
+﻿using CodeNav.Models;
 using Microsoft.WebTools.Languages.Json.Parser;
-using Microsoft.WebTools.Languages.Json.Parser.Nodes;
-using Microsoft.WebTools.Languages.Shared.Parser;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Windows.Media;
+using System.Text;
+using System.Threading.Tasks;
 using JsonMemberNode = System.ValueTuple<CodeNav.Models.LineMappedSourceFile, Microsoft.WebTools.Languages.Json.Parser.Nodes.MemberNode>;
 using JsonObjectNode = System.ValueTuple<CodeNav.Models.LineMappedSourceFile, Microsoft.WebTools.Languages.Json.Parser.Nodes.ObjectNode>;
 
-namespace CodeNav.Languages.JSON.Mappers
+namespace CodeNav.Languages.Languages.Mappers
 {
-    public class SyntaxMapperJSON : Languages.Mappers.SyntaxMapperJSON
+    public class SyntaxMapperJSON
     {
-        private static ICodeViewUserControl? _control;
-        public static List<CodeItem> Map(string filePath, ICodeViewUserControl control, string? jsonString = null)
+        public static List<ICodeItem> Map(string filePath, string? jsonString = null)
         {
-            _control = control;
             jsonString ??= File.ReadAllText(filePath);
             var lineMappedSource = new LineMappedSourceFile(jsonString);
             var jsonDocument = JsonNodeParser.Parse(jsonString);
@@ -33,18 +28,12 @@ namespace CodeNav.Languages.JSON.Mappers
                     FullName = Path.GetFileName(filePath),
                     Parameters = filePath,
                     Kind = CodeItemKindEnum.Namespace,
-                    BorderColor = Colors.DarkGray,
-                    Moniker = KnownMonikers.JSONScript,
-                    FontFamily = SettingsHelper.DefaultFontFamily,
-                    FontSize = SettingsHelper.Font.SizeInPoints,
-                    ParameterFontSize = SettingsHelper.Font.SizeInPoints - 1,
                     Members = ((ObjectNode)rootNode).Members.Where(member => member is not null).SelectMany(child => MapMember((lineMappedSource, child))).ToList()
                 }
             };
-
         }
 
-        private static List<CodeItem> MapMember(JsonMemberNode jsonMember)
+        private static List<ICodeItem> MapMember(JsonMemberNode jsonMember)
         {
             var (sourceStr, jsonNode) = jsonMember;
             switch (jsonNode.Value.Kind)
@@ -63,7 +52,7 @@ namespace CodeNav.Languages.JSON.Mappers
             return CodeItem.EmptyList;
         }
 
-        private static List<CodeItem> MapScalar(JsonMemberNode jsonNode)
+        private static List<ICodeItem> MapScalar(JsonMemberNode jsonNode)
         {
             var (_, jsonScalarNode) = jsonNode;
 
@@ -74,29 +63,27 @@ namespace CodeNav.Languages.JSON.Mappers
             return new List<CodeItem>() { scalar };
         }
 
-        private static List<CodeItem> MapJsonArray(JsonMemberNode jsonNode)
+        private static List<ICodeItem> MapJsonArray(JsonMemberNode jsonNode)
         {
             var (sourceStr, jsonArrayNode) = jsonNode;
             var jsonArray = BaseMapperJSON.MapBase<JsonObjectItem>(jsonNode, _control);
-            jsonArray.Moniker = KnownMonikers.ListProperty;
             jsonArray.Kind = CodeItemKindEnum.Property;
             jsonArray.Members = ((ArrayNode)jsonArrayNode.Value).BlockChildren.Select(child => child.Value).Where(child => child.Kind == NodeKind.JSON_Object).SelectMany(jsonArrayItem => MapJsonObject("object", (sourceStr, (ObjectNode)jsonArrayItem))).ToList();
             if (!jsonArray.Members.Any())
             {
                 jsonArray.Parameters = jsonArrayNode.Value.GetText();
             }
-            return new List<CodeItem>() { jsonArray };
+            return new List<ICodeItem>() { jsonArray };
         }
 
-        private static List<CodeItem> MapJsonObject(string name, JsonObjectNode jsonObjectNode)
+        private static List<ICodeItem> MapJsonObject(string name, JsonObjectNode jsonObjectNode)
         {
             var (sourceStr, objectNode) = jsonObjectNode;
             var jsonObject = BaseMapperJSON.MapBase<JsonObjectItem>(name, jsonObjectNode, _control);
-            jsonObject.Moniker = KnownMonikers.ObjectPublic;
             jsonObject.Kind = CodeItemKindEnum.Property;
             jsonObject.Members = objectNode.Members.SelectMany(jsonObjectProperty => MapMember((sourceStr, jsonObjectProperty))).ToList();
 
-            return new List<CodeItem>() { jsonObject };
+            return new List<ICodeItem>() { jsonObject };
         }
     }
 }

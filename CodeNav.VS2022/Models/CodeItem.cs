@@ -18,7 +18,7 @@ using Microsoft.VisualStudio.Shell;
 namespace CodeNav.Models
 {
     [DataContract]
-    public class CodeItem : ObservableObject
+    public class CodeItem : ObservableObject, ICodeItem
     {
         public static List<CodeItem> EmptyList = Enumerable.Empty<CodeItem>().ToList();
 
@@ -45,11 +45,11 @@ namespace CodeNav.Models
 
         public string FilePath { get; set; } = string.Empty;
 
-        internal string FullName = string.Empty;
+        public string FullName { get; set; } = string.Empty;
 
-        public CodeItemKindEnum Kind;
+        public CodeItemKindEnum Kind { get; set; }
 
-        public CodeItemAccessEnum Access;
+        public CodeItemAccessEnum Access { get; set; }
 
         internal ICodeViewUserControl? Control;
 

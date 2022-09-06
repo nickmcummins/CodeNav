@@ -3,7 +3,7 @@ using CodeNav.Mappers;
 using CodeNav.Models;
 using Microsoft.CodeAnalysis.Text;
 using System;
-using static CodeNav.Mappers.BaseMapper;
+using static CodeNav.Mappers.SyntaxMapperBase;
 using System.Windows.Media;
 using static CodeNav.Constants;
 using JsonNode = System.ValueTuple<CodeNav.Models.LineMappedSourceFile, Microsoft.WebTools.Languages.Json.Parser.Nodes.MemberNode>;

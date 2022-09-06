@@ -1,6 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using CodeNav.Languages.Collections;
+using System.Collections.Generic;
 using System.Linq;
-using IntervalTree;
 
 namespace CodeNav.Models
 {

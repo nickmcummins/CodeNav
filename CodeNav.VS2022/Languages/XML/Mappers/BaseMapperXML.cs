@@ -3,7 +3,7 @@ using CodeNav.Mappers;
 using CodeNav.Models;
 using Microsoft.Language.Xml;
 using System;
-using static CodeNav.Mappers.BaseMapper;
+using static CodeNav.Mappers.SyntaxMapperBase;
 using System.Linq;
 using System.Windows.Media;
 using static CodeNav.Constants;

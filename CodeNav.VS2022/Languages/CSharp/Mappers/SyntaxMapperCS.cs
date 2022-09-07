@@ -15,16 +15,17 @@ namespace CodeNav.Languages.CSharp.Mappers
         public static async Task<List<CodeItem>> MapAsync(string text, Document? codeAnalysisDocument = null, ICodeViewUserControl? control = null)
         {
             SyntaxTree tree;
-
+            SemanticModel semanticModel;
             if (codeAnalysisDocument != null)
             {
+                semanticModel = await codeAnalysisDocument.GetSemanticModelAsync();
                 tree = await codeAnalysisDocument.GetSyntaxTreeAsync();
             }
             else
             {
                 tree = CSharpSyntaxTree.ParseText(text);
+                semanticModel = SyntaxHelper.GetCSharpSemanticModel(tree);
             }
-            var semanticModel = await codeAnalysisDocument.GetSemanticModelAsync();
 
             var root = (CompilationUnitSyntax)await tree.GetRootAsync();
 

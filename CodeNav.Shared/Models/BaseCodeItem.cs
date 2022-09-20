@@ -8,7 +8,7 @@ using VisualBasicSyntax = Microsoft.CodeAnalysis.VisualBasic.Syntax;
 
 namespace CodeNav.Shared.Models
 {
-    public class BaseCodeItem
+    public class BaseCodeItem : ICodeItem
     {
         public string Name { get; set; } = string.Empty;
         public string FullName { get; set; } = string.Empty;
@@ -24,6 +24,16 @@ namespace CodeNav.Shared.Models
         public string FilePath { get; set; } = string.Empty;
         public CodeItemKindEnum Kind { get; set; }
         public CodeItemAccessEnum Access { get; set; }
+        public string MonikerString { get; set; } = string.Empty;
+        public string OverlayMonikerString { get; set; } = string.Empty;
+        public double Opacity { get; set; }
+        #region Fonts
+        public float FontSize { get; set; }
+        public float ParameterFontSize { get; set; }
+        #endregion
+        #region IsVisible
+        public bool IsVisible { get; set; }
+        #endregion
 
         public BaseCodeItem(SyntaxNode source, SyntaxToken identifier, SyntaxTokenList modifiers, SemanticModel semanticModel) : this(source, identifier.Text, modifiers, semanticModel) { }
         public BaseCodeItem(SyntaxNode source, NameSyntax name, SemanticModel semanticModel) : this(source, name.ToString(), new SyntaxTokenList(), semanticModel) { }
@@ -46,5 +56,7 @@ namespace CodeNav.Shared.Models
             ForegroundColor = Colors.Black;
             Access = MapAccess(modifiers, source);
         }
+
+        public BaseCodeItem() { }
     }
 }

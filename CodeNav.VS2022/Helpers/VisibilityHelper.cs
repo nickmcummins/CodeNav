@@ -15,8 +15,7 @@ namespace CodeNav.Helpers
 {
     public static class VisibilityHelper
     {
-        public static List<CodeItem> SetCodeItemVisibility(CodeDocumentViewModel model)
-            => SetCodeItemVisibility(model.CodeDocument, model.FilterText, model.FilterOnBookmarks, model.Bookmarks);
+        public static List<CodeItem> SetCodeItemVisibility(CodeDocumentViewModel model) => SetCodeItemVisibility(model.CodeDocument, model.FilterText, model.FilterOnBookmarks, model.Bookmarks);
 
         /// <summary>
         /// Loop through all codeItems and look into Settings to see if the item should be visible or not.

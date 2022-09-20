@@ -70,6 +70,8 @@ namespace CodeNav.Mappers
             item.Id = IdMapper.MapId(item.FullName, parameterList);
             item.Kind = kind;
             item.Moniker = IconMapper.MapMoniker(item.Kind, item.Access);
+            item.StartLine = BaseMapper.GetStartLine(node, modifiers);
+            item.StartLinePosition = BaseMapper.GetStartLinePosition(node, modifiers);
 
             if (TriviaSummaryMapper.HasSummary(node) && SettingsHelper.UseXMLComments)
             {

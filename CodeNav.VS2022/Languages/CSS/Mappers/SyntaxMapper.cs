@@ -3,6 +3,7 @@
 using CodeNav.Languages.CSS.Models;
 using CodeNav.Mappers;
 using CodeNav.Models;
+using CodeNav.Shared.Enums;
 using ExCSS;
 using Microsoft.CodeAnalysis;
 using System.Collections.Generic;

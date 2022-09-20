@@ -1,4 +1,5 @@
 ﻿using CodeNav.Models;
+using CodeNav.Shared.Enums;
 using Microsoft.VisualStudio.Imaging;
 using Microsoft.VisualStudio.Imaging.Interop;
 using System;

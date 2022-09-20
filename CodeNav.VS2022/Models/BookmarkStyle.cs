@@ -34,10 +34,7 @@ namespace CodeNav.Models
 
         public SolidColorBrush ForegroundBrush => ColorHelper.ToBrush(ForegroundColor);
 
-        public BookmarkStyle()
-        {
-
-        }
+        public BookmarkStyle() { }
 
         public BookmarkStyle(Color backgroundColor, Color foregroundColor)
         {

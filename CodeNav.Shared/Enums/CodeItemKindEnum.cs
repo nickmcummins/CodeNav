@@ -1,4 +1,4 @@
-﻿namespace CodeNav.Models
+﻿namespace CodeNav.Shared.Enums
 {
     public enum CodeItemKindEnum
     {

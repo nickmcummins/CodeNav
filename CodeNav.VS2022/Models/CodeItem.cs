@@ -14,6 +14,7 @@ using System;
 using System.Runtime.Serialization;
 using Task = System.Threading.Tasks.Task;
 using Microsoft.VisualStudio.Shell;
+using CodeNav.Shared.Enums;
 
 namespace CodeNav.Models
 {

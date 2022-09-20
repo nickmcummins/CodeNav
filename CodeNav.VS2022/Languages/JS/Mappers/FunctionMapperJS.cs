@@ -3,6 +3,7 @@
 using CodeNav.Extensions;
 using CodeNav.Mappers;
 using CodeNav.Models;
+using CodeNav.Shared.Enums;
 using System;
 using System.Collections.Generic;
 using System.Linq;

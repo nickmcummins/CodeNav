@@ -1,5 +1,6 @@
 ﻿using System.Linq;
 using CodeNav.Models;
+using CodeNav.Shared.Enums;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using VisualBasicSyntax = Microsoft.CodeAnalysis.VisualBasic.Syntax;

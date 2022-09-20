@@ -3,6 +3,7 @@
 using CodeNav.Extensions;
 using CodeNav.Helpers;
 using CodeNav.Models;
+using CodeNav.Shared.Enums;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using System.Linq;

@@ -8,6 +8,7 @@ using System.Linq;
 using VisualBasicSyntax = Microsoft.CodeAnalysis.VisualBasic.Syntax;
 using VisualBasic = Microsoft.CodeAnalysis.VisualBasic;
 using CodeNav.Helpers;
+using CodeNav.Shared.Enums;
 
 namespace CodeNav.Mappers
 {

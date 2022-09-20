@@ -1,0 +1,24 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup Label="ProjectProperties">
+    <TargetFrameworks>net481</TargetFrameworks>
+    <Nullable>enable</Nullable>
+    <LangVersion>9.0</LangVersion>
+  </PropertyGroup>
+
+  <ItemGroup Label="NuGetDependencies">
+    <PackageReference Include="Microsoft.CodeAnalysis">
+      <Version>4.4.0-2.final</Version>
+    </PackageReference>
+    <PackageReference Include="Microsoft.VisualStudio.LanguageServices">
+      <Version>4.4.0-2.final</Version>
+    </PackageReference>
+    <PackageReference Include="TypeScriptAST">
+      <Version>1.0.2</Version>
+    </PackageReference>
+    <PackageReference Include="ExCSS">
+      <Version>4.1.4</Version>
+    </PackageReference>
+  </ItemGroup>
+
+</Project>

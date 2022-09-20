@@ -2,6 +2,7 @@
 
 using CodeNav.Mappers;
 using CodeNav.Models;
+using CodeNav.Shared.Enums;
 using Microsoft.CodeAnalysis;
 using System.Collections.Generic;
 using System.IO;

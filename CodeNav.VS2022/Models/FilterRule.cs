@@ -1,4 +1,6 @@
-﻿namespace CodeNav.Models
+﻿using CodeNav.Shared.Enums;
+
+namespace CodeNav.Models
 {
     public class FilterRule
     {

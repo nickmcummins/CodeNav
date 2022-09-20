@@ -7,6 +7,7 @@ using System.Windows;
 using System.Windows.Controls;
 using CodeNav.Models;
 using CodeNav.Models.ViewModels;
+using CodeNav.Shared.Enums;
 using Microsoft.VisualStudio.Shell;
 using Task = System.Threading.Tasks.Task;
 

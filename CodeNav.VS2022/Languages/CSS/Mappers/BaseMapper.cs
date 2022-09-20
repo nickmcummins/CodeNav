@@ -7,6 +7,7 @@ using System;
 using System.Windows.Media;
 using TextSpan = Microsoft.CodeAnalysis.Text.TextSpan;
 using Colors = System.Windows.Media.Colors;
+using CodeNav.Shared.Enums;
 
 namespace CodeNav.Languages.CSS.Mappers
 {

@@ -5,6 +5,7 @@
 using CodeNav.Helpers;
 using CodeNav.Mappers;
 using CodeNav.Models;
+using CodeNav.Shared.Enums;
 using Microsoft.CodeAnalysis.Text;
 using System;
 using System.Linq;

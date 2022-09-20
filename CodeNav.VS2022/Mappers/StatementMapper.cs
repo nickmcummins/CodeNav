@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using VisualBasicSyntax = Microsoft.CodeAnalysis.VisualBasic.Syntax;
 using VisualBasic = Microsoft.CodeAnalysis.VisualBasic;
 using CodeNav.Extensions;
+using CodeNav.Shared.Enums;
 
 namespace CodeNav.Mappers
 {

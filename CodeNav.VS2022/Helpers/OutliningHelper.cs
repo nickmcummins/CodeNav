@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using CodeNav.Models;
+using CodeNav.Shared.Enums;
 using Community.VisualStudio.Toolkit;
 using Microsoft.CodeAnalysis.Text;
 using Microsoft.VisualStudio.Text;

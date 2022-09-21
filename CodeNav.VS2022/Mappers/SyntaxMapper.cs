@@ -1,23 +1,20 @@
 ﻿#nullable enable
 
+using CodeNav.Helpers;
+using CodeNav.Models;
+using CodeNav.Shared.Helpers;
+using CodeNav.Shared.Languages.CSharp.Mappers;
+using CodeNav.Shared.Languages.VisualBasic.Mappers;
+using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CSharp;
 using System;
 using System.Collections.Generic;
 using System.IO;
-using CodeNav.Models;
-using Microsoft.CodeAnalysis;
-using Microsoft.CodeAnalysis.CSharp;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
 using System.Linq;
-using CodeNav.Helpers;
+using System.Threading.Tasks;
+using CompilationUnitSyntax = Microsoft.CodeAnalysis.CSharp.Syntax.CompilationUnitSyntax;
 using VisualBasic = Microsoft.CodeAnalysis.VisualBasic;
 using VisualBasicSyntax = Microsoft.CodeAnalysis.VisualBasic.Syntax;
-using System.Threading.Tasks;
-using CodeNav.Shared.Helpers;
-using Microsoft.CodeAnalysis.VisualBasic.Syntax;
-using CompilationUnitSyntax = Microsoft.CodeAnalysis.CSharp.Syntax.CompilationUnitSyntax;
-using FieldDeclarationSyntax = Microsoft.CodeAnalysis.CSharp.Syntax.FieldDeclarationSyntax;
-using EnumMemberDeclarationSyntax = Microsoft.CodeAnalysis.CSharp.Syntax.EnumMemberDeclarationSyntax;
-using VariableDeclaratorSyntax = Microsoft.CodeAnalysis.CSharp.Syntax.VariableDeclaratorSyntax;
 
 namespace CodeNav.Mappers
 {
@@ -36,9 +33,12 @@ namespace CodeNav.Mappers
             var compilation = CSharpCompilation.Create("CodeNavCompilation", new[] { tree }, new[] { mscorlib });
             var semanticModel = compilation.GetSemanticModel(tree);
 
-            var root = (CompilationUnitSyntax)tree.GetRoot(); //
+            var root = (CompilationUnitSyntax)tree.GetRoot(); 
 
-            return root.Members.Select(member => MapMember(member, tree, semanticModel, control)).ToList();
+            return root.Members
+                .Select(member => SyntaxMapperCS.MapMember(member, tree, semanticModel))
+                .Select(member => MapMember(member, control))
+                .ToList();
         }
 
         /// <summary>
@@ -56,7 +56,10 @@ namespace CodeNav.Mappers
 
             var root = (VisualBasicSyntax.CompilationUnitSyntax)tree.GetRoot();
 
-            return root.Members.Select(member => MapMember(member, tree, semanticModel, control)).ToList();
+            return root.Members
+                .Select(member => SyntaxMapperVB.MapMember(member, tree, semanticModel))
+                .Select(member => MapMember(member, control))
+                .ToList();
         }
 
         /// <summary>
@@ -132,7 +135,7 @@ namespace CodeNav.Mappers
                     }
 
                     return rootSyntax.Members
-                        .Select(member => Shared.Languages.CSharp.Mappers.SyntaxMapperCS.MapMember(member, tree, semanticModel))
+                        .Select(member => SyntaxMapperCS.MapMember(member, tree, semanticModel))
                         .Select(member => MapMember(member, control))
                         .ToList();
                 case LanguageEnum.VisualBasic:
@@ -142,7 +145,10 @@ namespace CodeNav.Mappers
                         return new List<CodeItem?>();
                     }
 
-                    return vbRootSyntax.Members.Select(member => MapMember(member, tree, semanticModel, control)).ToList();
+                    return vbRootSyntax.Members.Select(member => SyntaxMapperVB
+                    .MapMember(member, tree, semanticModel))
+                        .Select(member => MapMember(member, control))
+                        .ToList();
                 default:
                     return new List<CodeItem?>();
             }
@@ -209,7 +215,10 @@ namespace CodeNav.Mappers
                     return new List<CodeItem?>();
                 }
 
-                return root.Members.Select(member => MapMember(member, tree, semanticModel, control)).ToList();
+                return root.Members
+                    .Select(member => SyntaxMapperVB.MapMember(member, tree, semanticModel))
+                    .Select(member => MapMember(member, control))
+                    .ToList();
             }
 
             return new List<CodeItem?>();
@@ -257,30 +266,6 @@ namespace CodeNav.Mappers
             }
             item.Control = control;
             return null; 
-        }
-
-        public static CodeItem? MapMember(SyntaxNode member,
-            SyntaxTree tree, SemanticModel semanticModel, ICodeViewUserControl control,
-            bool mapBaseClass = true)
-        {
-            if (member == null)
-            {
-                return null;
-            }
-
-                    return null;
-            
-        }
-
-        public static CodeItem? MapMember(VisualBasicSyntax.StatementSyntax member,
-            SyntaxTree tree, SemanticModel semanticModel, ICodeViewUserControl control)
-        {
-            if (member == null)
-            {
-                return null;
-            }
-
-            return null;
         }
     }
 }

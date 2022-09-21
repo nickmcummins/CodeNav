@@ -118,10 +118,8 @@
     <Compile Include="Helpers\VisibilityHelper.cs" />
     <Compile Include="Helpers\WpfHelper.cs" />
     <Compile Include="ICodeViewUserControl.cs" />
-    <Compile Include="Mappers\BaseMapper.cs" />
     <Compile Include="Mappers\FontStyleMapper.cs" />
     <Compile Include="Mappers\IconMapper.cs" />
-    <Compile Include="Mappers\RegionMapper.cs" />
     <Compile Include="Mappers\SyntaxMapper.cs" />
     <Compile Include="Models\BookmarkStyle.cs" />
     <Compile Include="Models\CodeClassItem.cs" />

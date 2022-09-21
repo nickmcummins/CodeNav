@@ -2,6 +2,7 @@
 
 using CodeNav.Helpers;
 using CodeNav.Models;
+using CodeNav.Shared.Helpers;
 using CodeNav.Shared.ViewModels;
 using Microsoft.VisualStudio.PlatformUI;
 using System.Windows;
@@ -106,7 +107,7 @@ namespace CodeNav.Windows
 
             General.Instance.Save();
 
-            SettingsHelper.Refresh();
+            CodeNavSettings.Instance.Refresh();
 
             Close();
         }
@@ -136,7 +137,7 @@ namespace CodeNav.Windows
             General.Instance.BackgroundColor = ColorHelper.Transparent();
             General.Instance.Save();
 
-            SettingsHelper.Refresh();
+            CodeNavSettings.Instance.Refresh();
             Close();
         }
     }

@@ -1,15 +1,16 @@
-﻿using CodeNav.Mappers;
-using NUnit.Framework;
+﻿using CodeNav.Shared.Mappers;
+
 
 namespace CodeNav.Tests.MapperTests
 {
-    [TestFixture]
+    [TestClass]
     public class TypeMapperTests
     {
-        [TestCase("System.Generic.Collection.List<Models.item>", true, "System.Generic.Collection.List<Models.item>")]
-        [TestCase("System.Generic.Collection.List<Models.item>", false, "List<item>")]
-        [TestCase("CodeNav.Models.CodeItem", true, "CodeNav.Models.CodeItem")]
-        [TestCase("CodeNav.Models.CodeItem", false, "CodeItem")]
+        [DataTestMethod]
+        [DataRow("System.Generic.Collection.List<Models.item>", true, "System.Generic.Collection.List<Models.item>")]
+        [DataRow("System.Generic.Collection.List<Models.item>", false, "List<item>")]
+        [DataRow("CodeNav.Models.CodeItem", true, "CodeNav.Models.CodeItem")]
+        [DataRow("CodeNav.Models.CodeItem", false, "CodeItem")]
         public void ShouldMapTypeOk(string type, bool useLongNames, string expected)
         {
             var actual = TypeMapper.Map(type, useLongNames);

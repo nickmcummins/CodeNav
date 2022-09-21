@@ -163,10 +163,10 @@ namespace CodeNav.Shared.Languages.JavaScript.Mappers
             element.Span = new TextSpan(variable.NodeStart, variable.End.GetValueOrDefault() - variable.NodeStart);
             element.ForegroundColor = Constants.Colors.Black;
             element.Access = CodeItemAccessEnum.Public;
-            element.FontSize = SettingsHelper.FontSizeInPoints;
-            element.ParameterFontSize = SettingsHelper.FontSizeInPoints - 1;
-            element.FontFamilyName = SettingsHelper.FontFamilyName;
-            element.FontStyleName = SettingsHelper.FontStyleName;
+            element.FontSize = Instance.FontSizeInPoints;
+            element.ParameterFontSize = Instance.FontSizeInPoints - 1;
+            element.FontFamilyName = Instance.FontFamilyName;
+            element.FontStyleName = Instance.FontStyleName;
             element.Kind = CodeItemKindEnum.Variable;
             element.MonikerString = IconMapper.MapMoniker(element.Kind, element.Access);
 

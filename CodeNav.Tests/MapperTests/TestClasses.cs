@@ -1,19 +1,16 @@
-﻿using System;
-using System.IO;
-using System.Linq;
-using CodeNav.Mappers;
-using CodeNav.Models;
-using NUnit.Framework;
+﻿using CodeNav.Shared.Enums;
+using CodeNav.Shared.Mappers;
+using CodeNav.Shared.Models;
 
 namespace CodeNav.Tests.MapperTests
 {
-    [TestFixture]
+    [TestClass]
     public class TestClasses
     {
-        [Test]
+        [TestMethod]
         public void ModulesShouldBeOkVB()
         {
-            var document = SyntaxMapper.MapDocumentVB(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "..\\..\\Files\\VisualBasic\\TestModules.vb"), null);
+            var document = SyntaxMapper.MapDocument($@"Files\VisualBasic\TestModules.vb");
 
             Assert.IsTrue(document.Any());
 
@@ -23,13 +20,13 @@ namespace CodeNav.Tests.MapperTests
             // Inner item should be a class
             var innerClass = document.First() as CodeClassItem;
 
-            Assert.True(innerClass.Members.Any());
+            Assert.IsTrue(innerClass.Members.Any());
         }
 
-        [Test]
+        [TestMethod]
         public void ClassInheritanceShouldBeOkVB()
         {
-            var document = SyntaxMapper.MapDocumentVB(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "..\\..\\Files\\VisualBasic\\TestClasses.vb"), null);
+            var document = SyntaxMapper.MapDocument(@$"Files\VisualBasic\TestClasses.vb");
 
             Assert.IsTrue(document.Any());
 

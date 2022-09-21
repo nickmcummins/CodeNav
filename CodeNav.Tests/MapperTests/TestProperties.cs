@@ -1,19 +1,20 @@
 ﻿using System;
 using System.IO;
 using System.Linq;
-using CodeNav.Mappers;
-using CodeNav.Models;
-using NUnit.Framework;
+using CodeNav.Shared.Enums;
+using CodeNav.Shared.Mappers;
+using CodeNav.Shared.Models;
+
 
 namespace CodeNav.Tests.MapperTests
 {
-    [TestFixture]
+    [TestClass]
     public class TestProperties
     {
-        [Test]
+        [TestMethod]
         public void ShouldBeOk()
         {
-            var document = SyntaxMapper.MapDocument(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "..\\..\\Files\\TestProperties.cs"), null);
+            var document = SyntaxMapper.MapDocument($@"Files\TestProperties.cs");
 
             Assert.IsTrue(document.Any());
 
@@ -40,10 +41,10 @@ namespace CodeNav.Tests.MapperTests
             Assert.IsNull(property.Parameters);
         }
 
-        [Test]
+        [TestMethod]
         public void ShouldBeOkVB()
         {
-            var document = SyntaxMapper.MapDocumentVB(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "..\\..\\Files\\VisualBasic\\TestProperties.vb"), null);
+            var document = SyntaxMapper.MapDocument($@"Files\\VisualBasic\\TestProperties.vb");
 
             Assert.IsTrue(document.Any());
 

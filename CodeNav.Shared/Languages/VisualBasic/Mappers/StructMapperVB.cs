@@ -22,7 +22,7 @@ namespace CodeNav.Shared.Languages.VisualBasic.Mappers
             item.MonikerString = IconMapper.MapMoniker(item.Kind, item.Access);
             item.BorderColor = Constants.Colors.DarkGray;
 
-            if (TriviaSummaryMapper.HasSummary(member) && SettingsHelper.UseXMLComments)
+            if (TriviaSummaryMapper.HasSummary(member) && Instance.UseXMLComments)
             {
                 item.Tooltip = TriviaSummaryMapper.Map(member);
             }

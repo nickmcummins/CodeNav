@@ -25,10 +25,10 @@ namespace CodeNav.Shared.Languages.CSS.Models
             Span = new TextSpan(startPos, endPos - startPos);
             ForegroundColor = Constants.Colors.Black;
             Access = CodeItemAccessEnum.Public;
-            FontSize = SettingsHelper.FontSizeInPoints;
-            ParameterFontSize = SettingsHelper.FontSizeInPoints - 1;
-            FontFamilyName = SettingsHelper.FontFamilyName;
-            FontStyleName = SettingsHelper.FontStyleName;
+            FontSize = Instance.FontSizeInPoints;
+            ParameterFontSize = Instance.FontSizeInPoints - 1;
+            FontFamilyName = Instance.FontFamilyName;
+            FontStyleName = Instance.FontStyleName;
         }
     }
 }

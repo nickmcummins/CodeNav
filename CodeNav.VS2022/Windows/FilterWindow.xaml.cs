@@ -2,6 +2,7 @@
 
 using CodeNav.Helpers;
 using CodeNav.Models;
+using CodeNav.Shared.Helpers;
 using CodeNav.Shared.Models;
 using CodeNav.Shared.ViewModels;
 using Microsoft.VisualStudio.PlatformUI;
@@ -26,7 +27,7 @@ namespace CodeNav.Windows
         {
             DataContext = new FilterWindowViewModel
             {
-                FilterRules = SettingsHelper.FilterRules
+                FilterRules = CodeNavSettings.Instance.FilterRules
             };
         }
 
@@ -39,7 +40,7 @@ namespace CodeNav.Windows
                 return;
             }
 
-            SettingsHelper.SaveFilterRules(ViewModel.FilterRules);
+            CodeNavSettings.Instance.SaveFilterRules(ViewModel.FilterRules);
 
             Close();
         }

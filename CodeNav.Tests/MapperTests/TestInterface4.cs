@@ -1,19 +1,20 @@
 ﻿using System;
 using System.IO;
 using System.Linq;
-using CodeNav.Mappers;
-using CodeNav.Models;
-using NUnit.Framework;
+using CodeNav.Shared.Enums;
+using CodeNav.Shared.Mappers;
+using CodeNav.Shared.Models;
+
 
 namespace CodeNav.Tests.MapperTests
 {
-    [TestFixture]
+    [TestClass]
     public class TestInterface4
     {
-        [Test]
+        [TestMethod]
         public void TestClassImplementedInterfaceAndBaseImplementedInterfaceShouldBeOk()
         {
-            var document = SyntaxMapper.MapDocument(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "..\\..\\Files\\TestInterface4.cs"), null);
+            var document = SyntaxMapper.MapDocument($@"Files\TestInterface4.cs");
 
             Assert.IsTrue(document.Any());
 

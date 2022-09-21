@@ -1,19 +1,20 @@
 ﻿using System;
 using System.IO;
 using System.Linq;
-using CodeNav.Mappers;
-using CodeNav.Models;
-using NUnit.Framework;
+using CodeNav.Shared.Enums;
+using CodeNav.Shared.Mappers;
+using CodeNav.Shared.Models;
+
 
 namespace CodeNav.Tests.MapperTests
 {
-    [TestFixture]
+    [TestClass]
     public class TestNamespaces
     {
-        [Test]
+        [TestMethod]
         public void NestedNamespacesShouldHaveCorrectStructure()
         {
-            var document = SyntaxMapper.MapDocument(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "..\\..\\Files\\TestNestedNamespaces.cs"), null);
+            var document = SyntaxMapper.MapDocument($@"Files\TestNestedNamespaces.cs");
 
             Assert.IsTrue(document.Any());
 
@@ -36,10 +37,10 @@ namespace CodeNav.Tests.MapperTests
             Assert.AreEqual("ClassInNestedNamespace", innerClass.Name);
         }
 
-        [Test]
+        [TestMethod]
         public void NamespacesShouldBeOKVB()
         {
-            var document = SyntaxMapper.MapDocumentVB(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "..\\..\\Files\\VisualBasic\\TestNamespaces.vb"), null);
+            var document = SyntaxMapper.MapDocument($@"Files\\VisualBasic\\TestNamespaces.vb");
 
             Assert.IsTrue(document.Any());
 

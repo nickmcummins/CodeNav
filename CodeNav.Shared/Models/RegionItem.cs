@@ -13,6 +13,7 @@ namespace CodeNav.Shared.Models
         {
         }
 
-        public CodeRegionItem() : base() { }
+        public CodeRegionItem() : base() {
+        }
     }
 }

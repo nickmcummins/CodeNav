@@ -114,10 +114,10 @@ namespace CodeNav.Shared.Languages.JavaScript.Mappers
                 item.Span = new TextSpan(function.NodeStart, function.End.GetValueOrDefault() - function.NodeStart);
                 item.ForegroundColor = Constants.Colors.Black;
                 item.Access = CodeItemAccessEnum.Public;
-                item.FontSize = SettingsHelper.FontSizeInPoints;
-                item.ParameterFontSize = SettingsHelper.FontSizeInPoints - 1;
-                item.FontFamilyName = SettingsHelper.FontFamilyName;
-                item.FontStyleName = SettingsHelper.FontStyleName;
+                item.FontSize = Instance.FontSizeInPoints;
+                item.ParameterFontSize = Instance.FontSizeInPoints - 1;
+                item.FontFamilyName = Instance.FontFamilyName;
+                item.FontStyleName = Instance.FontStyleName;
                 item.BorderColor = Constants.Colors.DarkGray;
 
                 item.Kind = CodeItemKindEnum.Method;
@@ -145,10 +145,10 @@ namespace CodeNav.Shared.Languages.JavaScript.Mappers
             functionItem.Span = new TextSpan(function.NodeStart, function.End.GetValueOrDefault() - function.NodeStart);
             functionItem.ForegroundColor = Constants.Colors.Black;
             functionItem.Access = CodeItemAccessEnum.Public;
-            functionItem.FontSize = SettingsHelper.FontSizeInPoints;
-            functionItem.ParameterFontSize = SettingsHelper.FontSizeInPoints - 1;
-            functionItem.FontFamilyName = SettingsHelper.FontFamilyName;
-            functionItem.FontStyleName = SettingsHelper.FontStyleName;
+            functionItem.FontSize = Instance.FontSizeInPoints;
+            functionItem.ParameterFontSize = Instance.FontSizeInPoints - 1;
+            functionItem.FontFamilyName = Instance.FontFamilyName;
+            functionItem.FontStyleName = Instance.FontStyleName;
 
             functionItem.Kind = CodeItemKindEnum.Method;
             functionItem.Parameters = $"({string.Join(", ", parameters.Select(p => p.IdentifierStr))})";

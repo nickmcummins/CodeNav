@@ -62,7 +62,7 @@ namespace CodeNav.Shared.Languages.CSharp.Mappers
             item.StartLine = BaseMapper.GetStartLine(node, modifiers);
             item.StartLinePosition = BaseMapper.GetStartLinePosition(node, modifiers);
 
-            if (TriviaSummaryMapper.HasSummary(node) && SettingsHelper.UseXMLComments)
+            if (TriviaSummaryMapper.HasSummary(node) && Instance.UseXMLComments)
             {
                 item.Tooltip = TriviaSummaryMapper.Map(node);
             }

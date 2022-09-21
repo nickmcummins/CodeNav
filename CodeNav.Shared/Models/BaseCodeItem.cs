@@ -8,6 +8,8 @@ using static CodeNav.Shared.Constants;
 using static CodeNav.Shared.Mappers.BaseMapper;
 using VisualBasicSyntax = Microsoft.CodeAnalysis.VisualBasic.Syntax;
 using static CodeNav.Shared.Helpers.CodeNavSettings;
+using ExCSS;
+using Colors = CodeNav.Shared.Constants.Colors;
 
 namespace CodeNav.Shared.Models
 {
@@ -60,10 +62,10 @@ namespace CodeNav.Shared.Models
             Span = source.Span;
             ForegroundColor = Colors.Black;
             Access = MapAccess(modifiers, source);
-            FontSize = SettingsHelper.FontSizeInPoints;
-            ParameterFontSize = SettingsHelper.FontSizeInPoints - 1;
-            FontFamilyName = SettingsHelper.FontFamilyName;
-            FontStyleName = SettingsHelper.FontStyleName;
+            FontSize = Instance.FontSizeInPoints;
+            ParameterFontSize = Instance.FontSizeInPoints - 1;
+            FontFamilyName = Instance.FontFamilyName;
+            FontStyleName = Instance.FontStyleName;
         }
 
         public BaseCodeItem() { }

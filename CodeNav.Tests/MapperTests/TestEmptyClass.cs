@@ -2,19 +2,20 @@
 using System.IO;
 using System.Linq;
 using System.Windows;
-using CodeNav.Mappers;
-using CodeNav.Models;
-using NUnit.Framework;
+using CodeNav.Shared.Enums;
+using CodeNav.Shared.Mappers;
+using CodeNav.Shared.Models;
+
 
 namespace CodeNav.Tests.MapperTests
 {
-    [TestFixture]
+    [TestClass]
     public class TestEmptyClass
     {
-        [Test]
+        [TestMethod]
         public void ShouldBeVisible()
         {
-            var document = SyntaxMapper.MapDocument(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "..\\..\\Files\\TestEmptyClass.cs"), null);
+            var document = SyntaxMapper.MapDocument($@"Files\TestEmptyClass.cs");
 
             Assert.IsTrue(document.Any());
 
@@ -30,10 +31,10 @@ namespace CodeNav.Tests.MapperTests
             Assert.AreEqual("CodeNavTestEmptyClass", innerClass.Name);
 
             // Class should be visible
-            Assert.AreEqual(Visibility.Visible, innerClass.IsVisible);
+            Assert.AreEqual(true, innerClass.IsVisible);
 
             // Since it does not have members, it should not show the expander symbol
-            Assert.AreEqual(Visibility.Collapsed, innerClass.HasMembersVisibility);
+            Assert.AreEqual(false, innerClass.HasMembersVisibility);
         }
     }
 }

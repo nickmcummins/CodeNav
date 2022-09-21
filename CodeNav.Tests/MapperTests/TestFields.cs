@@ -1,19 +1,20 @@
 ﻿using System;
 using System.IO;
 using System.Linq;
-using CodeNav.Mappers;
-using CodeNav.Models;
-using NUnit.Framework;
+using CodeNav.Shared.Enums;
+using CodeNav.Shared.Mappers;
+using CodeNav.Shared.Models;
+
 
 namespace CodeNav.Tests.MapperTests
 {
-    [TestFixture]
+    [TestClass]
     public class TestFields
     {
-        [Test]
+        [TestMethod]
         public void ShouldBeOkVB()
         {
-            var document = SyntaxMapper.MapDocumentVB(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "..\\..\\Files\\VisualBasic\\TestFields.vb"), null);
+            var document = SyntaxMapper.MapDocument($@"Files\\VisualBasic\\TestFields.vb");
 
             Assert.IsTrue(document.Any());
 
@@ -24,23 +25,23 @@ namespace CodeNav.Tests.MapperTests
             var innerClass = document.First() as CodeClassItem;
 
             // Class should have properties
-            var publicConst = innerClass.Members.First() as CodeItem;
+            var publicConst = innerClass.Members.First() as ICodeItem;
             Assert.AreEqual(CodeItemAccessEnum.Public, publicConst.Access);
             Assert.AreEqual(CodeItemKindEnum.Constant, publicConst.Kind);
 
-            var protectedVersion = innerClass.Members[1] as CodeItem;
+            var protectedVersion = innerClass.Members[1] as ICodeItem;
             Assert.AreEqual(CodeItemAccessEnum.Protected, protectedVersion.Access);
             Assert.AreEqual(CodeItemKindEnum.Variable, protectedVersion.Kind);
 
-            var publicField = innerClass.Members[2] as CodeItem;
+            var publicField = innerClass.Members[2] as ICodeItem;
             Assert.AreEqual(CodeItemAccessEnum.Public, publicField.Access);
             Assert.AreEqual(CodeItemKindEnum.Variable, publicField.Kind);
 
-            var privateSecret = innerClass.Members[3] as CodeItem;
+            var privateSecret = innerClass.Members[3] as ICodeItem;
             Assert.AreEqual(CodeItemAccessEnum.Private, privateSecret.Access);
             Assert.AreEqual(CodeItemKindEnum.Variable, privateSecret.Kind);
 
-            var local = innerClass.Members.Last() as CodeItem;
+            var local = innerClass.Members.Last() as ICodeItem;
             Assert.AreEqual(CodeItemAccessEnum.Private, local.Access);
             Assert.AreEqual(CodeItemKindEnum.Variable, local.Kind);
         }

@@ -1,133 +1,170 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+<Project Sdk="Microsoft.NET.Sdk">
+
   <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{3FF290DC-DCE3-4B6C-B3B9-0CE6B995E908}</ProjectGuid>
-    <OutputType>Library</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>CodeNav.Tests</RootNamespace>
-    <AssemblyName>CodeNav.Tests</AssemblyName>
-    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
-    <FileAlignment>512</FileAlignment>
-    <TargetFrameworkProfile />
-    <NuGetPackageImportStamp>
-    </NuGetPackageImportStamp>
+    <TargetFramework>net6.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+
+    <IsPackable>false</IsPackable>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-  </PropertyGroup>
+
   <ItemGroup>
-    <Compile Include="Files\CodeNavTest.cs" />
-    <Content Include="Files\JavaScript\TestVariable.js" />
-    <Content Include="Files\JavaScript\TestFunction.js" />
-    <Compile Include="Files\TestEmptyInterface.cs" />
-    <Compile Include="Files\TestEmptyClass.cs" />
-    <Compile Include="Files\TestInterface4.cs" />
-    <Compile Include="Files\TestInterfaceRegion.cs" />
-    <Compile Include="Files\TestNamespaceRegions.cs" />
-    <Compile Include="Files\TestPartial2.cs" />
-    <Compile Include="Files\TestPartial1.cs" />
-    <Compile Include="Files\TestNestedRegions.cs" />
-    <Compile Include="Files\TestVisibility.cs" />
-    <Compile Include="Files\TestInterface3.cs" />
-    <Compile Include="Files\TestInterface2.cs" />
-    <Compile Include="Files\TestInterface.cs" />
-    <Compile Include="Files\TestIndexers.cs" />
-    <Compile Include="Files\TestMethodsWithComments.cs" />
-    <Compile Include="Files\TestNestedNamespaces.cs" />
-    <Compile Include="Files\TestNoNamespace.cs" />
-    <Compile Include="Files\TestProperties.cs" />
-    <Compile Include="Files\TestRegionsNoName.cs" />
-    <Compile Include="Files\TestRegions.cs" />
-    <Compile Include="Files\TestSealed.cs" />
-    <Compile Include="Files\TestSorting.cs" />
-    <Compile Include="Files\TestSwitch.cs" />
-    <Compile Include="Files\TestUsingsInNamespace.cs" />
-    <Compile Include="HelperTests\VisibilityHelperTests.cs" />
-    <Compile Include="HelperTests\LanguageHelperTests.cs" />
-    <Compile Include="HelperTests\SortHelperTests.cs" />
-    <Compile Include="HelperTests\HighlightHelperTests.cs" />
-    <Compile Include="MapperTests\JavaScript\TestVariables.cs" />
-    <Compile Include="MapperTests\JavaScript\TestFunctions.cs" />
-    <Compile Include="MapperTests\RegionMapperTests.cs" />
-    <Compile Include="MapperTests\TestEnums.cs" />
-    <Compile Include="MapperTests\TestEmptyInterface.cs" />
-    <Compile Include="MapperTests\TestClasses.cs" />
-    <Compile Include="MapperTests\TestIndexers.cs" />
-    <Compile Include="MapperTests\TestInterface4.cs" />
-    <Compile Include="MapperTests\TestMethodsWithComments.cs" />
-    <Compile Include="MapperTests\TestNestedRegions.cs" />
-    <Compile Include="MapperTests\VisualBasic\TestMethods.cs" />
-    <Compile Include="MapperTests\TestInterface3.cs" />
-    <Compile Include="MapperTests\TestInterface2.cs" />
-    <Compile Include="MapperTests\TestFields.cs" />
-    <Compile Include="MapperTests\TestSwitch.cs" />
-    <Compile Include="MapperTests\TestUsingsInNamespace.cs" />
-    <Compile Include="MapperTests\TypeMapperTests.cs" />
-    <Compile Include="MapperTests\TooltipMapperTests.cs" />
-    <Compile Include="MapperTests\VisualBasic\TestMethodsWithComments.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="MapperTests\TestEmptyClass.cs" />
-    <Compile Include="MapperTests\TestInterface.cs" />
-    <Compile Include="MapperTests\TestNoNamespace.cs" />
-    <Compile Include="MapperTests\TestNamespaces.cs" />
-    <Compile Include="MapperTests\TestProperties.cs" />
-    <Compile Include="MapperTests\TestSealed.cs" />
+    <Compile Remove="Files\CodeNavTest.cs" />
+    <Compile Remove="Files\TestEmptyClass.cs" />
+    <Compile Remove="Files\TestEmptyInterface.cs" />
+    <Compile Remove="Files\TestIndexers.cs" />
+    <Compile Remove="Files\TestInterface.cs" />
+    <Compile Remove="Files\TestInterface2.cs" />
+    <Compile Remove="Files\TestInterface3.cs" />
+    <Compile Remove="Files\TestInterface4.cs" />
+    <Compile Remove="Files\TestInterfaceRegion.cs" />
+    <Compile Remove="Files\TestMethodsWithComments.cs" />
+    <Compile Remove="Files\TestNamespaceRegions.cs" />
+    <Compile Remove="Files\TestNestedNamespaces.cs" />
+    <Compile Remove="Files\TestNestedRegions.cs" />
+    <Compile Remove="Files\TestNoNamespace.cs" />
+    <Compile Remove="Files\TestPartial1.cs" />
+    <Compile Remove="Files\TestPartial2.cs" />
+    <Compile Remove="Files\TestProperties.cs" />
+    <Compile Remove="Files\TestRegions.cs" />
+    <Compile Remove="Files\TestRegionsNoName.cs" />
+    <Compile Remove="Files\TestSealed.cs" />
+    <Compile Remove="Files\TestSorting.cs" />
+    <Compile Remove="Files\TestSwitch.cs" />
+    <Compile Remove="Files\TestUsingsInNamespace.cs" />
+    <Compile Remove="Files\TestVisibility.cs" />
+    <Compile Remove="HelperTests\HighlightHelperTests.cs" />
+    <Compile Remove="HelperTests\SortHelperTests.cs" />
+    <Compile Remove="HelperTests\VisibilityHelperTests.cs" />
   </ItemGroup>
+
   <ItemGroup>
-    <None Include="..\.editorconfig">
-      <Link>.editorconfig</Link>
+    <Content Include="Files\CodeNavTest.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Files\TestEmptyClass.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Files\TestEmptyInterface.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Files\TestIndexers.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Files\TestInterface.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Files\TestInterface2.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Files\TestInterface3.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Files\TestInterface4.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Files\TestInterfaceRegion.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Files\TestMethodsWithComments.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Files\TestNamespaceRegions.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Files\TestNestedNamespaces.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Files\TestNestedRegions.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Files\TestNoNamespace.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Files\TestPartial1.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Files\TestPartial2.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Files\TestProperties.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Files\TestRegions.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Files\TestRegionsNoName.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Files\TestSealed.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Files\TestSorting.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Files\TestSwitch.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Files\TestUsingsInNamespace.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Files\TestVisibility.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.1.0" />
+    <PackageReference Include="MSTest.TestAdapter" Version="2.2.8" />
+    <PackageReference Include="MSTest.TestFramework" Version="2.2.8" />
+    <PackageReference Include="coverlet.collector" Version="3.1.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\CodeNav.Shared\CodeNav.Shared.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Files\JavaScript\" />
+    <Folder Include="Files\VisualBasic\" />
+    <Folder Include="MapperTests\JavaScript\" />
+    <Folder Include="MapperTests\VisualBasic\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="HelperTests\HighlightHelperTests.cs" />
+    <None Include="HelperTests\SortHelperTests.cs" />
+    <None Include="HelperTests\VisibilityHelperTests.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="Files\VisualBasic\TestClasses.vb">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="app.config" />
+    <None Update="Files\VisualBasic\TestFields.vb">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Files\VisualBasic\TestInterfaces.vb">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Files\VisualBasic\TestMethods.vb">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Files\VisualBasic\TestMethodsWithComments.vb">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Files\VisualBasic\TestModules.vb">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Files\VisualBasic\TestNamespaces.vb">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Files\VisualBasic\TestProperties.vb">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Files\VisualBasic\TestRegions.vb">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
-  <ItemGroup>
-    <Service Include="{82A7F48D-3B50-4B1E-B82E-3ADA8210C358}" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Files\VisualBasic\TestClasses.vb" />
-    <Content Include="Files\VisualBasic\TestMethodsWithComments.vb" />
-    <Content Include="Files\VisualBasic\TestModules.vb" />
-    <Content Include="Files\VisualBasic\TestNamespaces.vb" />
-    <Content Include="Files\VisualBasic\TestMethods.vb" />
-    <Content Include="Files\VisualBasic\TestFields.vb" />
-    <Content Include="Files\VisualBasic\TestInterfaces.vb" />
-    <Content Include="Files\VisualBasic\TestRegions.vb" />
-    <Content Include="Files\VisualBasic\TestProperties.vb" />
-  </ItemGroup>
-  <ItemGroup>
-    <Reference Include="PresentationCore" />
-    <Reference Include="System" />
-    <Reference Include="System.Windows" />
-  </ItemGroup>
-  <ItemGroup>
-    <PackageReference Include="NUnit">
-      <Version>3.13.2</Version>
-    </PackageReference>
-    <PackageReference Include="NUnit3TestAdapter">
-      <Version>4.2.1</Version>
-    </PackageReference>
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\CodeNav.VS2022\CodeNav.VS2022.csproj">
-      <Project>{5f314b23-2d45-4748-90be-362411f06ef0}</Project>
-      <Name>CodeNav.VS2022</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+
 </Project>

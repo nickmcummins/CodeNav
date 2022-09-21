@@ -134,12 +134,12 @@ namespace CodeNav.Shared.Helpers
 
         private static FilterRule? GetFilterRule(ICodeItem item)
         {
-            if (SettingsHelper.FilterRules == null)
+            if (Instance.FilterRules == null)
             {
                 return null;
             }
 
-            var filterRule = SettingsHelper.FilterRules.LastOrDefault(f =>
+            var filterRule = Instance.FilterRules.LastOrDefault(f =>
                     (f.Access == item.Access || f.Access == CodeItemAccessEnum.All) &&
                     (f.Kind == item.Kind || f.Kind == CodeItemKindEnum.All));
 

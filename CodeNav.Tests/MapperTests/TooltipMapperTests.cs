@@ -1,18 +1,20 @@
-﻿using CodeNav.Mappers;
-using CodeNav.Models;
-using NUnit.Framework;
+﻿using CodeNav.Shared.Enums;
+using CodeNav.Shared.Mappers;
+using CodeNav.Shared.Models;
+
 
 namespace CodeNav.Tests.MapperTests
 {
-    [TestFixture]
+    [TestClass]
     public class TooltipMapperTests
     {
-        [TestCase(CodeItemAccessEnum.Public, "int", "Property", "{get, set}", "Public int Property {get, set}")]
-        [TestCase(CodeItemAccessEnum.Private, "string", "Property", "{get}", "Private string Property {get}")]
-        [TestCase(CodeItemAccessEnum.Unknown, "int", "Property", "{set}", "int Property {set}")]
-        [TestCase(CodeItemAccessEnum.Public, "", "Constructor", "", "Public Constructor")]
-        [TestCase(CodeItemAccessEnum.Private, "List<Item>", "Property", "", "Private List<Item> Property")]
-        [TestCase(CodeItemAccessEnum.Private, "System.Generic.Collection.List<Models.item>", "", "Helpers.Property", 
+        [DataTestMethod]
+        [DataRow(CodeItemAccessEnum.Public, "int", "Property", "{get, set}", "Public int Property {get, set}")]
+        [DataRow(CodeItemAccessEnum.Private, "string", "Property", "{get}", "Private string Property {get}")]
+        [DataRow(CodeItemAccessEnum.Unknown, "int", "Property", "{set}", "int Property {set}")]
+        [DataRow(CodeItemAccessEnum.Public, "", "Constructor", "", "Public Constructor")]
+        [DataRow(CodeItemAccessEnum.Private, "List<Item>", "Property", "", "Private List<Item> Property")]
+        [DataRow(CodeItemAccessEnum.Private, "System.Generic.Collection.List<Models.item>", "", "Helpers.Property", 
             "Private System.Generic.Collection.List<Models.item> Helpers.Property")]
         public void ShouldMapMethodOk(CodeItemAccessEnum access, string type, string name, string extra, string expected)
         {

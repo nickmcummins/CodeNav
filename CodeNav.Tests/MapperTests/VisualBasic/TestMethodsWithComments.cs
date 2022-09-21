@@ -1,22 +1,23 @@
 ﻿using System;
 using System.IO;
 using System.Linq;
-using CodeNav.Helpers;
-using CodeNav.Mappers;
-using CodeNav.Models;
-using NUnit.Framework;
+using CodeNav.Shared.Enums;
+using CodeNav.Shared.Helpers;
+using CodeNav.Shared.Mappers;
+using CodeNav.Shared.Models;
+
 
 namespace CodeNav.Tests.MapperTests.VisualBasic
 {
-    [TestFixture]
+    [TestClass]
     public class TestMethodsWithComments
     {
-        [Test]
+        [TestMethod]
         public void ShouldBeOk()
         {
-            SettingsHelper.UseXMLComments = true;
+            CodeNavSettings.Instance.UseXMLComments = true;
 
-            var document = SyntaxMapper.MapDocumentVB(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "..\\..\\Files\\VisualBasic\\TestMethodsWithComments.vb"), null);
+            var document = SyntaxMapper.MapDocument($@"Files\Files\\VisualBasic\\TestMethodsWithComments.vb");
 
             Assert.IsTrue(document.Any());
 

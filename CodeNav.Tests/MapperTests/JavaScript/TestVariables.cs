@@ -1,6 +1,8 @@
-﻿using CodeNav.Languages.JS.Mappers;
-using CodeNav.Models;
-using NUnit.Framework;
+﻿using CodeNav.Shared.Enums;
+using CodeNav.Shared.Languages.JavaScript.Mappers;
+using CodeNav.Shared.Mappers;
+using CodeNav.Shared.Models;
+
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -8,29 +10,29 @@ using System.Linq;
 
 namespace CodeNav.Tests.MapperTests.JavaScript
 {
-    [TestFixture]
+    [TestClass]
     public class TestVariables
     {
-        List<CodeItem> document;
+        IList<ICodeItem> document;
         CodeClassItem root;
 
-        [OneTimeSetUp]
+        [ClassInitialize]
         public void Init()
         {
-            document = SyntaxMapperJS.Map(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "..\\..\\Files\\JavaScript\\TestVariable.js"), null);
+            document = SyntaxMapper.MapDocument($@"Files\JavaScript\TestVariable.js");
 
             Assert.IsTrue(document.Any());
             Assert.AreEqual(CodeItemKindEnum.Namespace, document.First().Kind);
             root = (document.First() as CodeNamespaceItem).Members.First() as CodeClassItem;
         }
 
-        [Test]
+        [TestMethod]
         public void TestBasicVariable()
         {
             Assert.AreEqual("firstVariable", root.Members.FirstOrDefault().Name);
         }
 
-        [Test]
+        [TestMethod]
         public void TestAssignedVariable()
         {
             Assert.AreEqual("assignedVariable", root.Members[1].Name);

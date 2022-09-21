@@ -1,21 +1,22 @@
 ﻿using System;
 using System.IO;
 using System.Linq;
-using CodeNav.Mappers;
-using CodeNav.Models;
-using NUnit.Framework;
+using CodeNav.Shared.Enums;
+using CodeNav.Shared.Mappers;
+using CodeNav.Shared.Models;
+
 
 namespace CodeNav.Tests.MapperTests.VisualBasic
 {
-    [TestFixture]
+    [TestClass]
     public class TestMethods
     {
         CodeClassItem _innerClass; 
 
-        [OneTimeSetUp]
+        [ClassInitialize]
         public void Setup()
         {
-            var document = SyntaxMapper.MapDocumentVB(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "..\\..\\Files\\VisualBasic\\TestMethods.vb"), null);
+            var document = SyntaxMapper.MapDocument($@"Files\Files\VisualBasic\TestMethods.vb");
 
             Assert.IsTrue(document.Any());
 
@@ -26,7 +27,7 @@ namespace CodeNav.Tests.MapperTests.VisualBasic
             _innerClass = document.First() as CodeClassItem;
         }
 
-        [Test]
+        [TestMethod]
         public void ConstructorShouldBeOkVB()
         {
             // Class should have a constructor
@@ -36,7 +37,7 @@ namespace CodeNav.Tests.MapperTests.VisualBasic
             Assert.AreEqual("New", constructor.Name);
         }
 
-        [Test]
+        [TestMethod]
         public void FunctionShouldBeOkVB()
         {
             // Class should have a function
@@ -48,7 +49,7 @@ namespace CodeNav.Tests.MapperTests.VisualBasic
             Assert.AreEqual("(Double)", method.Parameters);
         }
 
-        [Test]
+        [TestMethod]
         public void SubShouldBeOkVB()
         {
             // Class should have a sub
@@ -59,7 +60,7 @@ namespace CodeNav.Tests.MapperTests.VisualBasic
             Assert.AreEqual("Void", method.Type);
         }
 
-        [Test]
+        [TestMethod]
         public void FunctionShorthandShouldBeOkVB()
         {
             // Class should have a sub

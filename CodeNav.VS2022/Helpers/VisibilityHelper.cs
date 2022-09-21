@@ -11,6 +11,8 @@ using CodeNav.Shared.Enums;
 using CodeNav.Shared.Models;
 using Microsoft.VisualStudio.Shell;
 using Task = System.Threading.Tasks.Task;
+using static CodeNav.Shared.Helpers.CodeNavSettings;
+using CodeNav.Shared.Helpers;
 
 namespace CodeNav.Helpers
 {
@@ -249,12 +251,12 @@ namespace CodeNav.Helpers
 
         private static FilterRule? GetFilterRule(CodeItem item)
         {
-            if (SettingsHelper.FilterRules == null)
+            if (CodeNavSettings.Instance.FilterRules == null)
             {
                 return null;
             }
 
-            var filterRule = SettingsHelper.FilterRules.LastOrDefault(f =>
+            var filterRule = CodeNavSettings.Instance.FilterRules.LastOrDefault(f =>
                     (f.Access == item.Access || f.Access == CodeItemAccessEnum.All) &&
                     (f.Kind == item.Kind || f.Kind == CodeItemKindEnum.All));
 

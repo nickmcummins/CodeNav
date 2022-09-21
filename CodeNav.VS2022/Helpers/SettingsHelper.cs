@@ -1,6 +1,7 @@
 ﻿#nullable enable
 
 using CodeNav.Models;
+using CodeNav.Shared.Helpers;
 using CodeNav.Shared.Models;
 using Newtonsoft.Json;
 using System;
@@ -9,10 +10,10 @@ using System.Drawing;
 
 namespace CodeNav.Helpers
 {
-    public static class SettingsHelper
+    public class SettingsHelper : ICodeNavSettings
     {
-        private static bool? _useXmlComments;
-        public static bool UseXMLComments
+        private bool? _useXmlComments;
+        public bool UseXMLComments
         {
             get
             {
@@ -38,28 +39,31 @@ namespace CodeNav.Helpers
             }
             set => _font = value;
         }
+        public float FontSizeInPoints { get => General.Instance.FontSize; set => General.Instance.FontSize = value; }
+        public string FontFamilyName { get => General.Instance.FontFamilyName; set => General.Instance.FontFamilyName = value; }
+        public string FontStyleName { get => General.Instance.FontStyle.ToString(); set => General.Instance.FontStyle = Enum.TryParse<FontStyle>(value, out var fontStyle) ? fontStyle : FontStyle.Regular; }
 
-        private static ObservableCollection<FilterRule>? _filterRules;
-        public static ObservableCollection<FilterRule> FilterRules
+        private ObservableCollection<FilterRule>? _filterRules;
+        public ObservableCollection<FilterRule> FilterRules
         {
             get => LoadFilterRules();
             set => _filterRules = value;
         }
 
-        public static void SaveFilterRules(ObservableCollection<FilterRule> filterRules)
+        public void SaveFilterRules(ObservableCollection<FilterRule> filterRules)
         {
             General.Instance.FilterRules = JsonConvert.SerializeObject(filterRules);
             General.Instance.Save();
         }
 
-        public static void Refresh()
+        public void Refresh()
         {
             _useXmlComments = null;
             _filterRules = null;
             _font = null;
         }
 
-        private static ObservableCollection<FilterRule> LoadFilterRules()
+        private ObservableCollection<FilterRule> LoadFilterRules()
         {
             if (_filterRules != null)
             {

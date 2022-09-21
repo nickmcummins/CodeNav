@@ -39,7 +39,7 @@ namespace CodeNav.Shared.Languages.CSharp.Mappers
             item.Parameters = MapMembersToString(member.Members);
             item.BorderColor = Colors.DarkGray;
 
-            if (TriviaSummaryMapper.HasSummary(member) && SettingsHelper.UseXMLComments)
+            if (TriviaSummaryMapper.HasSummary(member) && Instance.UseXMLComments)
             {
                 item.Tooltip = TriviaSummaryMapper.Map(member);
             }

@@ -29,7 +29,7 @@ namespace CodeNav.Shared.Languages.CSharp.Mappers
             item.BorderColor = Colors.DarkGray;
             item.Tooltip = TooltipMapper.Map(item.Access, string.Empty, item.Name, item.Parameters);
 
-            if (TriviaSummaryMapper.HasSummary(member) && SettingsHelper.UseXMLComments)
+            if (TriviaSummaryMapper.HasSummary(member) && Instance.UseXMLComments)
             {
                 item.Tooltip = TriviaSummaryMapper.Map(member);
             }
@@ -116,7 +116,7 @@ namespace CodeNav.Shared.Languages.CSharp.Mappers
                 Tooltip = baseType.Name,
                 ForegroundColor = Colors.Black,
                 BorderColor = Colors.DarkGray,
-                FontSize = SettingsHelper.FontSizeInPoints - 2,
+                FontSize = Instance.FontSizeInPoints - 2,
                 Kind = CodeItemKindEnum.BaseClass
             };
 

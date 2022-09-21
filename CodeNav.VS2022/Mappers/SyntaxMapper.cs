@@ -27,40 +27,13 @@ namespace CodeNav.Mappers
         /// <returns>List of found code items</returns>
         public static List<CodeItem?> MapDocument(string filePath, ICodeViewUserControl control)
         {
-            var tree = CSharpSyntaxTree.ParseText(File.ReadAllText(filePath));
+            var document = Shared.Mappers.SyntaxMapper.MapDocument(filePath);
 
-            var mscorlib = MetadataReference.CreateFromFile(typeof(object).Assembly.Location);
-            var compilation = CSharpCompilation.Create("CodeNavCompilation", new[] { tree }, new[] { mscorlib });
-            var semanticModel = compilation.GetSemanticModel(tree);
-
-            var root = (CompilationUnitSyntax)tree.GetRoot(); 
-
-            return root.Members
-                .Select(member => SyntaxMapperCS.MapMember(member, tree, semanticModel))
+            return document
                 .Select(member => MapMember(member, control))
                 .ToList();
         }
 
-        /// <summary>
-        /// Map a document from filepath, used for unit testing
-        /// </summary>
-        /// <param name="filePath">filepath of the input document</param>
-        /// <returns>List of found code items</returns>
-        public static List<CodeItem?> MapDocumentVB(string filePath, ICodeViewUserControl control)
-        {
-            var tree = VisualBasic.VisualBasicSyntaxTree.ParseText(File.ReadAllText(filePath));
-
-            var mscorlib = MetadataReference.CreateFromFile(typeof(object).Assembly.Location);
-            var compilation = VisualBasic.VisualBasicCompilation.Create("CodeNavCompilation", new[] { tree }, new[] { mscorlib });
-            var semanticModel = compilation.GetSemanticModel(tree);
-
-            var root = (VisualBasicSyntax.CompilationUnitSyntax)tree.GetRoot();
-
-            return root.Members
-                .Select(member => SyntaxMapperVB.MapMember(member, tree, semanticModel))
-                .Select(member => MapMember(member, control))
-                .ToList();
-        }
 
         /// <summary>
         /// Map the active document in the workspace
@@ -75,7 +48,7 @@ namespace CodeNav.Mappers
 
                 if (codeAnalysisDocument != null)
                 {
-                    return await MapDocument(codeAnalysisDocument, control);
+                    return await MapDocumentAsync(codeAnalysisDocument, control);
                 }
 
                 return await MapDocument(control);
@@ -94,7 +67,7 @@ namespace CodeNav.Mappers
         /// </summary>
         /// <param name="document">a CodeAnalysis document</param>
         /// <returns>List of found code items</returns>
-        public static async Task<List<CodeItem?>> MapDocument(Document codeAnalysisDocument, ICodeViewUserControl control)
+        public static async Task<List<CodeItem?>> MapDocumentAsync(Document codeAnalysisDocument, ICodeViewUserControl control)
         {
             if (codeAnalysisDocument == null)
             {
@@ -265,7 +238,7 @@ namespace CodeNav.Mappers
                 item = new CodeItem(baseCodeItem, control);
             }
             item.Control = control;
-            return null; 
+            return item; 
         }
     }
 }

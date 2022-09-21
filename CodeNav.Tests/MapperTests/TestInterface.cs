@@ -1,19 +1,20 @@
 ﻿using System;
 using System.IO;
 using System.Linq;
-using CodeNav.Mappers;
-using CodeNav.Models;
-using NUnit.Framework;
+using CodeNav.Shared.Enums;
+using CodeNav.Shared.Mappers;
+using CodeNav.Shared.Models;
+
 
 namespace CodeNav.Tests.MapperTests
 {
-    [TestFixture]
+    [TestClass]
     public class TestInterface
     {
-        [Test]
+        [TestMethod]
         public void TestInterfaceShouldBeOk()
         {
-            var document = SyntaxMapper.MapDocument(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "..\\..\\Files\\TestInterface.cs"), null);
+            var document = SyntaxMapper.MapDocument($@"Files\TestInterface.cs");
 
             Assert.IsTrue(document.Any());
 
@@ -45,10 +46,10 @@ namespace CodeNav.Tests.MapperTests
             Assert.AreEqual(34, implementedInterface.Members[2].StartLine);
         }
 
-        [Test]
+        [TestMethod]
         public void TestInterfaceInRegionShouldBeOk()
         {
-            var document = SyntaxMapper.MapDocument(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "..\\..\\Files\\TestInterface.cs"), null);
+            var document = SyntaxMapper.MapDocument($@"Files\TestInterface.cs");
 
             Assert.IsTrue(document.Any());
 
@@ -72,10 +73,10 @@ namespace CodeNav.Tests.MapperTests
             Assert.AreEqual(3, implementedInterface.Members.Count);
         }
 
-        [Test]
+        [TestMethod]
         public void TestInterfaceShouldBeOkVB()
         {
-            var document = SyntaxMapper.MapDocumentVB(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "..\\..\\Files\\VisualBasic\\TestInterfaces.vb"), null);
+            var document = SyntaxMapper.MapDocument($@"Files\\VisualBasic\\TestInterfaces.vb");
 
             Assert.IsTrue(document.Any());
 
@@ -86,10 +87,10 @@ namespace CodeNav.Tests.MapperTests
             Assert.AreEqual(1, (document.First() as IMembers).Members.Count);
         }
 
-        [Test]
+        [TestMethod]
         public void TestInterfaceWithRegion()
         {
-            var document = SyntaxMapper.MapDocument(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "..\\..\\Files\\TestInterfaceRegion.cs"), null);
+            var document = SyntaxMapper.MapDocument($@"Files\TestInterfaceRegion.cs");
 
             Assert.IsTrue(document.Any());
 

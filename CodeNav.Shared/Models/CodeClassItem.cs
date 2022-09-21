@@ -1,6 +1,7 @@
 ﻿using Microsoft.CodeAnalysis;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using static CodeNav.Shared.Constants;
 
 namespace CodeNav.Shared.Models
@@ -12,11 +13,23 @@ namespace CodeNav.Shared.Models
         public event EventHandler? IsExpandedChanged;
         public bool IsExpanded { get; set; }
         public Colors BorderColor { get; set; }
+        public bool HasMembersVisibility => Members.Any(m => m != null && m.IsVisible);
 
-        public CodeClassItem(SyntaxNode source, string name, SemanticModel semanticModel) : base(source, name, new SyntaxTokenList(), semanticModel) { }
-        public CodeClassItem(SyntaxNode source, SyntaxToken identifier, SyntaxTokenList modifiers, SemanticModel semanticModel) : base(source, identifier.Text, modifiers, semanticModel) { }
-        public CodeClassItem() : base() { }
-        public CodeClassItem(SyntaxNode source, string name, SyntaxTokenList modifiers, SemanticModel semanticModel) : base(source, name, modifiers, semanticModel) { }
+        public CodeClassItem(SyntaxNode source, string name, SemanticModel semanticModel) : base(source, name, new SyntaxTokenList(), semanticModel) 
+        {
+            Members = new List<ICodeItem>();
+        }
+        public CodeClassItem(SyntaxNode source, SyntaxToken identifier, SyntaxTokenList modifiers, SemanticModel semanticModel) : base(source, identifier.Text, modifiers, semanticModel) 
+        {
+            Members = new List<ICodeItem>();
+        }
+
+        public CodeClassItem() : base() {
+            Members = new List<ICodeItem>();
+        }
+        public CodeClassItem(SyntaxNode source, string name, SyntaxTokenList modifiers, SemanticModel semanticModel) : base(source, name, modifiers, semanticModel) {
+            Members = new List<ICodeItem>();
+        }
 
     }
 }

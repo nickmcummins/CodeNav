@@ -26,7 +26,7 @@ namespace CodeNav.Shared.Languages.VisualBasic.Mappers
             item.Kind = CodeItemKindEnum.Method;
             item.MonikerString = IconMapper.MapMoniker(item.Kind, item.Access);
 
-            if (TriviaSummaryMapper.HasSummary(member) && SettingsHelper.UseXMLComments)
+            if (TriviaSummaryMapper.HasSummary(member) && Instance.UseXMLComments)
             {
                 item.Tooltip = TriviaSummaryMapper.Map(member);
             }
@@ -68,7 +68,7 @@ namespace CodeNav.Shared.Languages.VisualBasic.Mappers
             item.Kind = CodeItemKindEnum.Method;
             item.MonikerString = IconMapper.MapMoniker(item.Kind, item.Access);
 
-            if (TriviaSummaryMapper.HasSummary(member) && SettingsHelper.UseXMLComments)
+            if (TriviaSummaryMapper.HasSummary(member) && Instance.UseXMLComments)
             {
                 item.Tooltip = TriviaSummaryMapper.Map(member);
             }

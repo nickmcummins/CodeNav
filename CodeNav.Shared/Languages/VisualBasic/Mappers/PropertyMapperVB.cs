@@ -47,7 +47,7 @@ namespace CodeNav.Shared.Languages.VisualBasic.Mappers
             item.Kind = CodeItemKindEnum.Property;
             item.MonikerString = IconMapper.MapMoniker(item.Kind, item.Access);
 
-            if (TriviaSummaryMapper.HasSummary(member) && SettingsHelper.UseXMLComments)
+            if (TriviaSummaryMapper.HasSummary(member) && Instance.UseXMLComments)
             {
                 item.Tooltip = TriviaSummaryMapper.Map(member);
             }

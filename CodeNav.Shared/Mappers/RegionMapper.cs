@@ -34,9 +34,9 @@ namespace CodeNav.Shared.Mappers
                 return regionList;
             }
 
-            if (SettingsHelper.FilterRules != null)
+            if (Instance.FilterRules != null)
             {
-                var filterRule = SettingsHelper.FilterRules.LastOrDefault(f => f.Kind == CodeItemKindEnum.Region || f.Kind == CodeItemKindEnum.All);
+                var filterRule = Instance.FilterRules.LastOrDefault(f => f.Kind == CodeItemKindEnum.Region || f.Kind == CodeItemKindEnum.All);
 
                 if (filterRule != null && filterRule.Ignore)
                 {
@@ -125,7 +125,7 @@ namespace CodeNav.Shared.Mappers
                 StartLinePosition = GetStartLinePosition(source),
                 ForegroundColor = Colors.Black,
                 BorderColor = Colors.DarkGray,
-                FontSize = SettingsHelper.FontSizeInPoints - 2,
+                FontSize = Instance.FontSizeInPoints - 2,
                 Kind = CodeItemKindEnum.Region,
                 Span = source.Span
             };

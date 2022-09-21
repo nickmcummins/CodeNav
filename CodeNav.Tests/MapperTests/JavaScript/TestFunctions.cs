@@ -1,6 +1,7 @@
-﻿using CodeNav.Languages.JS.Mappers;
-using CodeNav.Models;
-using NUnit.Framework;
+﻿using CodeNav.Shared.Enums;
+using CodeNav.Shared.Languages.JavaScript.Mappers;
+using CodeNav.Shared.Models;
+
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -8,23 +9,23 @@ using System.Linq;
 
 namespace CodeNav.Tests.MapperTests.JavaScript
 {
-    [TestFixture]
+    [TestClass]
     public class TestFunctions
     {
-        List<CodeItem> document;
+        IList<ICodeItem> document;
         CodeClassItem root;
 
-        [OneTimeSetUp]
+        [ClassInitialize]
         public void Init()
         {
-            document = SyntaxMapperJS.Map(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "..\\..\\Files\\JavaScript\\TestFunction.js"), null);
+            document = SyntaxMapperJS.Map(@$"\Files\JavaScript\TestFunction.js");
 
             Assert.IsTrue(document.Any());
             Assert.AreEqual(CodeItemKindEnum.Namespace, document.First().Kind);
             root = (document.First() as CodeNamespaceItem).Members.First() as CodeClassItem;
         }
 
-        [Test]
+        [TestMethod]
         public void TestBasicFunction()
         {
             Assert.AreEqual("firstFunction", root.Members.FirstOrDefault().Name);
@@ -33,35 +34,35 @@ namespace CodeNav.Tests.MapperTests.JavaScript
             Assert.AreEqual(51, root.Members.FirstOrDefault().Span.End);
         }
 
-        [Test]
+        [TestMethod]
         public void TestFunctionWithParams()
         {
             Assert.AreEqual("secondFunction", root.Members[1].Name);
             Assert.AreEqual("(input)", (root.Members[1] as CodeFunctionItem).Parameters);
         }
 
-        [Test]
+        [TestMethod]
         public void TestAssignedFunction()
         {
             Assert.AreEqual("assignedFunction", root.Members[2].Name);
             Assert.AreEqual("(a, b)", (root.Members[2] as CodeFunctionItem).Parameters);
         }
 
-        [Test]
+        [TestMethod]
         public void TestFunctionConstructor()
         {
             Assert.AreEqual("myFunction", root.Members[3].Name);
             Assert.AreEqual("()", (root.Members[3] as CodeFunctionItem).Parameters);
         }
 
-        [Test]
+        [TestMethod]
         public void TestArrowFunction()
         {
             Assert.AreEqual("x", root.Members[4].Name);
             Assert.AreEqual("(x, y)", (root.Members[4] as CodeFunctionItem).Parameters);
         }
 
-        [Test]
+        [TestMethod]
         public void TestOuterInnerFunction()
         {
             Assert.AreEqual("outerFunction", root.Members[5].Name);
@@ -71,7 +72,7 @@ namespace CodeNav.Tests.MapperTests.JavaScript
             Assert.AreEqual("(a, b)", ((root.Members[5] as CodeClassItem).Members[1] as CodeFunctionItem).Parameters);
         }
 
-        [Test]
+        [TestMethod]
         public void TestAsyncFunction()
         {
             Assert.AreEqual("asyncFunction", root.Members[6].Name);

@@ -1,19 +1,20 @@
-﻿using CodeNav.Mappers;
-using CodeNav.Models;
-using NUnit.Framework;
+﻿using CodeNav.Shared.Enums;
+using CodeNav.Shared.Mappers;
+using CodeNav.Shared.Models;
+
 using System;
 using System.IO;
 using System.Linq;
 
 namespace CodeNav.Tests.MapperTests
 {
-    [TestFixture]
+    [TestClass]
     public class TestSwitch
     {
-        [Test]
+        [TestMethod]
         public void TestSwitchShouldBeOk()
         {
-            var document = SyntaxMapper.MapDocument(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "..\\..\\Files\\TestSwitch.cs"), null);
+            var document = SyntaxMapper.MapDocument($@"Files\TestSwitch.cs");
 
             Assert.IsTrue(document.Any());
 

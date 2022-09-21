@@ -25,7 +25,7 @@ namespace CodeNav.Shared.Languages.VisualBasic.Mappers
             item.BorderColor = Constants.Colors.DarkGray;
             item.Tooltip = TooltipMapper.Map(item.Access, string.Empty, item.Name, item.Parameters);
 
-            if (TriviaSummaryMapper.HasSummary(member) && SettingsHelper.UseXMLComments)
+            if (TriviaSummaryMapper.HasSummary(member) && Instance.UseXMLComments)
             {
                 item.Tooltip = TriviaSummaryMapper.Map(member);
             }

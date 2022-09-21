@@ -26,7 +26,7 @@ namespace CodeNav.Shared.Languages.CSharp.Mappers
             item.BorderColor = Colors.DarkGray;
             item.MonikerString = IconMapper.MapMoniker(item.Kind, item.Access);
 
-            if (TriviaSummaryMapper.HasSummary(member) && SettingsHelper.UseXMLComments)
+            if (TriviaSummaryMapper.HasSummary(member) && Instance.UseXMLComments)
             {
                 item.Tooltip = TriviaSummaryMapper.Map(member);
             }

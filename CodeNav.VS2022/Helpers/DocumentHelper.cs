@@ -4,6 +4,7 @@ using CodeNav.Extensions;
 using CodeNav.Mappers;
 using CodeNav.Models;
 using CodeNav.Models.ViewModels;
+using CodeNav.Shared.Helpers;
 using Community.VisualStudio.Toolkit;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Text;
@@ -233,6 +234,10 @@ namespace CodeNav.Helpers
             RowDefinition? row = null,
             string filePath = "")
         {
+            if (CodeNavSettings.Instance == null)
+            {
+                CodeNavSettings.Instance = new SettingsHelper();
+            }
             if (string.IsNullOrEmpty(filePath))
             {
                 filePath = await GetFilePath();

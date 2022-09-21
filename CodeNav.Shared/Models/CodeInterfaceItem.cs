@@ -11,6 +11,7 @@ namespace CodeNav.Shared.Models
     {
         public CodeInterfaceItem(SyntaxNode source, SyntaxToken identifier, SyntaxTokenList modifiers, SemanticModel semanticModel) : base(source, identifier, modifiers, semanticModel)
         {
+            Members = new List<ICodeItem>();
         }
     }
 

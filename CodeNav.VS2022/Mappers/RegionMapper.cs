@@ -112,7 +112,7 @@ namespace CodeNav.Mappers
         {
             var name = MapRegionName(source);
 
-            return new CodeRegionItem
+            return new CodeRegionItem(control)
             {
                 Name = name,
                 FullName = name,

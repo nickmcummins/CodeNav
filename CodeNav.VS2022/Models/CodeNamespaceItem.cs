@@ -1,24 +1,19 @@
-﻿using System.Collections.Generic;
+﻿using CodeNav.Mappers;
+using System.Linq;
 using System.Windows;
-using System.Windows.Controls;
 
 namespace CodeNav.Models
 {
     public class CodeNamespaceItem : CodeClassItem
     {
-        public CodeNamespaceItem()
+        public CodeNamespaceItem(Shared.Models.CodeNamespaceItem namespaceItem, ICodeViewUserControl control) : base(namespaceItem, control)
         {
-            Members = new List<CodeItem>();
+            Members = namespaceItem.Members.Select(member => SyntaxMapper.MapMember(member, control)).ToList();
         }
+
+        public CodeNamespaceItem() : base(new Shared.Models.CodeNamespaceItem(), null) { }
 
         public Visibility IgnoreVisibility { get; set; }
-
-        public Visibility NotIgnoreVisibility
-        {
-            get
-            {
-                return IgnoreVisibility == Visibility.Visible ? Visibility.Collapsed : Visibility.Visible;
-            }
-        }
+        public Visibility NotIgnoreVisibility =>IgnoreVisibility == Visibility.Visible ? Visibility.Collapsed : Visibility.Visible;
     }
 }

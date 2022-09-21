@@ -8,6 +8,7 @@ using System.Windows.Controls;
 using CodeNav.Models;
 using CodeNav.Models.ViewModels;
 using CodeNav.Shared.Enums;
+using CodeNav.Shared.Models;
 using Microsoft.VisualStudio.Shell;
 using Task = System.Threading.Tasks.Task;
 
@@ -37,7 +38,7 @@ namespace CodeNav.Helpers
             {
                 foreach (var item in document)
                 {
-                    if (item is IMembers hasMembersItem && hasMembersItem.Members.Any())
+                    if (item is Models.IMembers hasMembersItem && hasMembersItem.Members.Any())
                     {
                         SetCodeItemVisibility(hasMembersItem.Members, name, filterOnBookmarks, bookmarks);
                     }
@@ -133,7 +134,7 @@ namespace CodeNav.Helpers
 
             foreach (var item in document)
             {
-                if (item is IMembers membersItem)
+                if (item is Models.IMembers membersItem)
                 {
                     isEmpty = !membersItem.Members.Any();
                 }
@@ -213,7 +214,7 @@ namespace CodeNav.Helpers
 
             // If an item has any visible members, it should be visible.
             // If an item does not have any visible members, hide it depending on an option
-            if (item is IMembers hasMembersItem &&
+            if (item is Models.IMembers hasMembersItem &&
                 hasMembersItem?.Members != null)
             {
                 if (hasMembersItem.Members.Any(m => m.IsVisible == Visibility.Visible))

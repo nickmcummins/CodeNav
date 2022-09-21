@@ -26,6 +26,8 @@ namespace CodeNav.Shared.Models
         #region Fonts
         public float FontSize { get; set; }
         public float ParameterFontSize { get; set; }
+        public string FontFamilyName { get; set; }
+        public string FontStyleName { get; set; }
         #endregion
         #region IsVisible
         public bool IsVisible { get; set; }

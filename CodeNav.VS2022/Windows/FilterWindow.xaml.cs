@@ -2,6 +2,7 @@
 
 using CodeNav.Helpers;
 using CodeNav.Models;
+using CodeNav.Shared.Models;
 using CodeNav.Shared.ViewModels;
 using Microsoft.VisualStudio.PlatformUI;
 using System.Linq;

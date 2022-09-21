@@ -1,4 +1,5 @@
 ﻿using CodeNav.Models;
+using CodeNav.Shared.Models;
 using Microsoft.VisualStudio.PlatformUI;
 using System.Collections.ObjectModel;
 

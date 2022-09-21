@@ -1,17 +1,14 @@
 ﻿using CodeNav.Shared.Enums;
+using CodeNav.Shared.Extensions;
 using CodeNav.Shared.Helpers;
 using CodeNav.Shared.Mappers;
 using CodeNav.Shared.Models;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis;
-using System;
+using Microsoft.CodeAnalysis.CSharp;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using static CodeNav.Shared.Constants;
-using CodeNav.Shared.Extensions;
-using Microsoft.CodeAnalysis.CSharp;
 using static CodeNav.Shared.Helpers.CodeNavSettings;
 
 namespace CodeNav.Shared.Languages.CSharp.Mappers
@@ -38,7 +35,7 @@ namespace CodeNav.Shared.Languages.CSharp.Mappers
             }
 
             var regions = RegionMapper.MapRegions(tree, member.Span);
-            var implementedInterfaces = InterfaceMapperCS.MapImplementedInterfaces(member, semanticModel, tree);
+            var implementedInterfaces = InterfaceMapper.MapImplementedInterfaces(member, semanticModel, tree);
 
             // Map members from the base class
             if (mapBaseClass)
@@ -50,7 +47,7 @@ namespace CodeNav.Shared.Languages.CSharp.Mappers
             foreach (var classMember in member.Members)
             {
                 var memberItem = SyntaxMapperCS.MapMember(classMember, tree, semanticModel);
-                if (memberItem != null && !InterfaceMapperCS.IsPartOfImplementedInterface(implementedInterfaces, memberItem)
+                if (memberItem != null && !InterfaceMapper.IsPartOfImplementedInterface(implementedInterfaces, memberItem)
                     && !RegionMapper.AddToRegion(regions, memberItem))
                 {
                     item.Members.Add(memberItem);

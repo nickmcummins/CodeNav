@@ -1,6 +1,7 @@
 ﻿#nullable enable
 
 using CodeNav.Models;
+using CodeNav.Shared.Models;
 using Newtonsoft.Json;
 using System;
 using System.Collections.ObjectModel;

@@ -14,6 +14,5 @@ namespace CodeNav.Shared.Languages.CSharp.Mappers
         {
             return name + ParameterMapperCS.MapParameters(parameters, true, false);
         }
-
     }
 }

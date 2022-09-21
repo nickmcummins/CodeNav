@@ -1,4 +1,5 @@
 ﻿using CodeNav.Shared.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -39,6 +40,29 @@ namespace CodeNav.Shared.Extensions
             }
         }
 
+        /// <summary>
+        /// Recursively delete null items from a nested list of CodeItems
+        /// </summary>
+        /// <param name="items">Nested list of CodeItems</param>
+        public static IList<ICodeItem> FilterNullItems(this IList<ICodeItem?> items)
+        {
+            if (items == null)
+            {
+                return new List<ICodeItem>();
+            }
+
+            items.RemoveAll(item => item == null);
+
+            foreach (var item in items)
+            {
+                if (item is IMembers memberItem)
+                {
+                    FilterNullItems(memberItem.Members.Cast<ICodeItem?>().ToList());
+                }
+            }
+
+            return items.Cast<ICodeItem>().ToList();
+        }
 
         public static void AddIfNotNull<T>(this IList<T> items, T? item)
         {
@@ -48,6 +72,15 @@ namespace CodeNav.Shared.Extensions
             }
 
             items.Add(item);
+        }
+
+        public static void RemoveAll<T>(this IEnumerable<T> collection, Predicate<T> match)
+        { 
+            if (collection is List<T> list)
+            {
+                list.RemoveAll(match);
+            }
+            
         }
     }
 }

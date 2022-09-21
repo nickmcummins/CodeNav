@@ -6,6 +6,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using CodeNav.Models;
 using CodeNav.Shared.Enums;
+using CodeNav.Shared.Models;
 using Community.VisualStudio.Toolkit;
 using Microsoft.CodeAnalysis.Text;
 using Microsoft.VisualStudio.Text;
@@ -50,7 +51,7 @@ namespace CodeNav.Helpers
                 .ForEach(root => root
                     .Descendants()
                     .Where(i => i is ICodeCollapsible)
-                    .Cast<IMembers>()
+                    .Cast<Models.IMembers>()
                     .ToList()
                     .ForEach(i => i.IsExpanded = isExpanded));
 
@@ -58,7 +59,7 @@ namespace CodeNav.Helpers
         {
             foreach (var item in document)
             {
-                if (!(item is IMembers membersItem))
+                if (!(item is Models.IMembers membersItem))
                 {
                     continue;
                 }
@@ -103,8 +104,8 @@ namespace CodeNav.Helpers
                 .ForEach(root => root
                     .Descendants()
                     .Where(i => i.StartLine == startLine)
-                    .Where(i => i is IMembers)
-                    .Cast<IMembers>()
+                    .Where(i => i is Models.IMembers)
+                    .Cast<Models.IMembers>()
                     .ToList()
                     .ForEach(i => i.IsExpanded = isExpanded));
         }
@@ -202,7 +203,7 @@ namespace CodeNav.Helpers
         /// <param name="eventArgs">The event arguments.</param>
         private static async void OnIsExpandedChanged(object sender, EventArgs eventArgs)
         {
-            if (!(sender is IMembers item))
+            if (!(sender is Models.IMembers item))
             {
                 return;
             }
@@ -234,7 +235,7 @@ namespace CodeNav.Helpers
                 var item = items.Pop();
                 yield return item;
 
-                if (item is IMembers membersItem)
+                if (item is Models.IMembers membersItem)
                 {
                     foreach (var i in membersItem.Members) items.Push(i);
                 }

@@ -11,8 +11,12 @@ namespace CodeNav.Shared.Models
             Members = new List<ICodeItem>();
         }
 
-        public CodeNamespaceItem(SyntaxNode source, NameSyntax name, SemanticModel semanticModel): base(source, name.ToString(), new SyntaxTokenList(), semanticModel) 
+        public CodeNamespaceItem(SyntaxNode source, NameSyntax name, SemanticModel semanticModel) : base(source, name.ToString(), new SyntaxTokenList(), semanticModel)
         {
+            Members = new List<ICodeItem>();
+        }
+
+        public CodeNamespaceItem(SyntaxNode source, string name, SyntaxTokenList syntaxTokenList, SemanticModel semanticModel) : base(source, name, syntaxTokenList, semanticModel) {
             Members = new List<ICodeItem>();
         }
 

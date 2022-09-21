@@ -2,9 +2,12 @@
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Text;
+using System.Drawing;
+using System.Xml.Linq;
 using static CodeNav.Shared.Constants;
 using static CodeNav.Shared.Mappers.BaseMapper;
 using VisualBasicSyntax = Microsoft.CodeAnalysis.VisualBasic.Syntax;
+using static CodeNav.Shared.Helpers.CodeNavSettings;
 
 namespace CodeNav.Shared.Models
 {
@@ -30,6 +33,8 @@ namespace CodeNav.Shared.Models
         #region Fonts
         public float FontSize { get; set; }
         public float ParameterFontSize { get; set; }
+        public string FontFamilyName { get; set; }
+        public string FontStyleName { get; set; }
         #endregion
         #region IsVisible
         public bool IsVisible { get; set; }
@@ -55,6 +60,10 @@ namespace CodeNav.Shared.Models
             Span = source.Span;
             ForegroundColor = Colors.Black;
             Access = MapAccess(modifiers, source);
+            FontSize = SettingsHelper.FontSizeInPoints;
+            ParameterFontSize = SettingsHelper.FontSizeInPoints - 1;
+            FontFamilyName = SettingsHelper.FontFamilyName;
+            FontStyleName = SettingsHelper.FontStyleName;
         }
 
         public BaseCodeItem() { }

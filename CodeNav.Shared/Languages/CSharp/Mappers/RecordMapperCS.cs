@@ -1,5 +1,4 @@
 ﻿using CodeNav.Shared.Enums;
-using CodeNav.Shared.Helpers;
 using CodeNav.Shared.Mappers;
 using CodeNav.Shared.Models;
 using Microsoft.CodeAnalysis;

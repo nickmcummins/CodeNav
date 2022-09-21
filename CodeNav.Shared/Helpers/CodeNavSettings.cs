@@ -10,6 +10,8 @@ namespace CodeNav.Shared.Helpers
         public bool UseXMLComments { get; set; }
         public ObservableCollection<FilterRule> FilterRules { get; set; }
         public float FontSizeInPoints { get; set; }
+        public string FontFamilyName { get; set; }
+        public string FontStyleName { get; set; }
 
         public CodeNavSettings()
         {

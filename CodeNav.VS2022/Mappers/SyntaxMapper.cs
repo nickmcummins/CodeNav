@@ -108,7 +108,7 @@ namespace CodeNav.Mappers
                     }
 
                     var document = rootSyntax.Members
-                        .Select(member => SyntaxMapperCS.MapMember(member, tree, semanticModel))
+                        .Select(member => SyntaxMapperCS.MapMember(member, tree, semanticModel, 0))
                         .Select(member => MapMember(member, control))
                         .ToList();
                     return document;
@@ -120,7 +120,7 @@ namespace CodeNav.Mappers
                     }
 
                     return vbRootSyntax.Members.Select(member => SyntaxMapperVB
-                    .MapMember(member, tree, semanticModel))
+                        .MapMember(member, tree, semanticModel, 0))
                         .Select(member => MapMember(member, control))
                         .ToList();
                 default:
@@ -174,7 +174,7 @@ namespace CodeNav.Mappers
                 }
 
                 return root.Members
-                    .Select(member => Shared.Languages.CSharp.Mappers.SyntaxMapperCS.MapMember(member, tree, semanticModel))
+                    .Select(member => SyntaxMapperCS.MapMember(member, tree, semanticModel, 0))
                     .Select(member => MapMember(member, control))
                     .ToList();
             }
@@ -190,7 +190,7 @@ namespace CodeNav.Mappers
                 }
 
                 return root.Members
-                    .Select(member => SyntaxMapperVB.MapMember(member, tree, semanticModel))
+                    .Select(member => SyntaxMapperVB.MapMember(member, tree, semanticModel, 0))
                     .Select(member => MapMember(member, control))
                     .ToList();
             }

@@ -1,15 +1,13 @@
 ﻿using CodeNav.Shared.Enums;
+using CodeNav.Shared.Extensions;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Text;
-using System.Drawing;
-using System.Xml.Linq;
 using static CodeNav.Shared.Constants;
-using static CodeNav.Shared.Mappers.BaseMapper;
-using VisualBasicSyntax = Microsoft.CodeAnalysis.VisualBasic.Syntax;
 using static CodeNav.Shared.Helpers.CodeNavSettings;
-using ExCSS;
+using static CodeNav.Shared.Mappers.BaseMapper;
 using Colors = CodeNav.Shared.Constants.Colors;
+using VisualBasicSyntax = Microsoft.CodeAnalysis.VisualBasic.Syntax;
 
 namespace CodeNav.Shared.Models
 {
@@ -22,8 +20,8 @@ namespace CodeNav.Shared.Models
         public int? StartLine { get; set; }
         public int? EndLine { get; set; }
         public TextSpan Span { get; set; }
+        public int Depth { get; set; }
         public Colors ForegroundColor { get; set; }
-        public int? Depth { get; set; }
         public string Id { get; set; } = string.Empty;
         public string Tooltip { get; set; } = string.Empty;
         public string FilePath { get; set; } = string.Empty;
@@ -70,6 +68,6 @@ namespace CodeNav.Shared.Models
 
         public BaseCodeItem() { }
 
-        public override string ToString() => $"baseItem(kind={Kind},name={Name},startLine={StartLine},endLine={EndLine})";
+        public override string ToString() => $"{Tab.Repeat(Depth)}baseItem(kind={Kind},name={Name},depth={Depth},startLine={StartLine},endLine={EndLine})";
     }
 }

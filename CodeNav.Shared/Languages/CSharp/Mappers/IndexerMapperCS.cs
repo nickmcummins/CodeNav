@@ -10,7 +10,7 @@ namespace CodeNav.Shared.Languages.CSharp.Mappers
 {
     public static class IndexerMapperCS
     {
-        public static ICodeItem? MapIndexer(IndexerDeclarationSyntax? member, SemanticModel semanticModel)
+        public static ICodeItem? MapIndexer(IndexerDeclarationSyntax? member, SemanticModel semanticModel, int depth)
         {
             if (member == null)
             {
@@ -18,6 +18,7 @@ namespace CodeNav.Shared.Languages.CSharp.Mappers
             }
 
             var item = new CodeFunctionItem(member, member.ThisKeyword, member.Modifiers, semanticModel);
+            item.Depth = depth;
             item.Type = TypeMapperCS.Map(member.Type);
             item.Parameters = ParameterMapperCS.MapParameters(member.ParameterList);
             item.Tooltip = TooltipMapper.Map(item.Access, item.Type, item.Name, item.Parameters);

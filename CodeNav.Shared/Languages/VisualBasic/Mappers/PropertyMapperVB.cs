@@ -13,7 +13,7 @@ namespace CodeNav.Shared.Languages.VisualBasic.Mappers
     public static class PropertyMapperVB
     {
 
-        public static CodePropertyItem? MapProperty(VisualBasicSyntax.PropertyBlockSyntax? member, SemanticModel semanticModel)
+        public static CodePropertyItem? MapProperty(VisualBasicSyntax.PropertyBlockSyntax? member, SemanticModel semanticModel, int depth)
         {
             if (member == null)
             {
@@ -23,6 +23,7 @@ namespace CodeNav.Shared.Languages.VisualBasic.Mappers
             var item = new CodePropertyItem(member, member.PropertyStatement.Identifier, member.PropertyStatement.Modifiers, semanticModel);
 
             var symbol = SymbolHelper.GetSymbol<IPropertySymbol>(semanticModel, member);
+            item.Depth = depth;
             item.Type = TypeMapper.Map(symbol?.Type);
 
             if (member.Accessors != null)

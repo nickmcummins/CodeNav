@@ -9,7 +9,7 @@ namespace CodeNav.Shared.Languages.CSharp.Mappers
 {
     public static class RecordMapperCS
     {
-        public static CodeFunctionItem? MapRecord(RecordDeclarationSyntax? member, SemanticModel semanticModel)
+        public static CodeFunctionItem? MapRecord(RecordDeclarationSyntax? member, SemanticModel semanticModel, int depth)
         {
             if (member == null)
             {
@@ -17,6 +17,7 @@ namespace CodeNav.Shared.Languages.CSharp.Mappers
             }
 
             var item = new CodeFunctionItem(member, member.Identifier, member.Modifiers, semanticModel);
+            item.Depth = depth;
             item.Kind = CodeItemKindEnum.Record;
             item.MonikerString = IconMapper.MapMoniker(item.Kind, item.Access);
             item.Parameters = ParameterMapperCS.MapParameters(member.ParameterList);

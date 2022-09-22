@@ -16,7 +16,7 @@ namespace CodeNav.Shared.Languages.CSharp.Mappers
 {
     public static class StatementMapperCS
     {
-        public static IList<ICodeItem> MapStatement(StatementSyntax? statement, SemanticModel semanticModel)
+        public static IList<ICodeItem> MapStatement(StatementSyntax? statement, SemanticModel semanticModel, int depth)
         {
             if (statement == null)
             {
@@ -28,7 +28,7 @@ namespace CodeNav.Shared.Languages.CSharp.Mappers
             switch (statement.Kind())
             {
                 case SyntaxKind.SwitchStatement:
-                    item = MapSwitch(statement as SwitchStatementSyntax, semanticModel);
+                    item = MapSwitch(statement as SwitchStatementSyntax, semanticModel, depth);
                     return item != null ? new List<ICodeItem> { item } : new List<ICodeItem>();
                 case SyntaxKind.Block:
                     if (!(statement is BlockSyntax blockSyntax))
@@ -36,28 +36,28 @@ namespace CodeNav.Shared.Languages.CSharp.Mappers
                         return new List<ICodeItem>();
                     }
 
-                    return MapStatements(blockSyntax.Statements, semanticModel);
+                    return MapStatements(blockSyntax.Statements, semanticModel, depth);
                 case SyntaxKind.TryStatement:
                     if (!(statement is TryStatementSyntax trySyntax))
                     {
                         return new List<ICodeItem>();
                     }
 
-                    return MapStatement(trySyntax.Block, semanticModel);
+                    return MapStatement(trySyntax.Block, semanticModel, depth);
                 case SyntaxKind.LocalFunctionStatement:
                     if (!(statement is LocalFunctionStatementSyntax syntax))
                     {
                         return new List<ICodeItem>();
                     }
 
-                    item = MethodMapperCS.MapMethod(syntax, semanticModel);
+                    item = MethodMapperCS.MapMethod(syntax, semanticModel, depth);
                     return item != null ? new List<ICodeItem> { item } : new List<ICodeItem>();
                 default:
                     return new List<ICodeItem>();
             }
         }
 
-        public static IList<ICodeItem> MapStatements(SyntaxList<StatementSyntax> statements, SemanticModel semanticModel)
+        public static IList<ICodeItem> MapStatements(SyntaxList<StatementSyntax> statements, SemanticModel semanticModel, int depth)
         {
             var list = new List<ICodeItem>();
 
@@ -68,7 +68,7 @@ namespace CodeNav.Shared.Languages.CSharp.Mappers
 
             foreach (var statement in statements)
             {
-                list.AddRange(MapStatement(statement, semanticModel));
+                list.AddRange(MapStatement(statement, semanticModel, depth));
             }
 
             return list;
@@ -82,7 +82,7 @@ namespace CodeNav.Shared.Languages.CSharp.Mappers
         /// <param name="control"></param>
         /// <param name="semanticModel"></param>
         /// <returns></returns>
-        private static ICodeItem? MapSwitch(SwitchStatementSyntax? statement, SemanticModel semanticModel)
+        private static ICodeItem? MapSwitch(SwitchStatementSyntax? statement, SemanticModel semanticModel, int depth)
         {
             if (statement == null)
             {
@@ -90,6 +90,7 @@ namespace CodeNav.Shared.Languages.CSharp.Mappers
             }
 
             var item = new CodeClassItem(statement, statement.Expression.ToString(), semanticModel);
+            item.Depth = depth;
             item.Name = $"Switch {item.Name}";
             item.Kind = CodeItemKindEnum.Switch;
             item.MonikerString = IconMapper.MapMoniker(item.Kind, item.Access);
@@ -99,7 +100,7 @@ namespace CodeNav.Shared.Languages.CSharp.Mappers
             // Map switch cases
             foreach (var section in statement.Sections)
             {
-                item.Members.AddIfNotNull(MapSwitchSection(section, semanticModel));
+                item.Members.AddIfNotNull(MapSwitchSection(section, semanticModel, depth + 1));
             }
 
             return item;
@@ -113,7 +114,7 @@ namespace CodeNav.Shared.Languages.CSharp.Mappers
         /// <param name="control"></param>
         /// <param name="semanticModel"></param>
         /// <returns></returns>
-        private static ICodeItem? MapSwitchSection(SwitchSectionSyntax? section, SemanticModel semanticModel)
+        private static ICodeItem? MapSwitchSection(SwitchSectionSyntax? section, SemanticModel semanticModel, int depth)
         {
             if (section == null)
             {
@@ -121,6 +122,7 @@ namespace CodeNav.Shared.Languages.CSharp.Mappers
             }
 
             var item = new CodePropertyItem(section, section.Labels.First().ToString(), semanticModel);
+            item.Depth = depth;
             item.Tooltip = TooltipMapper.Map(item.Access, item.Type, item.Name, string.Empty);
             item.Id = item.FullName;
             item.Kind = CodeItemKindEnum.SwitchSection;

@@ -12,7 +12,7 @@ namespace CodeNav.Shared.Languages.VisualBasic.Mappers
     public static class NamespaceMapperVB
     {
 
-        public static CodeNamespaceItem? MapNamespace(VisualBasicSyntax.NamespaceBlockSyntax? member, SemanticModel semanticModel, SyntaxTree tree)
+        public static CodeNamespaceItem? MapNamespace(VisualBasicSyntax.NamespaceBlockSyntax? member, SemanticModel semanticModel, SyntaxTree tree, int depth)
         {
             if (member == null)
             {
@@ -20,6 +20,7 @@ namespace CodeNav.Shared.Languages.VisualBasic.Mappers
             }
 
             var item = new CodeNamespaceItem(member, member.NamespaceStatement.Name.ToString(), new SyntaxTokenList(), semanticModel);
+            item.Depth = depth;
             item.Kind = CodeItemKindEnum.Namespace;
             item.MonikerString = IconMapper.MapMoniker(item.Kind, item.Access);
             item.BorderColor = Constants.Colors.DarkGray;
@@ -33,7 +34,7 @@ namespace CodeNav.Shared.Languages.VisualBasic.Mappers
 
             foreach (var namespaceMember in member.Members)
             {
-                var memberItem = SyntaxMapperVB.MapMember(namespaceMember, tree, semanticModel);
+                var memberItem = SyntaxMapperVB.MapMember(namespaceMember, tree, semanticModel, depth + 1);
                 if (memberItem != null && !RegionMapper.AddToRegion(regions, memberItem))
                 {
                     item.Members.Add(memberItem);

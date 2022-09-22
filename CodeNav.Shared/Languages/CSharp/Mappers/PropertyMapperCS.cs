@@ -11,7 +11,7 @@ namespace CodeNav.Shared.Languages.CSharp.Mappers
 {
     public class PropertyMapperCS
     {
-        public static CodePropertyItem? MapProperty(PropertyDeclarationSyntax? member, SemanticModel semanticModel)
+        public static CodePropertyItem? MapProperty(PropertyDeclarationSyntax? member, SemanticModel semanticModel, int depth)
         {
             if (member == null)
             {
@@ -19,6 +19,7 @@ namespace CodeNav.Shared.Languages.CSharp.Mappers
             }
 
             var item = new CodePropertyItem(member, member.Identifier, member.Modifiers, semanticModel);
+            item.Depth = depth;
             item.Type = TypeMapperCS.Map(member.Type);
 
             if (member.AccessorList != null)

@@ -11,7 +11,7 @@ namespace CodeNav.Shared.Languages.VisualBasic.Mappers
 {
     public static class ClassMapperVB
     {
-        public static CodeClassItem? MapClass(VisualBasicSyntax.TypeBlockSyntax? member, SemanticModel semanticModel, SyntaxTree tree)
+        public static CodeClassItem? MapClass(VisualBasicSyntax.TypeBlockSyntax? member, SemanticModel semanticModel, SyntaxTree tree, int depth)
         {
             if (member == null)
             {
@@ -19,6 +19,7 @@ namespace CodeNav.Shared.Languages.VisualBasic.Mappers
             }
 
             var item = new CodeClassItem(member, member.BlockStatement.Identifier, member.BlockStatement.Modifiers, semanticModel);
+            item.Depth = depth;
             item.Kind = CodeItemKindEnum.Class;
             item.MonikerString = IconMapper.MapMoniker(item.Kind, item.Access);
             item.Parameters = MapInheritance(member);
@@ -31,11 +32,11 @@ namespace CodeNav.Shared.Languages.VisualBasic.Mappers
             }
 
             var regions = RegionMapper.MapRegions(tree, member.Span);
-            var implementedInterfaces = InterfaceMapper.MapImplementedInterfaces(member, semanticModel, tree);
+            var implementedInterfaces = InterfaceMapper.MapImplementedInterfaces(member, semanticModel, tree, depth + 1);
 
             foreach (var classMember in member.Members)
             {
-                var memberItem = SyntaxMapperVB.MapMember(classMember, tree, semanticModel);
+                var memberItem = SyntaxMapperVB.MapMember(classMember, tree, semanticModel, depth + 1);
                 if (memberItem != null && !InterfaceMapper.IsPartOfImplementedInterface(implementedInterfaces, memberItem)
                     && !RegionMapper.AddToRegion(regions, memberItem))
                 {

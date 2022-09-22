@@ -5,11 +5,7 @@ using CodeNav.Shared.Mappers;
 using CodeNav.Shared.Models;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
-using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using static CodeNav.Shared.Constants;
 using static CodeNav.Shared.Helpers.CodeNavSettings;
 
@@ -17,7 +13,7 @@ namespace CodeNav.Shared.Languages.CSharp.Mappers
 {
     public static class NamespaceMapperCS
     {
-        public static CodeNamespaceItem? MapNamespace(BaseNamespaceDeclarationSyntax? member, SemanticModel semanticModel, SyntaxTree tree)
+        public static CodeNamespaceItem? MapNamespace(BaseNamespaceDeclarationSyntax? member, SemanticModel semanticModel, SyntaxTree tree, int depth)
         {
             if (member == null)
             {
@@ -25,6 +21,7 @@ namespace CodeNav.Shared.Languages.CSharp.Mappers
             }
 
             var item = new CodeNamespaceItem(member, member.Name, semanticModel);
+            item.Depth = depth;
             item.Kind = CodeItemKindEnum.Namespace;
             item.MonikerString = IconMapper.MapMoniker(item.Kind, item.Access);
             item.BorderColor = Colors.DarkGray;
@@ -39,7 +36,7 @@ namespace CodeNav.Shared.Languages.CSharp.Mappers
 
             foreach (var namespaceMember in member.Members)
             {
-                var memberItem = SyntaxMapperCS.MapMember(namespaceMember, tree, semanticModel);
+                var memberItem = SyntaxMapperCS.MapMember(namespaceMember, tree, semanticModel, depth + 1);
                 if (memberItem != null && !RegionMapper.AddToRegion(regions, memberItem))
                 {
                     item.Members.Add(memberItem);

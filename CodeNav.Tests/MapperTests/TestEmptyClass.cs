@@ -1,8 +1,4 @@
-﻿using System;
-using System.IO;
-using System.Linq;
-using System.Windows;
-using CodeNav.Shared.Enums;
+﻿using CodeNav.Shared.Enums;
 using CodeNav.Shared.Mappers;
 using CodeNav.Shared.Models;
 

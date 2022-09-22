@@ -1,7 +1,9 @@
 ﻿using CodeNav.Shared.Models;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
+using System.Text;
 
 namespace CodeNav.Shared.Extensions
 {
@@ -81,6 +83,24 @@ namespace CodeNav.Shared.Extensions
                 list.RemoveAll(match);
             }
             
+        }
+
+
+        public static string GetEnumDescription(this Enum value)
+        {
+            var field = value.GetType().GetField(value.ToString());
+            var attribute = Attribute.GetCustomAttribute(field, typeof(DescriptionAttribute)) as DescriptionAttribute;
+            return attribute == null ? value.ToString() : attribute.Description;
+        }
+
+        public static string Repeat(this string str, int num)
+        {
+            var sb = new StringBuilder();
+            for (var i = 0; i <= num; i++)
+            {
+                sb.Append(str);
+            }
+            return sb.ToString();
         }
     }
 }

@@ -36,7 +36,7 @@ namespace CodeNav.Shared.Mappers
                     var root = (CompilationUnitSyntax)tree.GetRoot();
 
                     return root.Members
-                        .Select(member => SyntaxMapperCS.MapMember(member, tree, semanticModel))
+                        .Select(member => SyntaxMapperCS.MapMember(member, tree, semanticModel, 0))
                         .ToList();
                 }
                 case ".vb":
@@ -50,7 +50,7 @@ namespace CodeNav.Shared.Mappers
                     var root = (VisualBasicSyntax.CompilationUnitSyntax)tree.GetRoot();
 
                     return root.Members
-                        .Select(member => SyntaxMapperVB.MapMember(member, tree, semanticModel))
+                        .Select(member => SyntaxMapperVB.MapMember(member, tree, semanticModel, 0))
                         .ToList();
                 }
             }

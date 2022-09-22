@@ -18,7 +18,7 @@ namespace CodeNav.Shared.Mappers
             return item != null && implementedInterfaces.SelectMany(i => i.Members.Select(m => m.Id)).Contains(item.Id);
         }
 
-        public static List<CodeImplementedInterfaceItem> MapImplementedInterfaces(SyntaxNode member, SemanticModel semanticModel, SyntaxTree tree)
+        public static List<CodeImplementedInterfaceItem> MapImplementedInterfaces(SyntaxNode member, SemanticModel semanticModel, SyntaxTree tree, int depth)
         {
             var implementedInterfaces = new List<CodeImplementedInterfaceItem>();
 
@@ -44,7 +44,7 @@ namespace CodeNav.Shared.Mappers
             foreach (INamedTypeSymbol implementedInterface in interfacesList.Distinct())
             {
                 implementedInterfaces.Add(MapImplementedInterface(implementedInterface.Name,
-                    implementedInterface.GetMembers(), classSymbol, member, semanticModel, tree));
+                    implementedInterface.GetMembers(), classSymbol, member, semanticModel, tree, depth = 1));
             }
 
             return implementedInterfaces;
@@ -65,13 +65,14 @@ namespace CodeNav.Shared.Mappers
             }
         }
 
-        public static CodeImplementedInterfaceItem MapImplementedInterface(string name, ImmutableArray<ISymbol> members, INamedTypeSymbol implementingClass, SyntaxNode currentClass, SemanticModel semanticModel, SyntaxTree tree)
+        public static CodeImplementedInterfaceItem MapImplementedInterface(string name, ImmutableArray<ISymbol> members, INamedTypeSymbol implementingClass, SyntaxNode currentClass, SemanticModel semanticModel, SyntaxTree tree, int depth)
         {
             var item = new CodeImplementedInterfaceItem
             {
                 Name = name,
                 FullName = name,
                 Id = name,
+                Depth = depth,
                 ForegroundColor = Constants.Colors.Black,
                 BorderColor = Constants.Colors.DarkGray,
                 FontSize = Instance.FontSizeInPoints - 2,
@@ -109,7 +110,7 @@ namespace CodeNav.Shared.Mappers
                     continue;
                 }
 
-                var interfaceMember = SyntaxMapperCS.MapMember(memberDeclaration, tree, semanticModel);
+                var interfaceMember = SyntaxMapperCS.MapMember(memberDeclaration, tree, semanticModel, depth + 1);
                 if (interfaceMember == null)
                 {
                     continue;

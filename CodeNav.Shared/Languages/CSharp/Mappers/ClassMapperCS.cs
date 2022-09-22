@@ -15,7 +15,7 @@ namespace CodeNav.Shared.Languages.CSharp.Mappers
 {
     public static class ClassMapperCS
     {
-        public static CodeClassItem? MapClass(ClassDeclarationSyntax? member, SemanticModel semanticModel, SyntaxTree tree, bool mapBaseClass)
+        public static CodeClassItem? MapClass(ClassDeclarationSyntax? member, SemanticModel semanticModel, SyntaxTree tree, bool mapBaseClass, int depth)
         {
             if (member == null)
             {
@@ -23,6 +23,7 @@ namespace CodeNav.Shared.Languages.CSharp.Mappers
             }
 
             var item = new CodeClassItem(member, member.Identifier, member.Modifiers, semanticModel);
+            item.Depth = depth;
             item.Kind = CodeItemKindEnum.Class;
             item.MonikerString = IconMapper.MapMoniker(item.Kind, item.Access);
             item.Parameters = MapInheritance(member);
@@ -35,18 +36,18 @@ namespace CodeNav.Shared.Languages.CSharp.Mappers
             }
 
             var regions = RegionMapper.MapRegions(tree, member.Span);
-            var implementedInterfaces = InterfaceMapper.MapImplementedInterfaces(member, semanticModel, tree);
+            var implementedInterfaces = InterfaceMapper.MapImplementedInterfaces(member, semanticModel, tree, depth);
 
             // Map members from the base class
             if (mapBaseClass)
             {
-                MapMembersFromBaseClass(member, regions, semanticModel);
+                MapMembersFromBaseClass(member, regions, semanticModel, depth + 1);
             }
 
             // Map class members
             foreach (var classMember in member.Members)
             {
-                var memberItem = SyntaxMapperCS.MapMember(classMember, tree, semanticModel);
+                var memberItem = SyntaxMapperCS.MapMember(classMember, tree, semanticModel, depth + 1);
                 if (memberItem != null && !InterfaceMapper.IsPartOfImplementedInterface(implementedInterfaces, memberItem)
                     && !RegionMapper.AddToRegion(regions, memberItem))
                 {
@@ -97,7 +98,7 @@ namespace CodeNav.Shared.Languages.CSharp.Mappers
             return !inheritanceList.Any() ? string.Empty : $" : {string.Join(", ", inheritanceList)}";
         }
 
-        private static void MapMembersFromBaseClass(ClassDeclarationSyntax member, IList<CodeRegionItem> regions, SemanticModel semanticModel)
+        private static void MapMembersFromBaseClass(ClassDeclarationSyntax member, IList<CodeRegionItem> regions, SemanticModel semanticModel, int depth)
         {
             var classSymbol = semanticModel.GetDeclaredSymbol(member);
             var baseType = classSymbol?.BaseType;
@@ -113,6 +114,7 @@ namespace CodeNav.Shared.Languages.CSharp.Mappers
                 Name = baseType.Name,
                 FullName = baseType.Name,
                 Id = baseType.Name,
+                Depth = depth,
                 Tooltip = baseType.Name,
                 ForegroundColor = Colors.Black,
                 BorderColor = Colors.DarkGray,
@@ -157,7 +159,7 @@ namespace CodeNav.Shared.Languages.CSharp.Mappers
                     continue;
                 }
 
-                var memberItem = SyntaxMapperCS.MapMember(syntaxNode, syntaxNode.SyntaxTree, baseSemanticModel, mapBaseClass: false);
+                var memberItem = SyntaxMapperCS.MapMember(syntaxNode, syntaxNode.SyntaxTree, baseSemanticModel, depth + 1, mapBaseClass: false);
 
                 baseRegion.Members.AddIfNotNull(memberItem);
             }

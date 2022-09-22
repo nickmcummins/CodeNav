@@ -1,4 +1,5 @@
-﻿using Microsoft.CodeAnalysis;
+﻿using CodeNav.Shared.Extensions;
+using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using System.Collections.Generic;
 using System.Linq;
@@ -26,7 +27,7 @@ namespace CodeNav.Shared.Models
 
         public bool NotIgnoreVisibility => !IgnoreVisibility;
 
-        public override string ToString() => $"namespace(name={Name},startLine={StartLine},endLine={EndLine}))\n{string.Join(NewLine, Members.Select(member => member.ToString()))}";
+        public override string ToString() => $"{Tab.Repeat(Depth)}namespace(name={Name},depth={Depth},startLine={StartLine},endLine={EndLine}))\n{string.Join(NewLine, Members.Select(member => member.ToString()))}";
 
     }
 }

@@ -1,6 +1,5 @@
 ﻿using CodeNav.Shared.Enums;
-using System;
-using System.ComponentModel;
+using CodeNav.Shared.Extensions;
 
 namespace CodeNav.Shared.Mappers
 {
@@ -9,7 +8,7 @@ namespace CodeNav.Shared.Mappers
         public static string MapMoniker(CodeItemKindEnum kind, CodeItemAccessEnum access)
         {
             string monikerString;
-            var accessString = GetEnumDescription(access);
+            var accessString = access.GetEnumDescription();
 
             switch (kind)
             {
@@ -79,13 +78,6 @@ namespace CodeNav.Shared.Mappers
             }
 
             return monikerString;
-        }
-
-        private static string GetEnumDescription(this Enum value)
-        {
-            var field = value.GetType().GetField(value.ToString());
-            var attribute = Attribute.GetCustomAttribute(field, typeof(DescriptionAttribute)) as DescriptionAttribute;
-            return attribute == null ? value.ToString() : attribute.Description;
         }
     }
 }

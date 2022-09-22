@@ -14,7 +14,7 @@ namespace CodeNav.Shared.Models
         public int? EndLine { get; set; }
         public TextSpan Span { get; set; }
         public Colors ForegroundColor { get; set; }
-        public int? Depth { get; set; }
+        public int Depth { get; set; }
         public string Id { get; set; }
         public string Tooltip { get; set; }
         public string FilePath { get; set; }

@@ -7,7 +7,8 @@ namespace CodeNav.Tests
     {
         public static void Info<T>(this Logger logger, IEnumerable<T> value)
         {
-            logger.Info($"[{string.Join(string.Empty, value.Select(item => item.ToString()))}]");
+            
+            logger.Info($"[{NewLine}{string.Join(string.Empty, value.Select(item => item.ToString()))}]");
         }
     }
 }

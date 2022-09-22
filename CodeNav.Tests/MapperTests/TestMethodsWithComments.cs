@@ -6,6 +6,7 @@ using CodeNav.Shared.Enums;
 using CodeNav.Shared.Helpers;
 using CodeNav.Shared.Mappers;
 using CodeNav.Shared.Models;
+using NLog;
 
 
 namespace CodeNav.Tests.MapperTests
@@ -13,6 +14,8 @@ namespace CodeNav.Tests.MapperTests
     [TestClass]
     public class TestMethodsWithComments
     {
+        private static readonly Logger _log = LogManager.GetCurrentClassLogger();
+
         [TestMethod]
         public void ShouldBeOk()
         {
@@ -21,7 +24,7 @@ namespace CodeNav.Tests.MapperTests
             var document = SyntaxMapper.MapDocument($@"Files\TestMethodsWithComments.cs");
 
             Assert.IsTrue(document.Any());
-
+            _log.Info<ICodeItem>(document);
             // First item should be a namespace
             Assert.AreEqual(CodeItemKindEnum.Namespace, document.First().Kind);
 

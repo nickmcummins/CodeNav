@@ -11,7 +11,7 @@ namespace CodeNav.Shared.Languages.VisualBasic.Mappers
 {
     public static class EnumMapperVB
     {
-        public static ICodeItem? MapEnumMember(VisualBasicSyntax.EnumMemberDeclarationSyntax? member, SemanticModel semanticModel)
+        public static ICodeItem? MapEnumMember(VisualBasicSyntax.EnumMemberDeclarationSyntax? member, SemanticModel semanticModel, int depth)
         {
             if (member == null)
             {
@@ -19,13 +19,14 @@ namespace CodeNav.Shared.Languages.VisualBasic.Mappers
             }
 
             var item = new BaseCodeItem(member, member.Identifier, semanticModel);
+            item.Depth = depth;
             item.Kind = CodeItemKindEnum.EnumMember;
             item.MonikerString = IconMapper.MapMoniker(item.Kind, item.Access);
 
             return item;
         }
 
-        public static CodeClassItem? MapEnum(VisualBasicSyntax.EnumBlockSyntax? member, SemanticModel semanticModel, SyntaxTree tree)
+        public static CodeClassItem? MapEnum(VisualBasicSyntax.EnumBlockSyntax? member, SemanticModel semanticModel, SyntaxTree tree, int depth)
         {
             if (member == null)
             {
@@ -33,6 +34,7 @@ namespace CodeNav.Shared.Languages.VisualBasic.Mappers
             }
 
             var item = new CodeClassItem(member, member.EnumStatement.Identifier, member.EnumStatement.Modifiers, semanticModel);
+            item.Depth = depth;
             item.Kind = CodeItemKindEnum.Enum;
             item.MonikerString = IconMapper.MapMoniker(item.Kind, item.Access);
             item.Parameters = MapMembersToString(member.Members);
@@ -45,7 +47,7 @@ namespace CodeNav.Shared.Languages.VisualBasic.Mappers
 
             foreach (var enumMember in member.Members)
             {
-                item.Members.AddIfNotNull(SyntaxMapperVB.MapMember(enumMember, tree, semanticModel));
+                item.Members.AddIfNotNull(SyntaxMapperVB.MapMember(enumMember, tree, semanticModel, depth + 1));
             }
 
             return item;

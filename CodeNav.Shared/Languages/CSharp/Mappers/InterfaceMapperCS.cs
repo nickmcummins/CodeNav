@@ -3,9 +3,6 @@ using CodeNav.Shared.Mappers;
 using CodeNav.Shared.Models;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
-using System;
-using System.Collections.Generic;
-using System.Collections.Immutable;
 using System.Linq;
 using static CodeNav.Shared.Constants;
 using static CodeNav.Shared.Helpers.CodeNavSettings;
@@ -14,7 +11,7 @@ namespace CodeNav.Shared.Languages.CSharp.Mappers
 {
     public static class InterfaceMapperCS
     {
-        public static CodeInterfaceItem? MapInterface(InterfaceDeclarationSyntax? member, SemanticModel semanticModel, SyntaxTree tree)
+        public static CodeInterfaceItem? MapInterface(InterfaceDeclarationSyntax? member, SemanticModel semanticModel, SyntaxTree tree, int depth)
         {
             if (member == null)
             {
@@ -22,6 +19,7 @@ namespace CodeNav.Shared.Languages.CSharp.Mappers
             }
 
             var item = new CodeInterfaceItem(member, member.Identifier, member.Modifiers, semanticModel);
+            item.Depth = depth;
             item.Kind = CodeItemKindEnum.Interface;
             item.BorderColor = Colors.DarkGray;
             item.MonikerString = IconMapper.MapMoniker(item.Kind, item.Access);
@@ -35,7 +33,7 @@ namespace CodeNav.Shared.Languages.CSharp.Mappers
 
             foreach (var interfaceMember in member.Members)
             {
-                var memberItem = SyntaxMapperCS.MapMember(interfaceMember, tree, semanticModel);
+                var memberItem = SyntaxMapperCS.MapMember(interfaceMember, tree, semanticModel, depth + 1);
                 if (memberItem != null && !RegionMapper.AddToRegion(regions, memberItem))
                 {
                     item.Members.Add(memberItem);

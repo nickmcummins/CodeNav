@@ -1,4 +1,5 @@
 ﻿using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 using System.Linq;
 using System.Text.RegularExpressions;
 
@@ -7,6 +8,16 @@ namespace CodeNav.Shared.Mappers
     public static class TypeMapper
     {
         public static string Map(ITypeSymbol? type, bool useLongNames = false)
+        {
+            if (type == null)
+            {
+                return string.Empty;
+            }
+
+            return Map(type.ToString(), useLongNames);
+        }
+
+        public static string Map(TypeSyntax? type, bool useLongNames = false)
         {
             if (type == null)
             {

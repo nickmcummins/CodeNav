@@ -1,4 +1,5 @@
-﻿using Microsoft.CodeAnalysis;
+﻿using CodeNav.Shared.Extensions;
+using Microsoft.CodeAnalysis;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -35,6 +36,6 @@ namespace CodeNav.Shared.Models
             Members = new List<ICodeItem>();
         }
 
-        public override string ToString() => $"class(name={Name},startLine={StartLine},endLine={EndLine}))\n{string.Join(NewLine, Members.Select(member => member.ToString()))}";
+        public override string ToString() => $"{Tab.Repeat(Depth)}class(name={Name},depth={Depth},startLine={StartLine},endLine={EndLine}))\n{string.Join(NewLine, Members.Select(member => member.ToString()))}";
     }
 }

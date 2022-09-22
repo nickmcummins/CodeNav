@@ -1,4 +1,6 @@
-﻿using Microsoft.CodeAnalysis;
+﻿using CodeNav.Shared.Extensions;
+using Microsoft.CodeAnalysis;
+using static CodeNav.Shared.Constants;
 
 namespace CodeNav.Shared.Models
 {
@@ -8,7 +10,7 @@ namespace CodeNav.Shared.Models
 
         public CodePropertyItem(SyntaxNode source, SyntaxToken identifier, SyntaxTokenList modifiers, SemanticModel semanticModel) : base(source, identifier.Text, modifiers, semanticModel) { }
 
-        public override string ToString() => $"property(name={Name},startLine={StartLine},endLine={EndLine})";
+        public override string ToString() => $"{Tab.Repeat(Depth)}property(name={Name},depth={Depth},startLine={StartLine},endLine={EndLine})";
 
     }
 }

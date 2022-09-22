@@ -1,10 +1,6 @@
-﻿using CodeNav.Shared.Enums;
+﻿using CodeNav.Shared.Extensions;
 using Microsoft.CodeAnalysis;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using static CodeNav.Shared.Constants;
 
 namespace CodeNav.Shared.Models
 {
@@ -19,7 +15,7 @@ namespace CodeNav.Shared.Models
 
         public CodeFunctionItem() : base() { }
 
-        public override string ToString() => $"function(name={Name},startLine={StartLine},endLine={EndLine})";
+        public override string ToString() => $"{Tab.Repeat(Depth)}function(name={Name},depth={Depth},type={Type},startLine={StartLine},endLine={EndLine})";
 
     }
 }

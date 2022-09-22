@@ -12,7 +12,7 @@ namespace CodeNav.Shared.Languages.CSharp.Mappers
 {
     public static class StructMapperCS
     {
-        public static CodeClassItem? MapStruct(StructDeclarationSyntax? member, SemanticModel semanticModel, SyntaxTree tree)
+        public static CodeClassItem? MapStruct(StructDeclarationSyntax? member, SemanticModel semanticModel, SyntaxTree tree, int depth)
         {
             if (member == null)
             {
@@ -20,6 +20,7 @@ namespace CodeNav.Shared.Languages.CSharp.Mappers
             }
 
             var item = new CodeClassItem(member, member.Identifier, member.Modifiers, semanticModel);
+            item.Depth = depth;
             item.Kind = CodeItemKindEnum.Struct;
             item.MonikerString = IconMapper.MapMoniker(item.Kind, item.Access);
             item.BorderColor = Colors.DarkGray;
@@ -31,7 +32,7 @@ namespace CodeNav.Shared.Languages.CSharp.Mappers
 
             foreach (var structMember in member.Members)
             {
-                item.Members.AddIfNotNull(SyntaxMapperCS.MapMember(structMember, tree, semanticModel));
+                item.Members.AddIfNotNull(SyntaxMapperCS.MapMember(structMember, tree, semanticModel, depth + 1));
             }
 
             return item;

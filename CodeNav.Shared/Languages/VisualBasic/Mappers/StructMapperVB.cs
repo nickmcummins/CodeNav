@@ -10,7 +10,7 @@ namespace CodeNav.Shared.Languages.VisualBasic.Mappers
 {
     public static class StructMapperVB
     {
-        public static CodeClassItem? MapStruct(VisualBasicSyntax.StructureBlockSyntax? member, SemanticModel semanticModel, SyntaxTree tree)
+        public static CodeClassItem? MapStruct(VisualBasicSyntax.StructureBlockSyntax? member, SemanticModel semanticModel, SyntaxTree tree, int depth)
         {
             if (member == null)
             {
@@ -18,6 +18,7 @@ namespace CodeNav.Shared.Languages.VisualBasic.Mappers
             }
 
             var item = new CodeClassItem(member, member.StructureStatement.Identifier, member.StructureStatement.Modifiers, semanticModel);
+            item.Depth = depth;
             item.Kind = CodeItemKindEnum.Struct;
             item.MonikerString = IconMapper.MapMoniker(item.Kind, item.Access);
             item.BorderColor = Constants.Colors.DarkGray;
@@ -29,7 +30,7 @@ namespace CodeNav.Shared.Languages.VisualBasic.Mappers
 
             foreach (var structMember in member.Members)
             {
-                item.Members.AddIfNotNull(SyntaxMapperVB.MapMember(structMember, tree, semanticModel));
+                item.Members.AddIfNotNull(SyntaxMapperVB.MapMember(structMember, tree, semanticModel, depth + 1));
             }
 
             return item;

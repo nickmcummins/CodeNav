@@ -1,28 +1,28 @@
-﻿using System;
-using System.IO;
-using System.Linq;
-using CodeNav.Shared.Enums;
+﻿using CodeNav.Shared.Enums;
 using CodeNav.Shared.Mappers;
 using CodeNav.Shared.Models;
-
+using NLog;
 
 namespace CodeNav.Tests.MapperTests
 {
     [TestClass]
     public class TestInterface3
     {
+        private static readonly Logger _log = LogManager.GetCurrentClassLogger();
+
         [TestMethod]
         public void TestBaseImplementedInterfaceShouldBeOk()
         {
             var document = SyntaxMapper.MapDocument($@"Files\TestInterface3.cs");
 
             Assert.IsTrue(document.Any());
+            _log.Info<ICodeItem>(document);
 
             // last item should be the implementing class
             var implementingClass = (document.First() as IMembers).Members.Last() as CodeClassItem;
 
             Assert.AreEqual(CodeItemKindEnum.Class, implementingClass.Kind);
-            Assert.AreEqual(1, implementingClass.Members.Count);
+            Assert.AreEqual(1, implementingClass.Members.Where(member => member.GetType() != typeof(CodeRegionItem)).Count());
 
             var implementedInterface = implementingClass.Members.First() as CodeImplementedInterfaceItem;
 

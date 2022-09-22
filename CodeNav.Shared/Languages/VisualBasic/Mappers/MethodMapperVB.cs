@@ -13,7 +13,7 @@ namespace CodeNav.Shared.Languages.VisualBasic.Mappers
     internal class MethodMapperVB
     {
 
-        public static ICodeItem? MapMethod(VisualBasicSyntax.MethodStatementSyntax? member,SemanticModel semanticModel)
+        public static ICodeItem? MapMethod(VisualBasicSyntax.MethodStatementSyntax? member,SemanticModel semanticModel, int depth)
         {
             if (member == null)
             {
@@ -23,6 +23,7 @@ namespace CodeNav.Shared.Languages.VisualBasic.Mappers
             var item = new CodeFunctionItem(member, member.Identifier, member.Modifiers, semanticModel);
 
             item.Id = IdMapperVB.MapId(item.FullName, member.ParameterList, semanticModel);
+            item.Depth = depth;
             item.Kind = CodeItemKindEnum.Method;
             item.MonikerString = IconMapper.MapMoniker(item.Kind, item.Access);
 
@@ -34,7 +35,7 @@ namespace CodeNav.Shared.Languages.VisualBasic.Mappers
             return item;
         }
 
-        public static ICodeItem? MapMethod(VisualBasicSyntax.MethodBlockSyntax? member, SemanticModel semanticModel)
+        public static ICodeItem? MapMethod(VisualBasicSyntax.MethodBlockSyntax? member, SemanticModel semanticModel, int depth)
         {
             if (member == null)
             {
@@ -65,6 +66,7 @@ namespace CodeNav.Shared.Languages.VisualBasic.Mappers
             }
 
             item.Id = IdMapperVB.MapId(item.FullName, member.SubOrFunctionStatement.ParameterList, semanticModel);
+            item.Depth = depth;
             item.Kind = CodeItemKindEnum.Method;
             item.MonikerString = IconMapper.MapMoniker(item.Kind, item.Access);
 
@@ -75,7 +77,7 @@ namespace CodeNav.Shared.Languages.VisualBasic.Mappers
 
             return item;
         }
-        public static ICodeItem? MapConstructor(VisualBasicSyntax.ConstructorBlockSyntax? member, SemanticModel semanticModel)
+        public static ICodeItem? MapConstructor(VisualBasicSyntax.ConstructorBlockSyntax? member, SemanticModel semanticModel, int depth)
         {
             if (member == null)
             {
@@ -83,6 +85,7 @@ namespace CodeNav.Shared.Languages.VisualBasic.Mappers
             }
 
             var item = new CodeFunctionItem(member, member.SubNewStatement.NewKeyword, member.SubNewStatement.Modifiers, semanticModel);
+            item.Depth = depth;
             item.Parameters = ParameterMapperVB.MapParameters(member.SubNewStatement.ParameterList, semanticModel);
             item.Tooltip = TooltipMapperVB.Map(item.Access, item.Type, item.Name, member.SubNewStatement.ParameterList, semanticModel);
             item.Id = IdMapperVB.MapId(member.SubNewStatement.NewKeyword, member.SubNewStatement.ParameterList, semanticModel);

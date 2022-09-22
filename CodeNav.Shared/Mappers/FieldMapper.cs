@@ -2,19 +2,15 @@
 using CodeNav.Shared.Models;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
-using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using VisualBasic = Microsoft.CodeAnalysis.VisualBasic;
 using static CodeNav.Shared.Helpers.CodeNavSettings;
+using VisualBasic = Microsoft.CodeAnalysis.VisualBasic;
 
 namespace CodeNav.Shared.Mappers
 {
     public static class FieldMapper
     {
-        public static ICodeItem? MapField(SyntaxNode? member, SyntaxToken identifier, SyntaxTokenList modifiers, SemanticModel semanticModel)
+        public static ICodeItem? MapField(SyntaxNode? member, SyntaxToken identifier, SyntaxTokenList modifiers, SemanticModel semanticModel, int depth)
         {
             if (member == null)
             {
@@ -22,6 +18,7 @@ namespace CodeNav.Shared.Mappers
             }
 
             var item = new BaseCodeItem(member, identifier, modifiers, semanticModel);
+            item.Depth = depth;
             item.Kind = IsConstant(modifiers)
                 ? CodeItemKindEnum.Constant
                 : CodeItemKindEnum.Variable;

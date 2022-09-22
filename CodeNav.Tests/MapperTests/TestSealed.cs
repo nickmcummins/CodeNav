@@ -1,7 +1,4 @@
-﻿using System;
-using System.IO;
-using System.Linq;
-using CodeNav.Shared.Enums;
+﻿using CodeNav.Shared.Enums;
 using CodeNav.Shared.Mappers;
 using CodeNav.Shared.Models;
 using NLog;
@@ -41,7 +38,7 @@ namespace CodeNav.Tests.MapperTests
 
             _log.Info<ICodeItem>(document);
             // Inheriting class should have sealed property
-            var sealedProperty = inheritingClass.Members.Last() as CodeFunctionItem;
+            var sealedProperty = inheritingClass.Members.Where(member => member.Kind == CodeItemKindEnum.Property).Last() as CodeFunctionItem;
             Assert.AreEqual(CodeItemKindEnum.Property, sealedProperty.Kind);
             Assert.AreEqual("BaseProperty", sealedProperty.Name);
             Assert.AreEqual(CodeItemAccessEnum.Sealed, sealedProperty.Access);

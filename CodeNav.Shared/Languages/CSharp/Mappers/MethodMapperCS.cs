@@ -17,26 +17,26 @@ namespace CodeNav.Shared.Languages.CSharp.Mappers
 {
     public class MethodMapperCS
     {
-        public static ICodeItem? MapMethod(MethodDeclarationSyntax? member, SemanticModel semanticModel)
+        public static ICodeItem? MapMethod(MethodDeclarationSyntax? member, SemanticModel semanticModel, int depth)
         {
             if (member == null)
             {
                 return null;
             }
 
-            return MapMethod(member, member.Identifier, member.Modifiers, member.Body, member.ReturnType as ITypeSymbol, member.ParameterList, CodeItemKindEnum.Method, semanticModel);
+            return MapMethod(member, member.Identifier, member.Modifiers, member.Body, member.ReturnType, member.ParameterList, CodeItemKindEnum.Method, semanticModel, depth);
         }
 
-        public static ICodeItem? MapMethod(LocalFunctionStatementSyntax member, SemanticModel semanticModel)
+        public static ICodeItem? MapMethod(LocalFunctionStatementSyntax member, SemanticModel semanticModel, int depth)
         {
-            return MapMethod(member, member.Identifier, member.Modifiers, member.Body, member.ReturnType as ITypeSymbol, member.ParameterList, CodeItemKindEnum.LocalFunction, semanticModel);
+            return MapMethod(member, member.Identifier, member.Modifiers, member.Body, member.ReturnType, member.ParameterList, CodeItemKindEnum.LocalFunction, semanticModel, depth);
         }
 
-        public static ICodeItem? MapMethod(SyntaxNode node, SyntaxToken identifier, SyntaxTokenList modifiers, BlockSyntax? body, ITypeSymbol? returnType, ParameterListSyntax parameterList, CodeItemKindEnum kind, SemanticModel semanticModel)
+        public static ICodeItem? MapMethod(SyntaxNode node, SyntaxToken identifier, SyntaxTokenList modifiers, BlockSyntax? body, TypeSyntax? returnType, ParameterListSyntax parameterList, CodeItemKindEnum kind, SemanticModel semanticModel, int depth)
         {
             ICodeItem item;
 
-            var statementsCodeItems = StatementMapperCS.MapStatement(body, semanticModel);
+            var statementsCodeItems = StatementMapperCS.MapStatement(body, semanticModel, depth);
 
             VisibilityHelper.SetCodeItemVisibility(statementsCodeItems);
 
@@ -57,6 +57,7 @@ namespace CodeNav.Shared.Languages.CSharp.Mappers
             }
 
             item.Id = IdMapperCS.MapId(item.FullName, parameterList);
+            item.Depth = depth;
             item.Kind = kind;
             item.MonikerString = IconMapper.MapMoniker(item.Kind, item.Access);
             item.StartLine = BaseMapper.GetStartLine(node, modifiers);
@@ -70,7 +71,7 @@ namespace CodeNav.Shared.Languages.CSharp.Mappers
             return item;
         }
 
-        public static ICodeItem? MapConstructor(ConstructorDeclarationSyntax? member, SemanticModel semanticModel)
+        public static ICodeItem? MapConstructor(ConstructorDeclarationSyntax? member, SemanticModel semanticModel, int depth)
         {
             if (member == null)
             {
@@ -78,6 +79,7 @@ namespace CodeNav.Shared.Languages.CSharp.Mappers
             }
 
             var item = new CodeFunctionItem(member, member.Identifier, member.Modifiers, semanticModel);
+            item.Depth = depth;
             item.Parameters = ParameterMapperCS.MapParameters(member.ParameterList);
             item.Tooltip = TooltipMapperCS.Map(item.Access, item.Type, item.Name, member.ParameterList);
             item.Id = IdMapperCS.MapId(member.Identifier, member.ParameterList);

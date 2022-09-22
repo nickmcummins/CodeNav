@@ -4,6 +4,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static CodeNav.Shared.Constants;
+
 
 namespace CodeNav.Shared.Models
 {
@@ -13,6 +15,8 @@ namespace CodeNav.Shared.Models
         {
             Members = new List<ICodeItem>();
         }
+        public override string ToString() => $"interfacce(name={Name},startLine={StartLine},endLine={EndLine}))\n{string.Join(NewLine, Members.Select(member => member.ToString()))}";
+
     }
 
     public class CodeImplementedInterfaceItem : CodeRegionItem

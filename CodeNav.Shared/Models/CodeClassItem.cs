@@ -19,17 +19,22 @@ namespace CodeNav.Shared.Models
         {
             Members = new List<ICodeItem>();
         }
+        
         public CodeClassItem(SyntaxNode source, SyntaxToken identifier, SyntaxTokenList modifiers, SemanticModel semanticModel) : base(source, identifier.Text, modifiers, semanticModel) 
         {
             Members = new List<ICodeItem>();
         }
 
-        public CodeClassItem() : base() {
-            Members = new List<ICodeItem>();
-        }
-        public CodeClassItem(SyntaxNode source, string name, SyntaxTokenList modifiers, SemanticModel semanticModel) : base(source, name, modifiers, semanticModel) {
+        public CodeClassItem() : base() 
+        {
             Members = new List<ICodeItem>();
         }
 
+        public CodeClassItem(SyntaxNode source, string name, SyntaxTokenList modifiers, SemanticModel semanticModel) : base(source, name, modifiers, semanticModel) 
+        {
+            Members = new List<ICodeItem>();
+        }
+
+        public override string ToString() => $"class(name={Name},startLine={StartLine},endLine={EndLine}))\n{string.Join(NewLine, Members.Select(member => member.ToString()))}";
     }
 }

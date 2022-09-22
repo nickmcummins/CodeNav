@@ -2,23 +2,18 @@
 using CodeNav.Shared.Languages.JavaScript.Mappers;
 using CodeNav.Shared.Models;
 
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-
 namespace CodeNav.Tests.MapperTests.JavaScript
 {
     [TestClass]
     public class TestFunctions
     {
-        IList<ICodeItem> document;
-        CodeClassItem root;
+        static IList<ICodeItem> document;
+        static CodeClassItem root;
 
         [ClassInitialize]
-        public void Init()
+        public static void Init(TestContext testContext)
         {
-            document = SyntaxMapperJS.Map(@$"\Files\JavaScript\TestFunction.js");
+            document = SyntaxMapperJS.Map(@$"Files\JavaScript\TestFunction.js");
 
             Assert.IsTrue(document.Any());
             Assert.AreEqual(CodeItemKindEnum.Namespace, document.First().Kind);

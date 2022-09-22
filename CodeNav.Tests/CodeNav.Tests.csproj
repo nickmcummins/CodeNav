@@ -118,6 +118,8 @@
     <PackageReference Include="MSTest.TestAdapter" Version="2.2.10" />
     <PackageReference Include="MSTest.TestFramework" Version="2.2.10" />
     <PackageReference Include="coverlet.collector" Version="3.1.2" />
+    <PackageReference Include="NLog" Version="5.0.4" />
+    <PackageReference Include="NLog.Extensions.Logging" Version="5.0.4" />
   </ItemGroup>
 
   <ItemGroup>
@@ -138,6 +140,12 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Update="Files\JavaScript\TestFunction.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Files\JavaScript\TestVariable.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="Files\VisualBasic\TestClasses.vb">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

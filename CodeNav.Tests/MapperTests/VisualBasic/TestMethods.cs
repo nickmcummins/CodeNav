@@ -11,12 +11,12 @@ namespace CodeNav.Tests.MapperTests.VisualBasic
     [TestClass]
     public class TestMethods
     {
-        CodeClassItem _innerClass; 
+        static CodeClassItem _innerClass; 
 
         [ClassInitialize]
-        public void Setup()
+        public static void Setup(TestContext testContext)
         {
-            var document = SyntaxMapper.MapDocument($@"Files\Files\VisualBasic\TestMethods.vb");
+            var document = SyntaxMapper.MapDocument($@"Files\VisualBasic\TestMethods.vb");
 
             Assert.IsTrue(document.Any());
 

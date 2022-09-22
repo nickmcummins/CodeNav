@@ -18,5 +18,8 @@ namespace CodeNav.Shared.Models
         public CodeFunctionItem(SyntaxNode source, SyntaxToken identifier, SyntaxTokenList modifiers, SemanticModel semanticModel) : base(source, identifier.Text, modifiers, semanticModel) { }
 
         public CodeFunctionItem() : base() { }
+
+        public override string ToString() => $"function(name={Name},startLine={StartLine},endLine={EndLine})";
+
     }
 }

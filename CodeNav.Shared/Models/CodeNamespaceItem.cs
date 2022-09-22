@@ -1,6 +1,8 @@
 ﻿using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using System.Collections.Generic;
+using System.Linq;
+using static CodeNav.Shared.Constants;
 
 namespace CodeNav.Shared.Models
 {
@@ -22,6 +24,9 @@ namespace CodeNav.Shared.Models
 
         public bool IgnoreVisibility { get; set; }
 
-        public bool NotIgnoreVisibility => !IgnoreVisibility;    
+        public bool NotIgnoreVisibility => !IgnoreVisibility;
+
+        public override string ToString() => $"namespace(name={Name},startLine={StartLine},endLine={EndLine}))\n{string.Join(NewLine, Members.Select(member => member.ToString()))}";
+
     }
 }

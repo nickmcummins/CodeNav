@@ -38,7 +38,7 @@ namespace CodeNav.Tests.MapperTests
             Assert.AreEqual(" {set}", propertySet.Parameters);
 
             var property = innerClass.Members.Last() as CodeFunctionItem;
-            Assert.IsNull(property.Parameters);
+            Assert.AreEqual(string.Empty, property.Parameters);
         }
 
         [TestMethod]
@@ -65,7 +65,7 @@ namespace CodeNav.Tests.MapperTests
             Assert.AreEqual(" {set}", propertySet.Parameters);
 
             var property = innerClass.Members[3] as CodeFunctionItem;
-            Assert.IsNull(property.Parameters);
+            Assert.AreEqual(string.Empty, property.Parameters);
 
             var propertyShorthand = innerClass.Members[4] as CodeFunctionItem;
             Assert.AreEqual("String", property.Type);

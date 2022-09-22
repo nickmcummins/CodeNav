@@ -1,23 +1,17 @@
 ﻿using CodeNav.Shared.Enums;
-using CodeNav.Shared.Languages.JavaScript.Mappers;
 using CodeNav.Shared.Mappers;
 using CodeNav.Shared.Models;
-
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
 
 namespace CodeNav.Tests.MapperTests.JavaScript
 {
     [TestClass]
     public class TestVariables
     {
-        IList<ICodeItem> document;
-        CodeClassItem root;
+        static IList<ICodeItem> document;
+        static CodeClassItem root;
 
         [ClassInitialize]
-        public void Init()
+        public static void Init(TestContext testContext)
         {
             document = SyntaxMapper.MapDocument($@"Files\JavaScript\TestVariable.js");
 

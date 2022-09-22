@@ -4,13 +4,15 @@ using System.Linq;
 using CodeNav.Shared.Enums;
 using CodeNav.Shared.Mappers;
 using CodeNav.Shared.Models;
-
+using NLog;
 
 namespace CodeNav.Tests.MapperTests
 {
     [TestClass]
     public class TestSealed
     {
+        private static readonly Logger _log = LogManager.GetCurrentClassLogger();
+
         [TestMethod]
         public void TestSealedShouldBeOk()
         {
@@ -37,6 +39,7 @@ namespace CodeNav.Tests.MapperTests
             Assert.AreEqual(CodeItemAccessEnum.Public, inheritingClass.Access);
             Assert.AreEqual(" : BaseClass", inheritingClass.Parameters);
 
+            _log.Info<ICodeItem>(document);
             // Inheriting class should have sealed property
             var sealedProperty = inheritingClass.Members.Last() as CodeFunctionItem;
             Assert.AreEqual(CodeItemKindEnum.Property, sealedProperty.Kind);

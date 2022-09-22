@@ -1,7 +1,4 @@
-﻿using System;
-using System.IO;
-using System.Linq;
-using CodeNav.Shared.Enums;
+﻿using CodeNav.Shared.Enums;
 using CodeNav.Shared.Helpers;
 using CodeNav.Shared.Mappers;
 using CodeNav.Shared.Models;
@@ -17,7 +14,7 @@ namespace CodeNav.Tests.MapperTests.VisualBasic
         {
             CodeNavSettings.Instance.UseXMLComments = true;
 
-            var document = SyntaxMapper.MapDocument($@"Files\Files\\VisualBasic\\TestMethodsWithComments.vb");
+            var document = SyntaxMapper.MapDocument($@"Files\VisualBasic\TestMethodsWithComments.vb");
 
             Assert.IsTrue(document.Any());
 

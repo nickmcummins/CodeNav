@@ -69,5 +69,7 @@ namespace CodeNav.Shared.Models
         }
 
         public BaseCodeItem() { }
+
+        public override string ToString() => $"baseItem(kind={Kind},name={Name},startLine={StartLine},endLine={EndLine})";
     }
 }

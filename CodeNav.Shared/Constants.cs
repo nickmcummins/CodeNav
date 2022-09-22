@@ -7,5 +7,8 @@
             Black,
             DarkGray
         }
+
+        public const string NewLine = "\n";
+        public const string Comma = ",";
     }
 }

@@ -259,7 +259,7 @@ namespace CodeNav.Helpers
                     codeDocumentViewModel.CodeDocument = PlaceholderHelper.CreateLoadingItem();
                 }
 
-                var codeItems = await SyntaxMapper.MapDocument(control, filePath);
+                var codeItems = await SyntaxMapper.MapDocumentAsync(control, filePath);
 
                 if (codeItems == null)
                 {

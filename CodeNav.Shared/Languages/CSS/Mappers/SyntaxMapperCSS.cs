@@ -12,16 +12,17 @@ namespace CodeNav.Shared.Languages.CSS.Mappers
 {
     public static class SyntaxMapperCSS
     {
-        public static IList<ICodeItem?> Map(Document document) => Map(document.FilePath);
-
-        public static IList<ICodeItem?> Map(string? filePath)
+        public static IList<ICodeItem?> Map(string? filePath, string? text = null)
         {
-            if (!File.Exists(filePath))
+            if (text == null)
             {
-                return new List<ICodeItem?>();
+                if (string.IsNullOrEmpty(filePath) || !File.Exists(filePath))
+                {
+                    return new List<ICodeItem?>();
+                }
+                text = File.ReadAllText(filePath);
             }
 
-            var text = File.ReadAllText(filePath);
 
             var ast = new StylesheetParser().Parse(text);
 

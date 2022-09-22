@@ -2,37 +2,19 @@
 
 using CodeNav.Helpers;
 using CodeNav.Models;
-using CodeNav.Shared.Helpers;
 using CodeNav.Shared.Languages.CSharp.Mappers;
 using CodeNav.Shared.Languages.VisualBasic.Mappers;
 using Microsoft.CodeAnalysis;
-using Microsoft.CodeAnalysis.CSharp;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
-using CompilationUnitSyntax = Microsoft.CodeAnalysis.CSharp.Syntax.CompilationUnitSyntax;
-using VisualBasic = Microsoft.CodeAnalysis.VisualBasic;
-using VisualBasicSyntax = Microsoft.CodeAnalysis.VisualBasic.Syntax;
 
 namespace CodeNav.Mappers
 {
     public static class SyntaxMapper
     {
-        /// <summary>
-        /// Map a document from filepath, used for unit testing
-        /// </summary>
-        /// <param name="filePath">filepath of the input document</param>
-        /// <returns>List of found code items</returns>
-        public static List<CodeItem?> MapDocument(string filePath, ICodeViewUserControl control)
-        {
-            var document = Shared.Mappers.SyntaxMapper.MapDocument(filePath);
-
-            return document
-                .Select(member => MapMember(member, control))
-                .ToList();
-        }
 
 
         /// <summary>
@@ -40,18 +22,12 @@ namespace CodeNav.Mappers
         /// </summary>
         /// <param name="control">CodeNav control that will show the result</param>
         /// <returns>List of found code items</returns>
-        public static async Task<List<CodeItem?>> MapDocument(ICodeViewUserControl control, string filePath = "")
+        public static async Task<List<CodeItem?>> MapDocumentAsync(ICodeViewUserControl control, string filePath = "")
         {
             try
             {
                 var codeAnalysisDocument = await DocumentHelper.GetCodeAnalysisDocument(filePath);
-
-                if (codeAnalysisDocument != null)
-                {
-                    return await MapDocumentAsync(codeAnalysisDocument, control);
-                }
-
-                return await MapDocument(control);
+                return await MapDocumentAsync(control, codeAnalysisDocument);
             }
             catch (Exception e)
             {
@@ -62,79 +38,18 @@ namespace CodeNav.Mappers
             return new List<CodeItem?>();
         }
 
-        /// <summary>
-        /// Map a CodeAnalysis document, used for files in the current solution and workspace
-        /// </summary>
-        /// <param name="document">a CodeAnalysis document</param>
-        /// <returns>List of found code items</returns>
-        public static async Task<List<CodeItem?>> MapDocumentAsync(Document codeAnalysisDocument, ICodeViewUserControl control)
+
+        public static async Task<List<CodeItem?>> MapDocumentAsync(ICodeViewUserControl control, Document codeAnalysisDocument = null)
         {
-            if (codeAnalysisDocument == null)
+            string filePath;
+            if (codeAnalysisDocument != null)
             {
-                return new List<CodeItem?>();
+                filePath = codeAnalysisDocument.FilePath;
             }
-
-            if (Path.GetExtension(codeAnalysisDocument.FilePath).Equals(".js"))
+            else
             {
-                return Shared.Languages.JavaScript.Mappers.SyntaxMapperJS.Map(codeAnalysisDocument)
-                        .Select(member => MapMember(member, control))
-                        .ToList();
+                filePath = await DocumentHelper.GetFilePath();
             }
-
-            if (Path.GetExtension(codeAnalysisDocument.FilePath) == ".css")
-            {
-                return Shared.Languages.CSS.Mappers.SyntaxMapperCSS.Map(codeAnalysisDocument)
-                    .Select(member => MapMember(member, control))
-                    .ToList();
-            }
-
-            var tree = await codeAnalysisDocument.GetSyntaxTreeAsync();
-
-            if (tree == null)
-            {
-                return new List<CodeItem?>();
-            }
-
-            var semanticModel = await codeAnalysisDocument.GetSemanticModelAsync();
-            var root = await tree.GetRootAsync();
-
-            switch (LanguageHelper.GetLanguage(root.Language))
-            {
-                case LanguageEnum.CSharp:
-                    if (!(root is CompilationUnitSyntax rootSyntax) ||
-                        semanticModel == null)
-                    {
-                        return new List<CodeItem?>();
-                    }
-
-                    var document = rootSyntax.Members
-                        .Select(member => SyntaxMapperCS.MapMember(member, tree, semanticModel, 0))
-                        .Select(member => MapMember(member, control))
-                        .ToList();
-                    return document;
-                case LanguageEnum.VisualBasic:
-                    if (!(root is VisualBasicSyntax.CompilationUnitSyntax vbRootSyntax) ||
-                        semanticModel == null)
-                    {
-                        return new List<CodeItem?>();
-                    }
-
-                    return vbRootSyntax.Members.Select(member => SyntaxMapperVB
-                        .MapMember(member, tree, semanticModel, 0))
-                        .Select(member => MapMember(member, control))
-                        .ToList();
-                default:
-                    return new List<CodeItem?>();
-            }
-        }
-
-        /// <summary>
-        /// Map the active document without workspace
-        /// </summary>
-        /// <returns>List of found code items</returns>
-        public static async Task<List<CodeItem?>> MapDocument(ICodeViewUserControl control)
-        {
-            var filePath = await DocumentHelper.GetFilePath();
 
             if (string.IsNullOrEmpty(filePath))
             {
@@ -150,52 +65,23 @@ namespace CodeNav.Mappers
                 return new List<CodeItem?>();
             }
 
-            if (fileExtension == ".js")
+            IList<Shared.Models.ICodeItem?> document = null;
+            switch (fileExtension)
             {
-                return Shared.Languages.JavaScript.Mappers.SyntaxMapperJS.Map(filePath)
-                    .Select(member => MapMember(member, control))
-                    .ToList();
+                case ".js":
+                    document = Shared.Languages.JavaScript.Mappers.SyntaxMapperJS.Map(filePath, text);
+                    break;
+                case ".css":
+                    document = Shared.Languages.CSS.Mappers.SyntaxMapperCSS.Map(filePath, text);
+                    break;
+                case ".cs":
+                    document = await SyntaxMapperCS.MapAsync(filePath, text, codeAnalysisDocument);
+                    break;
+                case ".vb":
+                    document = await SyntaxMapperVB.MapAsync(filePath, text, codeAnalysisDocument);
+                    break;
             }
-            else if (fileExtension == ".css")
-            {
-                return Shared.Languages.CSS.Mappers.SyntaxMapperCSS.Map(filePath)
-                    .Select(member => MapMember(member, control))
-                    .ToList();
-            }
-            else if (fileExtension == ".cs")
-            {
-                var tree = CSharpSyntaxTree.ParseText(text);
-                var semanticModel = SyntaxHelper.GetCSharpSemanticModel(tree);
-                var root = (CompilationUnitSyntax)await tree.GetRootAsync();
-
-                if (semanticModel == null)
-                {
-                    return new List<CodeItem?>();
-                }
-
-                return root.Members
-                    .Select(member => SyntaxMapperCS.MapMember(member, tree, semanticModel, 0))
-                    .Select(member => MapMember(member, control))
-                    .ToList();
-            }
-            else if (fileExtension == ".vb")
-            {
-                var tree = VisualBasic.VisualBasicSyntaxTree.ParseText(text);
-                var semanticModel = SyntaxHelper.GetVBSemanticModel(tree);
-                var root = (VisualBasicSyntax.CompilationUnitSyntax)await tree.GetRootAsync();
-
-                if (semanticModel == null)
-                {
-                    return new List<CodeItem?>();
-                }
-
-                return root.Members
-                    .Select(member => SyntaxMapperVB.MapMember(member, tree, semanticModel, 0))
-                    .Select(member => MapMember(member, control))
-                    .ToList();
-            }
-
-            return new List<CodeItem?>();
+            return document.Select(member => MapMember(member, control)).ToList();
         }
 
         public static CodeItem? MapMember(Shared.Models.ICodeItem member, ICodeViewUserControl control)

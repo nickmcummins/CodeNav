@@ -1,12 +1,52 @@
-﻿using CodeNav.Shared.Models;
+﻿using CodeNav.Shared.Helpers;
+using CodeNav.Shared.Models;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace CodeNav.Shared.Languages.CSharp.Mappers
 {
     public static class SyntaxMapperCS
     {
+        public static async Task<IList<ICodeItem?>> MapAsync(string? filePath, string? text = null, Document codeAnalysisDocument = null)
+        {
+            if (text == null)
+            {
+                if (string.IsNullOrEmpty(filePath) || !File.Exists(filePath))
+                {
+                    return new List<ICodeItem?>();
+                }
+                text = File.ReadAllText(filePath);
+            }
+            SyntaxTree tree;
+            SemanticModel semanticModel;
+            if (codeAnalysisDocument != null)
+            {
+                tree = await codeAnalysisDocument.GetSyntaxTreeAsync();
+                semanticModel = await codeAnalysisDocument.GetSemanticModelAsync();
+            }
+            else
+            {
+                tree = CSharpSyntaxTree.ParseText(text);
+                semanticModel = SyntaxHelper.GetCSharpSemanticModel(tree);
+            }
+
+            var root = (CompilationUnitSyntax)await tree.GetRootAsync();
+
+            if (semanticModel == null)
+            {
+                return new List<ICodeItem?>();
+            }
+
+            return root.Members
+                .Select(member => MapMember(member, tree, semanticModel, 0))
+                .ToList();
+        }
+
         public static ICodeItem? MapMember(SyntaxNode member, SyntaxTree tree, SemanticModel semanticModel, int depth, bool mapBaseClass = true)
         {
             if (member == null)

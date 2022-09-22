@@ -1,39 +1,32 @@
 ﻿using CodeNav.Shared.Enums;
 using CodeNav.Shared.Mappers;
 using CodeNav.Shared.Models;
-using System;
+using ExCSS;
+using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.Text;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Zu.TypeScript.TsTypes;
 using Zu.TypeScript;
-using Microsoft.CodeAnalysis;
+using Zu.TypeScript.TsTypes;
 using static CodeNav.Shared.Helpers.CodeNavSettings;
-
-using ExCSS;
-using Microsoft.CodeAnalysis.Text;
-using System.Drawing;
-using System.Xml.Linq;
 using TextSpan = Microsoft.CodeAnalysis.Text.TextSpan;
 
 namespace CodeNav.Shared.Languages.JavaScript.Mappers
 {
     public static class SyntaxMapperJS
     {
-        public static IList<ICodeItem?> Map(Document document) => Map(document.FilePath);
 
-        public static IList<ICodeItem?> Map(string? filePath)
+        public static IList<ICodeItem?> Map(string? filePath, string? jsString = null)
         {
-
-            if (string.IsNullOrEmpty(filePath) ||
-                !File.Exists(filePath))
+            if (jsString == null)
             {
-                return new List<ICodeItem?>();
+                if (string.IsNullOrEmpty(filePath) || !File.Exists(filePath))
+                {
+                    return new List<ICodeItem?>();
+                }
+                jsString = File.ReadAllText(filePath);
             }
-
-            var jsString = File.ReadAllText(filePath);
 
             var ast = new TypeScriptAST(jsString, filePath);
 
@@ -184,6 +177,4 @@ namespace CodeNav.Shared.Languages.JavaScript.Mappers
             return member.SourceStr.Take(pos.GetValueOrDefault(0)).Count(c => c == '\n') + 1;
         }
     }
-
-
 }

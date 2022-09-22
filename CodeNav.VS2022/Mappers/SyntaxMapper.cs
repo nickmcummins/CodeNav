@@ -107,10 +107,11 @@ namespace CodeNav.Mappers
                         return new List<CodeItem?>();
                     }
 
-                    return rootSyntax.Members
+                    var document = rootSyntax.Members
                         .Select(member => SyntaxMapperCS.MapMember(member, tree, semanticModel))
                         .Select(member => MapMember(member, control))
                         .ToList();
+                    return document;
                 case LanguageEnum.VisualBasic:
                     if (!(root is VisualBasicSyntax.CompilationUnitSyntax vbRootSyntax) ||
                         semanticModel == null)
@@ -208,34 +209,34 @@ namespace CodeNav.Mappers
             {
                 item = new CodeClassItem(classMember, control);
             }
-            if (member is Shared.Models.CodeFunctionItem functionItem)
+            else if (member is Shared.Models.CodeFunctionItem functionItem)
             {
                 item = new CodeFunctionItem(functionItem, control);
             }
 
-            if (member is Shared.Models.CodeImplementedInterfaceItem implementedInterfaceItem)
+            else if (member is Shared.Models.CodeImplementedInterfaceItem implementedInterfaceItem)
             {
                 item = new CodeImplementedInterfaceItem(implementedInterfaceItem, control);
             }
-            if (member is Shared.Models.CodeInterfaceItem interfaceItem)
+            else if (member is Shared.Models.CodeInterfaceItem interfaceItem)
             {
                 item = new CodeInterfaceItem(interfaceItem, control);
             }
-            if (member is Shared.Models.CodeNamespaceItem namespaceMember)
+            else if (member is Shared.Models.CodeNamespaceItem namespaceMember)
             {
                 item = new CodeNamespaceItem(namespaceMember, control);
             }
-            if (member is Shared.Models.CodePropertyItem propertyMember)
+            else if (member is Shared.Models.CodePropertyItem propertyMember)
             {
                 item = new CodePropertyItem(propertyMember, control);
             }
-            if (member is Shared.Models.CodeRegionItem regionItem)
+            else if (member is Shared.Models.CodeRegionItem regionItem)
             {
                 item = new CodeRegionItem(regionItem, control);
             }
-            if (member is Shared.Models.BaseCodeItem baseCodeItem)
+            else 
             {
-                item = new CodeItem(baseCodeItem, control);
+                item = new CodeItem(member, control);
             }
             item.Control = control;
             return item; 

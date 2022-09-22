@@ -16,6 +16,7 @@ using Task = System.Threading.Tasks.Task;
 using Microsoft.VisualStudio.Shell;
 using CodeNav.Shared.Enums;
 using CodeNav.Shared.Models;
+using CodeNav.Mappers;
 
 namespace CodeNav.Models
 {
@@ -107,6 +108,8 @@ namespace CodeNav.Models
         public CodeItem(ICodeItem codeItem, ICodeViewUserControl control)
         {
             _codeItem = codeItem;
+            Moniker = IconMapper.MapMoniker(codeItem.MonikerString);
+            OverlayMoniker = IconMapper.MapMoniker(codeItem.OverlayMonikerString);
             Control = control;
         }
 

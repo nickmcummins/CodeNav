@@ -1,4 +1,5 @@
 ﻿using CodeNav.Shared.Enums;
+using CodeNav.Shared.Models;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.Text;
@@ -38,6 +39,11 @@ namespace CodeNav.Shared.Mappers
         public static int GetStartLine(SyntaxToken identifier) => GetStartLinePosition(identifier).Line + 1;
 
         public static LinePosition GetStartLinePosition(SyntaxNode source, SyntaxTokenList modifiers) => source.SyntaxTree.GetLineSpan(modifiers.Span).StartLinePosition;
+
+        public static int GetLineNumber(LineMappedSourceFile lineMappedSource, int pos)
+        {
+            return lineMappedSource.LineRanges.Query(pos).First() + 1;
+        }
 
         public static int GetStartLine(SyntaxNode source, SyntaxTokenList modifiers) => GetStartLinePosition(source, modifiers).Line + 1;
 

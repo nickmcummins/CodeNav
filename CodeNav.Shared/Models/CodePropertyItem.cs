@@ -10,6 +10,8 @@ namespace CodeNav.Shared.Models
 
         public CodePropertyItem(SyntaxNode source, SyntaxToken identifier, SyntaxTokenList modifiers, SemanticModel semanticModel) : base(source, identifier.Text, modifiers, semanticModel) { }
 
+        public CodePropertyItem() : base() { }
+
         public override string ToString() => $"{Tab.Repeat(Depth)}property(name={Name},depth={Depth},startLine={StartLine},endLine={EndLine})";
 
     }

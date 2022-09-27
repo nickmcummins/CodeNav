@@ -7,6 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup Label="NuGetDependencies">
+    <PackageReference Include="GuiLabs.Language.Xml" Version="1.2.60" />
     <PackageReference Include="Microsoft.CodeAnalysis">
       <Version>4.4.0-2.final</Version>
     </PackageReference>
@@ -19,6 +20,12 @@
     <PackageReference Include="ExCSS">
       <Version>4.1.4</Version>
     </PackageReference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Languages\XML\Mappers\" />
+    <Folder Include="Languages\XML\Models\" />
+    <Folder Include="Collections\" />
   </ItemGroup>
 
 </Project>

@@ -4,13 +4,15 @@ using System.Linq;
 using CodeNav.Shared.Enums;
 using CodeNav.Shared.Mappers;
 using CodeNav.Shared.Models;
-
+using NLog;
 
 namespace CodeNav.Tests.MapperTests
 {
     [TestClass]
     public class TestInterface
     {
+        private static readonly Logger _log = LogManager.GetCurrentClassLogger();
+
         [TestMethod]
         public void TestInterfaceShouldBeOk()
         {
@@ -77,7 +79,6 @@ namespace CodeNav.Tests.MapperTests
         public void TestInterfaceShouldBeOkVB()
         {
             var document = SyntaxMapper.MapDocument($@"Files\\VisualBasic\\TestInterfaces.vb");
-
             Assert.IsTrue(document.Any());
 
             // First item should be a namespace
@@ -91,21 +92,22 @@ namespace CodeNav.Tests.MapperTests
         public void TestInterfaceWithRegion()
         {
             var document = SyntaxMapper.MapDocument($@"Files\TestInterfaceRegion.cs");
+            _log.Info<ICodeItem>(document);
 
             Assert.IsTrue(document.Any());
 
             // First item should be a namespace
             Assert.AreEqual(CodeItemKindEnum.Namespace, document.First().Kind);
+            var region = (document.First() as IMembers).Members.Last() as CodeRegionItem;
 
             // Namespace item should have 1 member
-            Assert.AreEqual(1, (document.First() as IMembers).Members.Count);
+            Assert.AreEqual(2, (document.First() as IMembers).Members.Count);
 
             // First item should be an interface
             var innerInterface = (document.First() as IMembers).Members.First() as CodeInterfaceItem;
             Assert.AreEqual(4, innerInterface.Members.Count);
 
             // Region in interface should have 1 member
-            var region = innerInterface.Members[3] as CodeRegionItem;
 
             Assert.AreEqual(CodeItemKindEnum.Region, region.Kind);
             Assert.AreEqual(1, region.Members.Count);

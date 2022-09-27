@@ -11,5 +11,6 @@
         public const string NewLine = "\n";
         public const string Comma = ",";
         public const string Tab = "\t";
+        public static readonly string DoubleQuote = '"'.ToString();
     }
 }

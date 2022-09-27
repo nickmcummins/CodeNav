@@ -2,13 +2,13 @@
 using CodeNav.Shared.Extensions;
 using CodeNav.Shared.Models;
 using Microsoft.Language.Xml;
-using static CodeNav.Languages.XML.Mappers.SyntaxMapperXML;
+using static CodeNav.Shared.Languages.XML.Mappers.SyntaxMapperXML;
 using static CodeNav.Shared.Constants;
 using static CodeNav.Shared.Helpers.CodeNavSettings;
 using static CodeNav.Shared.Mappers.BaseMapper;
 using SyntaxNode = Microsoft.Language.Xml.SyntaxNode;
 
-namespace CodeNav.Languages.XML.Models
+namespace CodeNav.Shared.Languages.XML.Models
 {
     public class XmlElementLeafItem : CodePropertyItem
     {

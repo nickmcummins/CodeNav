@@ -134,9 +134,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Include="Files\XML\CodeNav.Tests.csproj">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
     <None Include="HelperTests\HighlightHelperTests.cs" />
     <None Include="HelperTests\SortHelperTests.cs" />
     <None Include="HelperTests\VisibilityHelperTests.cs" />

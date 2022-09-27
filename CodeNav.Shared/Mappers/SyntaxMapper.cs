@@ -27,6 +27,13 @@ namespace CodeNav.Shared.Mappers
                 case ".css":
                     document = Languages.CSS.Mappers.SyntaxMapperCSS.Map(filePath, text);
                     break;
+                case ".xml":
+                case ".csproj":
+                case ".config":
+                case ".xaml":
+                case ".runsettings":
+                    document = Shared.Languages.XML.Mappers.SyntaxMapperXML.Map(filePath, text);
+                    break;
                 case ".cs":
                     document = await SyntaxMapperCS.MapAsync(filePath, text, codeAnalysisDocument);
                     break;

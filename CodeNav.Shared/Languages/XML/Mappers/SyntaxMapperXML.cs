@@ -1,16 +1,15 @@
-﻿using CodeNav.Languages.XML.Models;
-using CodeNav.Shared.Enums;
+﻿using CodeNav.Shared.Enums;
+using CodeNav.Shared.Languages.XML.Models;
 using CodeNav.Shared.Models;
 using Microsoft.CodeAnalysis;
 using Microsoft.Language.Xml;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Xml.Linq;
 using static CodeNav.Shared.Constants;
 using static CodeNav.Shared.Helpers.CodeNavSettings;
 
-namespace CodeNav.Languages.XML.Mappers
+namespace CodeNav.Shared.Languages.XML.Mappers
 {
     public static class SyntaxMapperXML
     {

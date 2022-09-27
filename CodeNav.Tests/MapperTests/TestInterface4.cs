@@ -14,9 +14,9 @@ namespace CodeNav.Tests.MapperTests
         private static readonly Logger _log = LogManager.GetCurrentClassLogger();
 
         [TestMethod]
-        public void TestClassImplementedInterfaceAndBaseImplementedInterfaceShouldBeOk()
+        public async Task TestClassImplementedInterfaceAndBaseImplementedInterfaceShouldBeOkAsync()
         {
-            var document = SyntaxMapper.MapDocument($@"Files\TestInterface4.cs");
+            var document = await SyntaxMapper.MapDocumentAsync($@"Files\TestInterface4.cs");
 
             Assert.IsTrue(document.Any());
             _log.Info<ICodeItem>(document);

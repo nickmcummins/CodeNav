@@ -12,9 +12,9 @@ namespace CodeNav.Tests.MapperTests
     public class TestNamespaces
     {
         [TestMethod]
-        public void NestedNamespacesShouldHaveCorrectStructure()
+        public async Task NestedNamespacesShouldHaveCorrectStructureAsync()
         {
-            var document = SyntaxMapper.MapDocument($@"Files\TestNestedNamespaces.cs");
+            var document = await SyntaxMapper.MapDocumentAsync($@"Files\TestNestedNamespaces.cs");
 
             Assert.IsTrue(document.Any());
 
@@ -38,9 +38,9 @@ namespace CodeNav.Tests.MapperTests
         }
 
         [TestMethod]
-        public void NamespacesShouldBeOKVB()
+        public async Task NamespacesShouldBeOKVBAsync()
         {
-            var document = SyntaxMapper.MapDocument($@"Files\\VisualBasic\\TestNamespaces.vb");
+            var document = await SyntaxMapper.MapDocumentAsync($@"Files\\VisualBasic\\TestNamespaces.vb");
 
             Assert.IsTrue(document.Any());
 

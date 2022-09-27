@@ -12,9 +12,9 @@ namespace CodeNav.Tests.MapperTests
     public class RegionMapperTests
     {
         [TestMethod]
-        public void TestRegions()
+        public async Task TestRegionsAsync()
         {
-            var document = SyntaxMapper.MapDocument($@"Files\TestRegions.cs");
+            var document = await SyntaxMapper.MapDocumentAsync($@"Files\TestRegions.cs");
 
             Assert.IsTrue(document.Any());
 
@@ -43,9 +43,9 @@ namespace CodeNav.Tests.MapperTests
         }
 
         [TestMethod]
-        public void TestRegionsVB()
+        public async Task TestRegionsVBAsync()
         {
-            var document = SyntaxMapper.MapDocument($@"Files\\VisualBasic\\TestRegions.vb");
+            var document = await SyntaxMapper.MapDocumentAsync($@"Files\\VisualBasic\\TestRegions.vb");
 
             Assert.IsTrue(document.Any());
 
@@ -65,9 +65,9 @@ namespace CodeNav.Tests.MapperTests
         }
 
         [TestMethod]
-        public void TestRegionsNoName()
+        public async Task TestRegionsNoNameAsync()
         {
-            var document = SyntaxMapper.MapDocument($@"Files\TestRegionsNoName.cs");
+            var document = await SyntaxMapper.MapDocumentAsync($@"Files\TestRegionsNoName.cs");
 
             Assert.IsTrue(document.Any());
 
@@ -84,9 +84,9 @@ namespace CodeNav.Tests.MapperTests
         }
 
         [TestMethod]
-        public void TestRegionsSpan()
+        public async Task TestRegionsSpanAsync()
         {
-            var document = SyntaxMapper.MapDocument($@"Files\TestRegions.cs");
+            var document = await SyntaxMapper.MapDocumentAsync($@"Files\TestRegions.cs");
 
             Assert.IsTrue(document.Any());
 

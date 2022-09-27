@@ -12,9 +12,9 @@ namespace CodeNav.Tests.MapperTests
     public class TestEnums
     {
         [TestMethod]
-        public void EnumsShouldBeOkVB()
+        public async Task EnumsShouldBeOkVBAsync()
         {
-            var document = SyntaxMapper.MapDocument($@"Files\\VisualBasic\\TestModules.vb");
+            var document = await SyntaxMapper.MapDocumentAsync($@"Files\\VisualBasic\\TestModules.vb");
 
             Assert.IsTrue(document.Any());
 

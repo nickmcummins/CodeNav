@@ -4,7 +4,6 @@ using CodeNav.Shared.Mappers;
 using CodeNav.Shared.Models;
 using NLog;
 
-
 namespace CodeNav.Tests.MapperTests
 {
     [TestClass]
@@ -13,11 +12,11 @@ namespace CodeNav.Tests.MapperTests
         private static readonly Logger _log = LogManager.GetCurrentClassLogger();
 
         [TestMethod]
-        public void ShouldBeOk()
+        public async Task ShouldBeOkAsync()
         {
             CodeNavSettings.Instance.UseXMLComments = true;
 
-            var document = SyntaxMapper.MapDocument($@"Files\TestMethodsWithComments.cs");
+            var document = await SyntaxMapper.MapDocumentAsync($@"Files\TestMethodsWithComments.cs");
 
             Assert.IsTrue(document.Any());
             _log.Info<ICodeItem>(document);

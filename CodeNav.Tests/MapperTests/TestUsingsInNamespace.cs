@@ -12,9 +12,9 @@ namespace CodeNav.Tests.MapperTests
     public class TestUsingsInNamespace
     {
         [TestMethod]
-        public void TestUsingsInNamespaceShouldBeOk()
+        public async Task TestUsingsInNamespaceShouldBeOkAsync()
         {
-            var document = SyntaxMapper.MapDocument($@"Files\TestUsingsInNamespace.cs");
+            var document = await SyntaxMapper.MapDocumentAsync($@"Files\TestUsingsInNamespace.cs");
 
             Assert.IsTrue(document.Any());
 

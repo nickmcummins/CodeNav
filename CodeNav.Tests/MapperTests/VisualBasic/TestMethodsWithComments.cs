@@ -3,18 +3,17 @@ using CodeNav.Shared.Helpers;
 using CodeNav.Shared.Mappers;
 using CodeNav.Shared.Models;
 
-
 namespace CodeNav.Tests.MapperTests.VisualBasic
 {
     [TestClass]
     public class TestMethodsWithComments
     {
         [TestMethod]
-        public void ShouldBeOk()
+        public async Task ShouldBeOkAsync()
         {
             CodeNavSettings.Instance.UseXMLComments = true;
 
-            var document = SyntaxMapper.MapDocument($@"Files\VisualBasic\TestMethodsWithComments.vb");
+            var document = await SyntaxMapper.MapDocumentAsync($@"Files\VisualBasic\TestMethodsWithComments.vb");
 
             Assert.IsTrue(document.Any());
 

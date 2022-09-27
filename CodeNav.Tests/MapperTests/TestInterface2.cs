@@ -12,9 +12,9 @@ namespace CodeNav.Tests.MapperTests
     public class TestInterface2
     {
         [TestMethod]
-        public void TestNestedInterfaceShouldBeOk()
+        public async Task TestNestedInterfaceShouldBeOkAsync()
         {
-            var document = SyntaxMapper.MapDocument($@"Files\TestInterface2.cs");
+            var document = await SyntaxMapper.MapDocumentAsync($@"Files\TestInterface2.cs");
 
             Assert.IsTrue(document.Any());
 

@@ -14,9 +14,9 @@ namespace CodeNav.Tests.MapperTests.VisualBasic
         static CodeClassItem _innerClass; 
 
         [ClassInitialize]
-        public static void Setup(TestContext testContext)
+        public static async Task SetupAsync(TestContext testContext)
         {
-            var document = SyntaxMapper.MapDocument($@"Files\VisualBasic\TestMethods.vb");
+            var document = await SyntaxMapper.MapDocumentAsync($@"Files\VisualBasic\TestMethods.vb");
 
             Assert.IsTrue(document.Any());
 

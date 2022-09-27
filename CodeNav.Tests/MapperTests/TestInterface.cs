@@ -14,9 +14,9 @@ namespace CodeNav.Tests.MapperTests
         private static readonly Logger _log = LogManager.GetCurrentClassLogger();
 
         [TestMethod]
-        public void TestInterfaceShouldBeOk()
+        public async Task TestInterfaceShouldBeOkAsync()
         {
-            var document = SyntaxMapper.MapDocument($@"Files\TestInterface.cs");
+            var document = await SyntaxMapper.MapDocumentAsync($@"Files\TestInterface.cs");
 
             Assert.IsTrue(document.Any());
 
@@ -49,9 +49,9 @@ namespace CodeNav.Tests.MapperTests
         }
 
         [TestMethod]
-        public void TestInterfaceInRegionShouldBeOk()
+        public async Task TestInterfaceInRegionShouldBeOkAsync()
         {
-            var document = SyntaxMapper.MapDocument($@"Files\TestInterface.cs");
+            var document = await SyntaxMapper.MapDocumentAsync($@"Files\TestInterface.cs");
 
             Assert.IsTrue(document.Any());
 
@@ -76,9 +76,9 @@ namespace CodeNav.Tests.MapperTests
         }
 
         [TestMethod]
-        public void TestInterfaceShouldBeOkVB()
+        public async Task TestInterfaceShouldBeOkVBAsync()
         {
-            var document = SyntaxMapper.MapDocument($@"Files\\VisualBasic\\TestInterfaces.vb");
+            var document = await SyntaxMapper.MapDocumentAsync($@"Files\\VisualBasic\\TestInterfaces.vb");
             Assert.IsTrue(document.Any());
 
             // First item should be a namespace
@@ -89,9 +89,9 @@ namespace CodeNav.Tests.MapperTests
         }
 
         [TestMethod]
-        public void TestInterfaceWithRegion()
+        public async Task TestInterfaceWithRegionAsync()
         {
-            var document = SyntaxMapper.MapDocument($@"Files\TestInterfaceRegion.cs");
+            var document = await SyntaxMapper.MapDocumentAsync($@"Files\TestInterfaceRegion.cs");
             _log.Info<ICodeItem>(document);
 
             Assert.IsTrue(document.Any());

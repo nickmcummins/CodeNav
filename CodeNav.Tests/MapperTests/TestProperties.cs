@@ -12,9 +12,9 @@ namespace CodeNav.Tests.MapperTests
     public class TestProperties
     {
         [TestMethod]
-        public void ShouldBeOk()
+        public async Task ShouldBeOkAsync()
         {
-            var document = SyntaxMapper.MapDocument($@"Files\TestProperties.cs");
+            var document = await SyntaxMapper.MapDocumentAsync($@"Files\TestProperties.cs");
 
             Assert.IsTrue(document.Any());
 
@@ -42,9 +42,9 @@ namespace CodeNav.Tests.MapperTests
         }
 
         [TestMethod]
-        public void ShouldBeOkVB()
+        public async Task ShouldBeOkVBAsync()
         {
-            var document = SyntaxMapper.MapDocument($@"Files\\VisualBasic\\TestProperties.vb");
+            var document = await SyntaxMapper.MapDocumentAsync($@"Files\\VisualBasic\\TestProperties.vb");
 
             Assert.IsTrue(document.Any());
 

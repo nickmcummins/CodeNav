@@ -12,9 +12,9 @@ namespace CodeNav.Tests.MapperTests
     public class TestIndexers
     {
         [TestMethod]
-        public void ShouldBeOk()
+        public async Task ShouldBeOkAsync()
         {
-            var document = SyntaxMapper.MapDocument($@"Files\TestIndexers.cs");
+            var document = await SyntaxMapper.MapDocumentAsync($@"Files\TestIndexers.cs");
 
             Assert.IsTrue(document.Any());
 

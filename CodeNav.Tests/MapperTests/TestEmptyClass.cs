@@ -2,16 +2,15 @@
 using CodeNav.Shared.Mappers;
 using CodeNav.Shared.Models;
 
-
 namespace CodeNav.Tests.MapperTests
 {
     [TestClass]
     public class TestEmptyClass
     {
         [TestMethod]
-        public void ShouldBeVisible()
+        public async Task ShouldBeVisibleAsync()
         {
-            var document = SyntaxMapper.MapDocument($@"Files\TestEmptyClass.cs");
+            var document = await SyntaxMapper.MapDocumentAsync($@"Files\TestEmptyClass.cs");
 
             Assert.IsTrue(document.Any());
 

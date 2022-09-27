@@ -12,9 +12,9 @@ namespace CodeNav.Tests.MapperTests
     public class TestNestedRegions
     {
         [TestMethod]
-        public void NestedRegionsShouldWork()
+        public async Task NestedRegionsShouldWorkAsync()
         {
-            var document = SyntaxMapper.MapDocument($@"Files\TestNestedRegions.cs");
+            var document = await SyntaxMapper.MapDocumentAsync($@"Files\TestNestedRegions.cs");
 
             Assert.IsTrue(document.Any());
 

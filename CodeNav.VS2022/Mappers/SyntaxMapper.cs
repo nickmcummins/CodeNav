@@ -15,8 +15,6 @@ namespace CodeNav.Mappers
 {
     public static class SyntaxMapper
     {
-
-
         /// <summary>
         /// Map the active document in the workspace
         /// </summary>
@@ -65,22 +63,7 @@ namespace CodeNav.Mappers
                 return new List<CodeItem?>();
             }
 
-            IList<Shared.Models.ICodeItem?> document = null;
-            switch (fileExtension)
-            {
-                case ".js":
-                    document = Shared.Languages.JavaScript.Mappers.SyntaxMapperJS.Map(filePath, text);
-                    break;
-                case ".css":
-                    document = Shared.Languages.CSS.Mappers.SyntaxMapperCSS.Map(filePath, text);
-                    break;
-                case ".cs":
-                    document = await SyntaxMapperCS.MapAsync(filePath, text, codeAnalysisDocument);
-                    break;
-                case ".vb":
-                    document = await SyntaxMapperVB.MapAsync(filePath, text, codeAnalysisDocument);
-                    break;
-            }
+            IList<Shared.Models.ICodeItem> document = await Shared.Mappers.SyntaxMapper.MapDocumentAsync(filePath, text, codeAnalysisDocument); ;
             return document.Select(member => MapMember(member, control)).ToList();
         }
 

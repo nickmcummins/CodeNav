@@ -7,17 +7,19 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 using VisualBasic = Microsoft.CodeAnalysis.VisualBasic;
 using VisualBasicSyntax = Microsoft.CodeAnalysis.VisualBasic.Syntax;
 
 namespace CodeNav.Shared.Mappers
 {
     public static class SyntaxMapper
-    {        /// <summary>
-             /// Map a document from filepath, used for unit testing
-             /// </summary>
-             /// <param name="filePath">filepath of the input document</param>
-             /// <returns>List of found code items</returns>
+    {       
+        /// <summary>
+        /// Map a document from filepath, used for unit testing
+        /// </summary>
+        /// <param name="filePath">filepath of the input document</param>
+        /// <returns>List of found code items</returns>
         public static IList<ICodeItem?> MapDocument(string filePath)
         {
             var fileExt = Path.GetExtension(filePath);
@@ -55,6 +57,28 @@ namespace CodeNav.Shared.Mappers
                 }
             }
             return null;
+        }
+
+        public static async Task<IList<ICodeItem>> MapDocumentAsync(string filePath, string? text = null, Document? codeAnalysisDocument = null)
+        {
+            var fileExtension = Path.GetExtension(filePath);
+            IList<ICodeItem?> document = null;
+            switch (fileExtension)
+            {
+                case ".js":
+                    document = Languages.JavaScript.Mappers.SyntaxMapperJS.Map(filePath, text);
+                    break;
+                case ".css":
+                    document = Languages.CSS.Mappers.SyntaxMapperCSS.Map(filePath, text);
+                    break;
+                case ".cs":
+                    document = await SyntaxMapperCS.MapAsync(filePath, text, codeAnalysisDocument);
+                    break;
+                case ".vb":
+                    document = await SyntaxMapperVB.MapAsync(filePath, text, codeAnalysisDocument);
+                    break;
+            }
+            return document;
         }
     }
 }

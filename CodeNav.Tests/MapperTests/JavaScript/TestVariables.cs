@@ -11,9 +11,9 @@ namespace CodeNav.Tests.MapperTests.JavaScript
         static CodeClassItem root;
 
         [ClassInitialize]
-        public static void Init(TestContext testContext)
+        public static async Task Init(TestContext testContext)
         {
-            document = SyntaxMapper.MapDocument($@"Files\JavaScript\TestVariable.js");
+            document = await SyntaxMapper.MapDocumentAsync($@"Files\JavaScript\TestVariable.js");
 
             Assert.IsTrue(document.Any());
             Assert.AreEqual(CodeItemKindEnum.Namespace, document.First().Kind);
@@ -21,13 +21,13 @@ namespace CodeNav.Tests.MapperTests.JavaScript
         }
 
         [TestMethod]
-        public void TestBasicVariable()
+        public async Task TestBasicVariable()
         {
             Assert.AreEqual("firstVariable", root.Members.FirstOrDefault().Name);
         }
 
         [TestMethod]
-        public void TestAssignedVariable()
+        public async Task TestAssignedVariable()
         {
             Assert.AreEqual("assignedVariable", root.Members[1].Name);
             Assert.AreEqual(3, root.Members[1].StartLine);

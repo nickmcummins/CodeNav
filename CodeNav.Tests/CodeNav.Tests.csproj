@@ -130,6 +130,7 @@
     <Folder Include="Files\JavaScript\" />
     <Folder Include="Files\VisualBasic\" />
     <Folder Include="MapperTests\JavaScript\" />
+    <Folder Include="MapperTests\XML\" />
     <Folder Include="MapperTests\VisualBasic\" />
   </ItemGroup>
 

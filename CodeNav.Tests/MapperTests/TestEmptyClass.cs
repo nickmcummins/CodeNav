@@ -1,4 +1,5 @@
 ﻿using CodeNav.Shared.Enums;
+using CodeNav.Shared.Helpers;
 using CodeNav.Shared.Mappers;
 using CodeNav.Shared.Models;
 
@@ -11,7 +12,7 @@ namespace CodeNav.Tests.MapperTests
         public async Task ShouldBeVisible()
         {
             var document = await SyntaxMapper.MapDocumentAsync(@"Files\TestEmptyClass.cs");
-
+            VisibilityHelper.SetCodeItemVisibility(document);
             Assert.IsTrue(document.Any());
 
             // First item should be a namespace

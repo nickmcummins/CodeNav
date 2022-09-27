@@ -12,7 +12,7 @@ namespace CodeNav.Tests.MapperTests
     public class TestFields
     {
         [TestMethod]
-        public async Task ShouldBeOkVBAsync()
+        public async Task ShouldBeOkVB()
         {
             var document = await SyntaxMapper.MapDocumentAsync($@"Files\\VisualBasic\\TestFields.vb");
 

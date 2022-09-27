@@ -12,7 +12,7 @@ namespace CodeNav.Tests.MapperTests
     public class TestInterface2
     {
         [TestMethod]
-        public async Task TestNestedInterfaceShouldBeOkAsync()
+        public async Task TestNestedInterfaceShouldBeOk()
         {
             var document = await SyntaxMapper.MapDocumentAsync($@"Files\TestInterface2.cs");
 

@@ -20,7 +20,7 @@ namespace CodeNav.Mappers
         /// </summary>
         /// <param name="control">CodeNav control that will show the result</param>
         /// <returns>List of found code items</returns>
-        public static async Task<List<CodeItem?>> MapDocumentAsync(ICodeViewUserControl control, string filePath = "")
+        public static async Task<List<CodeItem>> MapDocumentAsync(ICodeViewUserControl control, string filePath = "")
         {
             try
             {
@@ -33,11 +33,11 @@ namespace CodeNav.Mappers
                 LogHelper.Log("Error during mapping", e, null, language.ToString());
             }
 
-            return new List<CodeItem?>();
+            return new List<CodeItem>();
         }
 
 
-        public static async Task<List<CodeItem?>> MapDocumentAsync(ICodeViewUserControl control, Document codeAnalysisDocument = null)
+        public static async Task<List<CodeItem>> MapDocumentAsync(ICodeViewUserControl control, Document? codeAnalysisDocument = null)
         {
             string filePath;
             if (codeAnalysisDocument != null)
@@ -51,7 +51,7 @@ namespace CodeNav.Mappers
 
             if (string.IsNullOrEmpty(filePath))
             {
-                return new List<CodeItem?>();
+                return new List<CodeItem>();
             }
 
             var fileExtension = Path.GetExtension(filePath);
@@ -60,19 +60,18 @@ namespace CodeNav.Mappers
 
             if (string.IsNullOrEmpty(text))
             {
-                return new List<CodeItem?>();
+                return new List<CodeItem>();
             }
 
-            IList<Shared.Models.ICodeItem> document = await Shared.Mappers.SyntaxMapper.MapDocumentAsync(filePath, text, codeAnalysisDocument); ;
-            return document.Select(member => MapMember(member, control)).ToList();
+            IList<Shared.Models.ICodeItem> document = await Shared.Mappers.SyntaxMapper.MapDocumentAsync(filePath, text, codeAnalysisDocument);
+            return document
+                .Where(member => member != null)
+                .Select(member => MapMember(member, control))
+                .ToList();
         }
 
-        public static CodeItem? MapMember(Shared.Models.ICodeItem member, ICodeViewUserControl control)
+        public static CodeItem MapMember(Shared.Models.ICodeItem member, ICodeViewUserControl control)
         {
-            if (member == null)
-            {
-                return null;
-            }
             CodeItem? item = null;
             if (member is Shared.Models.CodeClassItem classMember)
             {

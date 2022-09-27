@@ -5,7 +5,7 @@ namespace CodeNav.Models
 {
     public class CodeInterfaceItem : CodeClassItem
     {
-        public CodeInterfaceItem(Shared.Models.CodeInterfaceItem interfaceItem, ICodeViewUserControl control) : base(interfaceItem, control, interfaceItem.Members.Select(member => SyntaxMapper.MapMember(member, control)).ToList()) { }
+        public CodeInterfaceItem(Shared.Models.CodeInterfaceItem interfaceItem, ICodeViewUserControl control) : base(interfaceItem, control, interfaceItem.Members.Where(member => member != null).Select(member => SyntaxMapper.MapMember(member, control)).ToList()) { }
     }
 
     public class CodeImplementedInterfaceItem : CodeRegionItem
@@ -13,7 +13,9 @@ namespace CodeNav.Models
         public CodeImplementedInterfaceItem(Shared.Models.CodeImplementedInterfaceItem implementedInterfaceItem, ICodeViewUserControl control) : base(
             implementedInterfaceItem, 
             control, 
-            implementedInterfaceItem.Members.Select(member => SyntaxMapper.MapMember(member, control)).ToList()) { }
+            implementedInterfaceItem.Members
+                .Where(member => member != null)
+                .Select(member => SyntaxMapper.MapMember(member, control)).ToList()) { }
 
         public CodeImplementedInterfaceItem(ICodeViewUserControl control) : base(new Shared.Models.CodeImplementedInterfaceItem(), control) { }
     }

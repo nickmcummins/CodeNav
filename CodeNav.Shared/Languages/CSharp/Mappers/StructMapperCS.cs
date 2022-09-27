@@ -12,7 +12,7 @@ namespace CodeNav.Shared.Languages.CSharp.Mappers
 {
     public static class StructMapperCS
     {
-        public static CodeClassItem? MapStruct(StructDeclarationSyntax? member, SemanticModel semanticModel, SyntaxTree tree, int depth)
+        public static CodeClassItem MapStruct(StructDeclarationSyntax member, SemanticModel semanticModel, SyntaxTree tree, int depth)
         {
             if (member == null)
             {

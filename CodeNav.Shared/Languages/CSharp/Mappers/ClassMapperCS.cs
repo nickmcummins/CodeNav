@@ -15,13 +15,8 @@ namespace CodeNav.Shared.Languages.CSharp.Mappers
 {
     public static class ClassMapperCS
     {
-        public static CodeClassItem? MapClass(ClassDeclarationSyntax? member, SemanticModel semanticModel, SyntaxTree tree, bool mapBaseClass, int depth)
+        public static CodeClassItem MapClass(ClassDeclarationSyntax member, SemanticModel semanticModel, SyntaxTree tree, bool mapBaseClass, int depth)
         {
-            if (member == null)
-            {
-                return null;
-            }
-
             var item = new CodeClassItem(member, member.Identifier, member.Modifiers, semanticModel);
             item.Depth = depth;
             item.Kind = CodeItemKindEnum.Class;

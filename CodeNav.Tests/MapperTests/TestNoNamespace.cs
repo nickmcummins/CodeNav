@@ -12,7 +12,7 @@ namespace CodeNav.Tests.MapperTests
     public class TestNoNamespace
     {
         [TestMethod]
-        public async Task ShouldHaveCorrectStructureAsync()
+        public async Task ShouldHaveCorrectStructure()
         {
             var document = await SyntaxMapper.MapDocumentAsync($@"Files\TestNoNamespace.cs");
 

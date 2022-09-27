@@ -12,7 +12,7 @@ namespace CodeNav.Tests.MapperTests
     public class RegionMapperTests
     {
         [TestMethod]
-        public async Task TestRegionsAsync()
+        public async Task TestRegions()
         {
             var document = await SyntaxMapper.MapDocumentAsync($@"Files\TestRegions.cs");
 
@@ -43,7 +43,7 @@ namespace CodeNav.Tests.MapperTests
         }
 
         [TestMethod]
-        public async Task TestRegionsVBAsync()
+        public async Task TestRegionsVB()
         {
             var document = await SyntaxMapper.MapDocumentAsync($@"Files\\VisualBasic\\TestRegions.vb");
 
@@ -65,7 +65,7 @@ namespace CodeNav.Tests.MapperTests
         }
 
         [TestMethod]
-        public async Task TestRegionsNoNameAsync()
+        public async Task TestRegionsNoName()
         {
             var document = await SyntaxMapper.MapDocumentAsync($@"Files\TestRegionsNoName.cs");
 
@@ -84,7 +84,7 @@ namespace CodeNav.Tests.MapperTests
         }
 
         [TestMethod]
-        public async Task TestRegionsSpanAsync()
+        public async Task TestRegionsSpan()
         {
             var document = await SyntaxMapper.MapDocumentAsync($@"Files\TestRegions.cs");
 

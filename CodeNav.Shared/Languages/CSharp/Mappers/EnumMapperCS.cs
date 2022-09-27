@@ -12,7 +12,7 @@ namespace CodeNav.Shared.Languages.CSharp.Mappers
 {
     public static class EnumMapperCS
     {
-        public static ICodeItem? MapEnumMember(EnumMemberDeclarationSyntax? member, SemanticModel semanticModel, int depth)
+        public static ICodeItem MapEnumMember(EnumMemberDeclarationSyntax? member, SemanticModel semanticModel, int depth)
         {
             if (member == null)
             {
@@ -27,7 +27,7 @@ namespace CodeNav.Shared.Languages.CSharp.Mappers
             return item;
         }
 
-        public static CodeClassItem? MapEnum(EnumDeclarationSyntax? member, SemanticModel semanticModel, SyntaxTree tree, int depth)
+        public static CodeClassItem MapEnum(EnumDeclarationSyntax? member, SemanticModel semanticModel, SyntaxTree tree, int depth)
         {
             if (member == null)
             {

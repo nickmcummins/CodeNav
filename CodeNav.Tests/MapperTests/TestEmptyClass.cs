@@ -8,9 +8,9 @@ namespace CodeNav.Tests.MapperTests
     public class TestEmptyClass
     {
         [TestMethod]
-        public async Task ShouldBeVisibleAsync()
+        public async Task ShouldBeVisible()
         {
-            var document = await SyntaxMapper.MapDocumentAsync($@"Files\TestEmptyClass.cs");
+            var document = await SyntaxMapper.MapDocumentAsync(@"Files\TestEmptyClass.cs");
 
             Assert.IsTrue(document.Any());
 
@@ -18,10 +18,10 @@ namespace CodeNav.Tests.MapperTests
             Assert.AreEqual(CodeItemKindEnum.Namespace, document.First().Kind);
 
             // Namespace item should have members
-            Assert.IsTrue((document.First() as IMembers).Members.Any());
+            Assert.IsTrue(((IMembers)document.First()).Members.Any());
 
             // Inner item should be a class
-            var innerClass = (document.First() as IMembers).Members.First() as CodeClassItem;
+            var innerClass = ((IMembers)document.First()).Members.First() as CodeClassItem;
             Assert.AreEqual(CodeItemKindEnum.Class, innerClass.Kind);
             Assert.AreEqual("CodeNavTestEmptyClass", innerClass.Name);
 

@@ -33,6 +33,6 @@ namespace CodeNav.Shared.Languages.XML.Models
             FontStyleName = Instance.FontStyleName;
         }
 
-        public override string ToString() => $"{Tab.Repeat(Depth)}xmlElement(name={Name},startLine={StartLine.GetValueOrDefault()},endLine={EndLine.GetValueOrDefault()}){NewLine}{string.Join(NewLine, Members.Select(child => child.ToString()))}";
+        public override string ToString() => $"{Tab.Repeat(Depth)}xmlElement(name={Name},startLine={StartLine.GetValueOrDefault()},endLine={EndLine.GetValueOrDefault()}){(Members.Any() ? NewLine : string.Empty)}{string.Join(NewLine, Members.Select(child => child.ToString()))}";
     }
 }

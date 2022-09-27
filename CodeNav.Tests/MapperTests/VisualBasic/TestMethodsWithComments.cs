@@ -9,7 +9,7 @@ namespace CodeNav.Tests.MapperTests.VisualBasic
     public class TestMethodsWithComments
     {
         [TestMethod]
-        public async Task ShouldBeOkAsync()
+        public async Task ShouldBeOk()
         {
             CodeNavSettings.Instance.UseXMLComments = true;
 

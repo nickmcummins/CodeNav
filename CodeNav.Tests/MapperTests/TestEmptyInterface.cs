@@ -12,7 +12,7 @@ namespace CodeNav.Tests.MapperTests
     public class TestEmptyInterface
     {
         [TestMethod]
-        public async Task ShouldBeOkAsync()
+        public async Task ShouldBeOk()
         {
             var document = await SyntaxMapper.MapDocumentAsync($@"Files\TestEmptyInterface.cs");
 

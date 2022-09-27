@@ -12,13 +12,13 @@ namespace CodeNav.Shared.Languages.CSharp.Mappers
 {
     public static class SyntaxMapperCS
     {
-        public static async Task<IList<ICodeItem?>> MapAsync(string? filePath, string? text = null, Document codeAnalysisDocument = null)
+        public static async Task<IList<ICodeItem>> MapAsync(string? filePath, string? text = null, Document codeAnalysisDocument = null)
         {
             if (text == null)
             {
                 if (string.IsNullOrEmpty(filePath) || !File.Exists(filePath))
                 {
-                    return new List<ICodeItem?>();
+                    return new List<ICodeItem>();
                 }
                 text = File.ReadAllText(filePath);
             }
@@ -39,21 +39,17 @@ namespace CodeNav.Shared.Languages.CSharp.Mappers
 
             if (semanticModel == null)
             {
-                return new List<ICodeItem?>();
+                return new List<ICodeItem>();
             }
 
             return root.Members
+                .Where(member => member != null)
                 .Select(member => MapMember(member, tree, semanticModel, 0))
                 .ToList();
         }
 
-        public static ICodeItem? MapMember(SyntaxNode member, SyntaxTree tree, SemanticModel semanticModel, int depth, bool mapBaseClass = true)
+        public static ICodeItem MapMember(SyntaxNode member, SyntaxTree tree, SemanticModel semanticModel, int depth, bool mapBaseClass = true)
         {
-            if (member == null)
-            {
-                return null;
-            }
-
             switch (member.Kind())
             {
                 case SyntaxKind.MethodDeclaration:
@@ -63,28 +59,28 @@ namespace CodeNav.Shared.Languages.CSharp.Mappers
                 case SyntaxKind.EnumMemberDeclaration:
                     return EnumMapperCS.MapEnumMember(member as EnumMemberDeclarationSyntax, semanticModel, depth);
                 case SyntaxKind.InterfaceDeclaration:
-                    return InterfaceMapperCS.MapInterface(member as InterfaceDeclarationSyntax, semanticModel, tree, depth);
+                    return InterfaceMapperCS.MapInterface((InterfaceDeclarationSyntax)member, semanticModel, tree, depth);
                 case SyntaxKind.FieldDeclaration:
                     return FieldMapperCS.MapField(member as FieldDeclarationSyntax, semanticModel, depth);
                 case SyntaxKind.PropertyDeclaration:
-                    return PropertyMapperCS.MapProperty(member as PropertyDeclarationSyntax, semanticModel, depth);
+                    return PropertyMapperCS.MapProperty((PropertyDeclarationSyntax)member, semanticModel, depth);
                 case SyntaxKind.StructDeclaration:
-                    return StructMapperCS.MapStruct(member as StructDeclarationSyntax, semanticModel, tree, depth);
+                    return StructMapperCS.MapStruct((StructDeclarationSyntax)member, semanticModel, tree, depth);
                 case SyntaxKind.ClassDeclaration:
-                    return ClassMapperCS.MapClass(member as ClassDeclarationSyntax, semanticModel, tree, mapBaseClass, depth);
+                    return ClassMapperCS.MapClass((ClassDeclarationSyntax)member, semanticModel, tree, mapBaseClass, depth);
                 case SyntaxKind.EventFieldDeclaration:
-                    return DelegateEventMapperCS.MapEvent(member as EventFieldDeclarationSyntax, semanticModel, depth);
+                    return DelegateEventMapperCS.MapEvent((EventFieldDeclarationSyntax)member, semanticModel, depth);
                 case SyntaxKind.DelegateDeclaration:
-                    return DelegateEventMapperCS.MapDelegate(member as DelegateDeclarationSyntax, semanticModel, depth);
+                    return DelegateEventMapperCS.MapDelegate((DelegateDeclarationSyntax)member, semanticModel, depth);
                 case SyntaxKind.FileScopedNamespaceDeclaration:
                 case SyntaxKind.NamespaceDeclaration:
-                    return NamespaceMapperCS.MapNamespace(member as BaseNamespaceDeclarationSyntax, semanticModel, tree, depth);
+                    return NamespaceMapperCS.MapNamespace((BaseNamespaceDeclarationSyntax)member, semanticModel, tree, depth);
                 case SyntaxKind.RecordDeclaration:
-                    return RecordMapperCS.MapRecord(member as RecordDeclarationSyntax, semanticModel, depth);
+                    return RecordMapperCS.MapRecord((RecordDeclarationSyntax)member, semanticModel, depth);
                 case SyntaxKind.ConstructorDeclaration:
                     return MethodMapperCS.MapConstructor(member as ConstructorDeclarationSyntax, semanticModel, depth);
                 case SyntaxKind.IndexerDeclaration:
-                    return IndexerMapperCS.MapIndexer(member as IndexerDeclarationSyntax, semanticModel, depth);
+                    return IndexerMapperCS.MapIndexer((IndexerDeclarationSyntax)member, semanticModel, depth);
                 case SyntaxKind.VariableDeclarator:
                     var bla = member as VariableDeclaratorSyntax;
                     return null;

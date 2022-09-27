@@ -11,13 +11,8 @@ namespace CodeNav.Shared.Languages.CSharp.Mappers
 {
     public static class InterfaceMapperCS
     {
-        public static CodeInterfaceItem? MapInterface(InterfaceDeclarationSyntax? member, SemanticModel semanticModel, SyntaxTree tree, int depth)
+        public static CodeInterfaceItem MapInterface(InterfaceDeclarationSyntax member, SemanticModel semanticModel, SyntaxTree tree, int depth)
         {
-            if (member == null)
-            {
-                return null;
-            }
-
             var item = new CodeInterfaceItem(member, member.Identifier, member.Modifiers, semanticModel);
             item.Depth = depth;
             item.Kind = CodeItemKindEnum.Interface;

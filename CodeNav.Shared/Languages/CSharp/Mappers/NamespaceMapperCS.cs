@@ -13,13 +13,8 @@ namespace CodeNav.Shared.Languages.CSharp.Mappers
 {
     public static class NamespaceMapperCS
     {
-        public static CodeNamespaceItem? MapNamespace(BaseNamespaceDeclarationSyntax? member, SemanticModel semanticModel, SyntaxTree tree, int depth)
+        public static CodeNamespaceItem MapNamespace(BaseNamespaceDeclarationSyntax member, SemanticModel semanticModel, SyntaxTree tree, int depth)
         {
-            if (member == null)
-            {
-                return null;
-            }
-
             var item = new CodeNamespaceItem(member, member.Name, semanticModel);
             item.Depth = depth;
             item.Kind = CodeItemKindEnum.Namespace;
@@ -34,7 +29,7 @@ namespace CodeNav.Shared.Languages.CSharp.Mappers
 
             var regions = RegionMapper.MapRegions(tree, member.Span);
 
-            foreach (var namespaceMember in member.Members)
+            foreach (var namespaceMember in member.Members.Where(member => member != null))
             {
                 var memberItem = SyntaxMapperCS.MapMember(namespaceMember, tree, semanticModel, depth + 1);
                 if (memberItem != null && !RegionMapper.AddToRegion(regions, memberItem))

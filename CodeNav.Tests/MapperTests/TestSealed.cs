@@ -11,7 +11,7 @@ namespace CodeNav.Tests.MapperTests
         private static readonly Logger _log = LogManager.GetCurrentClassLogger();
 
         [TestMethod]
-        public async Task TestSealedShouldBeOkAsync()
+        public async Task TestSealedShouldBeOk()
         {
             var document = await SyntaxMapper.MapDocumentAsync($@"Files\TestSealed.cs");
 

@@ -11,13 +11,8 @@ namespace CodeNav.Shared.Languages.CSharp.Mappers
 {
     public class PropertyMapperCS
     {
-        public static CodePropertyItem? MapProperty(PropertyDeclarationSyntax? member, SemanticModel semanticModel, int depth)
+        public static CodePropertyItem MapProperty(PropertyDeclarationSyntax member, SemanticModel semanticModel, int depth)
         {
-            if (member == null)
-            {
-                return null;
-            }
-
             var item = new CodePropertyItem(member, member.Identifier, member.Modifiers, semanticModel);
             item.Depth = depth;
             item.Type = TypeMapperCS.Map(member.Type);

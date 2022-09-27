@@ -7,7 +7,7 @@ namespace CodeNav.Models
 {
     public class CodeRegionItem : CodeClassItem
     {
-        public CodeRegionItem(Shared.Models.CodeRegionItem regionItem, ICodeViewUserControl control, List<CodeItem> members = null) : base(regionItem, control, members != null ? members : regionItem.Members.Select(member => SyntaxMapper.MapMember(member, control)).ToList()) { }
+        public CodeRegionItem(Shared.Models.CodeRegionItem regionItem, ICodeViewUserControl control, List<CodeItem> members = null) : base(regionItem, control, members != null ? members : regionItem.Members.Where(member => member != null).Select(member => SyntaxMapper.MapMember(member, control)).ToList()) { }
 
         public CodeRegionItem(ICodeViewUserControl control) : this(new Shared.Models.CodeRegionItem(), control) { }
     }

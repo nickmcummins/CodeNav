@@ -29,6 +29,7 @@ namespace CodeNav.Models
         public CodeClassItem(Shared.Models.CodeClassItem codeItem, ICodeViewUserControl control, List<CodeItem> members = null) : base(codeItem, control)
         {
             Members = members ?? codeItem.Members
+                .Where(member => member != null)
                 .Select(member => SyntaxMapper.MapMember(member, control))
                 .ToList();
         }

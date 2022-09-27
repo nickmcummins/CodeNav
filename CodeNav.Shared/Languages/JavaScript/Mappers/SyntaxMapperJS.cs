@@ -17,7 +17,7 @@ namespace CodeNav.Shared.Languages.JavaScript.Mappers
     public static class SyntaxMapperJS
     {
 
-        public static IList<ICodeItem?> Map(string? filePath, string? jsString = null)
+        public static IList<ICodeItem> Map(string? filePath, string? jsString = null)
         {
             if (jsString == null)
             {
@@ -30,7 +30,7 @@ namespace CodeNav.Shared.Languages.JavaScript.Mappers
 
             var ast = new TypeScriptAST(jsString, filePath);
 
-            return new List<ICodeItem?>
+            return new List<ICodeItem>
             {
                 new CodeNamespaceItem
                 {

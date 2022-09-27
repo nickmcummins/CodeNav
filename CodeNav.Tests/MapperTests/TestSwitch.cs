@@ -12,7 +12,7 @@ namespace CodeNav.Tests.MapperTests
     public class TestSwitch
     {
         [TestMethod]
-        public async Task TestSwitchShouldBeOkAsync()
+        public async Task TestSwitchShouldBeOk()
         {
             var document = await SyntaxMapper.MapDocumentAsync($@"Files\TestSwitch.cs");
 

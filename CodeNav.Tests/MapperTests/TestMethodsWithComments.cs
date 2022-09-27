@@ -12,7 +12,7 @@ namespace CodeNav.Tests.MapperTests
         private static readonly Logger _log = LogManager.GetCurrentClassLogger();
 
         [TestMethod]
-        public async Task ShouldBeOkAsync()
+        public async Task ShouldBeOk()
         {
             CodeNavSettings.Instance.UseXMLComments = true;
 

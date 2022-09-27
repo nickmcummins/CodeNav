@@ -1,20 +1,16 @@
 ﻿using CodeNav.Shared.Enums;
+using CodeNav.Shared.Extensions;
 using CodeNav.Shared.Mappers;
 using CodeNav.Shared.Models;
 using ExCSS;
 using Microsoft.CodeAnalysis.Text;
 using System;
 using System.Collections.Generic;
-using System.Drawing;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Zu.TypeScript.TsTypes;
-using TextSpan = Microsoft.CodeAnalysis.Text.TextSpan;
 using static CodeNav.Shared.Helpers.CodeNavSettings;
 using static CodeNav.Shared.Languages.JavaScript.Mappers.SyntaxMapperJS;
-using CodeNav.Shared.Extensions;
-using System.Xml.Linq;
+using TextSpan = Microsoft.CodeAnalysis.Text.TextSpan;
 
 namespace CodeNav.Shared.Languages.JavaScript.Mappers
 {

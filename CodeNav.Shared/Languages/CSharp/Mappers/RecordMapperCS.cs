@@ -9,7 +9,7 @@ namespace CodeNav.Shared.Languages.CSharp.Mappers
 {
     public static class RecordMapperCS
     {
-        public static CodeFunctionItem? MapRecord(RecordDeclarationSyntax? member, SemanticModel semanticModel, int depth)
+        public static CodeFunctionItem MapRecord(RecordDeclarationSyntax member, SemanticModel semanticModel, int depth)
         {
             if (member == null)
             {

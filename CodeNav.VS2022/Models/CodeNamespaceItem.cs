@@ -8,7 +8,9 @@ namespace CodeNav.Models
     {
         public CodeNamespaceItem(Shared.Models.CodeNamespaceItem namespaceItem, ICodeViewUserControl control) : base(namespaceItem, control)
         {
-            Members = namespaceItem.Members.Select(member => SyntaxMapper.MapMember(member, control)).ToList();
+            Members = namespaceItem.Members
+                .Where(member => member != null)
+                .Select(member => SyntaxMapper.MapMember(member, control)).ToList();
         }
 
         public CodeNamespaceItem() : base(new Shared.Models.CodeNamespaceItem(), null) { }

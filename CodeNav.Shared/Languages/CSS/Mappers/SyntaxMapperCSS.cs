@@ -12,7 +12,7 @@ namespace CodeNav.Shared.Languages.CSS.Mappers
 {
     public static class SyntaxMapperCSS
     {
-        public static IList<ICodeItem?> Map(string? filePath, string? text = null)
+        public static IList<ICodeItem> Map(string? filePath, string? text = null)
         {
             if (text == null)
             {
@@ -26,13 +26,13 @@ namespace CodeNav.Shared.Languages.CSS.Mappers
 
             var ast = new StylesheetParser().Parse(text);
 
-            return new List<ICodeItem?>
+            return new List<ICodeItem>
             {
                 new CodeNamespaceItem
                 {
                     Id = "Namespace" + filePath,
                     Kind = CodeItemKindEnum.Namespace,
-                    BorderColor = Shared.Constants.Colors.DarkGray,
+                    BorderColor = Constants.Colors.DarkGray,
                     Members = MapMembers(ast)
                 }
             };

@@ -8,7 +8,7 @@ namespace CodeNav.Tests.MapperTests
     public class TestClasses
     {
         [TestMethod]
-        public async Task ModulesShouldBeOkVBAsync()
+        public async Task ModulesShouldBeOkVB()
         {
             var document = await SyntaxMapper.MapDocumentAsync($@"Files\VisualBasic\TestModules.vb");
 
@@ -24,7 +24,7 @@ namespace CodeNav.Tests.MapperTests
         }
 
         [TestMethod]
-        public async Task ClassInheritanceShouldBeOkVBAsync()
+        public async Task ClassInheritanceShouldBeOkVB()
         {
             var document = await SyntaxMapper.MapDocumentAsync(@$"Files\VisualBasic\TestClasses.vb");
 

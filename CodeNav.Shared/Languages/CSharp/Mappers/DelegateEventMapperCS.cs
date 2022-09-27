@@ -8,13 +8,8 @@ namespace CodeNav.Shared.Languages.CSharp.Mappers
 {
     public static class DelegateEventMapperCS
     {
-        public static ICodeItem? MapDelegate(DelegateDeclarationSyntax? member, SemanticModel semanticModel, int depth)
+        public static ICodeItem MapDelegate(DelegateDeclarationSyntax member, SemanticModel semanticModel, int depth)
         {
-            if (member == null)
-            {
-                return null;
-            }
-
             var item = new BaseCodeItem(member, member.Identifier, member.Modifiers, semanticModel);
             item.Depth = depth;
             item.Kind = CodeItemKindEnum.Delegate;
@@ -22,13 +17,8 @@ namespace CodeNav.Shared.Languages.CSharp.Mappers
             return item;
         }
 
-        public static ICodeItem? MapEvent(EventFieldDeclarationSyntax? member, SemanticModel semanticModel, int depth)
+        public static ICodeItem MapEvent(EventFieldDeclarationSyntax member, SemanticModel semanticModel, int depth)
         {
-            if (member == null)
-            {
-                return null;
-            }
-
             var item = new BaseCodeItem(member, member.Declaration.Variables.First().Identifier, member.Modifiers, semanticModel);
             item.Depth = depth;
             item.Kind = CodeItemKindEnum.Event;

@@ -1,38 +1,29 @@
 ﻿using CodeNav.Shared.Enums;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
-using Microsoft.CodeAnalysis;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using CodeNav.Shared.Extensions;
+using CodeNav.Shared.Helpers;
 using CodeNav.Shared.Mappers;
 using CodeNav.Shared.Models;
+using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
+using System.Linq;
 using static CodeNav.Shared.Constants;
-using CodeNav.Shared.Helpers;
-using CodeNav.Shared.Extensions;
 using static CodeNav.Shared.Helpers.CodeNavSettings;
 
 namespace CodeNav.Shared.Languages.CSharp.Mappers
 {
     public class MethodMapperCS
     {
-        public static ICodeItem? MapMethod(MethodDeclarationSyntax? member, SemanticModel semanticModel, int depth)
+        public static ICodeItem MapMethod(MethodDeclarationSyntax? member, SemanticModel semanticModel, int depth)
         {
-            if (member == null)
-            {
-                return null;
-            }
-
             return MapMethod(member, member.Identifier, member.Modifiers, member.Body, member.ReturnType, member.ParameterList, CodeItemKindEnum.Method, semanticModel, depth);
         }
 
-        public static ICodeItem? MapMethod(LocalFunctionStatementSyntax member, SemanticModel semanticModel, int depth)
+        public static ICodeItem MapMethod(LocalFunctionStatementSyntax member, SemanticModel semanticModel, int depth)
         {
             return MapMethod(member, member.Identifier, member.Modifiers, member.Body, member.ReturnType, member.ParameterList, CodeItemKindEnum.LocalFunction, semanticModel, depth);
         }
 
-        public static ICodeItem? MapMethod(SyntaxNode node, SyntaxToken identifier, SyntaxTokenList modifiers, BlockSyntax? body, TypeSyntax? returnType, ParameterListSyntax parameterList, CodeItemKindEnum kind, SemanticModel semanticModel, int depth)
+        public static ICodeItem MapMethod(SyntaxNode node, SyntaxToken identifier, SyntaxTokenList modifiers, BlockSyntax? body, TypeSyntax? returnType, ParameterListSyntax parameterList, CodeItemKindEnum kind, SemanticModel semanticModel, int depth)
         {
             ICodeItem item;
 
@@ -71,13 +62,8 @@ namespace CodeNav.Shared.Languages.CSharp.Mappers
             return item;
         }
 
-        public static ICodeItem? MapConstructor(ConstructorDeclarationSyntax? member, SemanticModel semanticModel, int depth)
+        public static ICodeItem MapConstructor(ConstructorDeclarationSyntax? member, SemanticModel semanticModel, int depth)
         {
-            if (member == null)
-            {
-                return null;
-            }
-
             var item = new CodeFunctionItem(member, member.Identifier, member.Modifiers, semanticModel);
             item.Depth = depth;
             item.Parameters = ParameterMapperCS.MapParameters(member.ParameterList);

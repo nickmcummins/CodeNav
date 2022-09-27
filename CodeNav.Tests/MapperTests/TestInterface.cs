@@ -14,7 +14,7 @@ namespace CodeNav.Tests.MapperTests
         private static readonly Logger _log = LogManager.GetCurrentClassLogger();
 
         [TestMethod]
-        public async Task TestInterfaceShouldBeOkAsync()
+        public async Task TestInterfaceShouldBeOk()
         {
             var document = await SyntaxMapper.MapDocumentAsync($@"Files\TestInterface.cs");
 
@@ -49,7 +49,7 @@ namespace CodeNav.Tests.MapperTests
         }
 
         [TestMethod]
-        public async Task TestInterfaceInRegionShouldBeOkAsync()
+        public async Task TestInterfaceInRegionShouldBeOk()
         {
             var document = await SyntaxMapper.MapDocumentAsync($@"Files\TestInterface.cs");
 
@@ -76,7 +76,7 @@ namespace CodeNav.Tests.MapperTests
         }
 
         [TestMethod]
-        public async Task TestInterfaceShouldBeOkVBAsync()
+        public async Task TestInterfaceShouldBeOkVB()
         {
             var document = await SyntaxMapper.MapDocumentAsync($@"Files\\VisualBasic\\TestInterfaces.vb");
             Assert.IsTrue(document.Any());
@@ -89,7 +89,7 @@ namespace CodeNav.Tests.MapperTests
         }
 
         [TestMethod]
-        public async Task TestInterfaceWithRegionAsync()
+        public async Task TestInterfaceWithRegion()
         {
             var document = await SyntaxMapper.MapDocumentAsync($@"Files\TestInterfaceRegion.cs");
             _log.Info<ICodeItem>(document);

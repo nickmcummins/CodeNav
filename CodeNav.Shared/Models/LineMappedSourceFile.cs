@@ -6,11 +6,13 @@ namespace CodeNav.Shared.Models
 {
     public class LineMappedSourceFile
     {
+        public string FilePath { get; }
         public string SourceString { get; }
         public IntervalTree<int, int> LineRanges { get; }
 
-        public LineMappedSourceFile(string sourceString)
+        public LineMappedSourceFile(string filePath, string sourceString)
         {
+            FilePath = filePath;
             SourceString = sourceString;
             LineRanges = new IntervalTree<int, int>();
             var lines = sourceString.Split('\n');

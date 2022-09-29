@@ -32,7 +32,10 @@ namespace CodeNav.Shared.Mappers
                 case ".config":
                 case ".xaml":
                 case ".runsettings":
-                    document = Shared.Languages.XML.Mappers.SyntaxMapperXML.Map(filePath, text);
+                    document = Languages.XML.Mappers.SyntaxMapperXML.Map(filePath, text);
+                    break;
+                case ".json":
+                    document = Languages.JSON.Mappers.SyntaxMapperJSON.Map(filePath, text);
                     break;
                 case ".cs":
                     document = await SyntaxMapperCS.MapAsync(filePath, text, codeAnalysisDocument);

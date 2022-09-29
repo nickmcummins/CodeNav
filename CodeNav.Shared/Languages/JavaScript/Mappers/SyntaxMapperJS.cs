@@ -23,7 +23,7 @@ namespace CodeNav.Shared.Languages.JavaScript.Mappers
             {
                 if (string.IsNullOrEmpty(filePath) || !File.Exists(filePath))
                 {
-                    return new List<ICodeItem?>();
+                    return new List<ICodeItem>();
                 }
                 jsString = File.ReadAllText(filePath);
             }

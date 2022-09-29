@@ -25,7 +25,7 @@ namespace CodeNav.Shared.Languages.XML.Mappers
 
             xmlString ??= File.ReadAllText(filePath);
 
-            var xmlSourceFile = new LineMappedSourceFile(xmlString);
+            var xmlSourceFile = new LineMappedSourceFile(filePath, xmlString);
             var xmlTree = Parser.ParseText(xmlString);
 
             return new List<ICodeItem>

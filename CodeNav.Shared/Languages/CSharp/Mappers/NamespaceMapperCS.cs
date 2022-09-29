@@ -45,6 +45,7 @@ namespace CodeNav.Shared.Languages.CSharp.Mappers
                 {
                     if (item.Members.Flatten().FilterNull().Any(i => i.Id == region?.Id) == false)
                     {
+                        region.Depth = depth + 1;
                         item.Members.AddIfNotNull(region);
                     }
                 }

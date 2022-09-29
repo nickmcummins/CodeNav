@@ -128,6 +128,7 @@
 
   <ItemGroup>
     <Folder Include="Files\JavaScript\" />
+    <Folder Include="Files\JSON\" />
     <Folder Include="Files\VisualBasic\" />
     <Folder Include="MapperTests\JavaScript\" />
     <Folder Include="MapperTests\VisualBasic\" />
@@ -147,6 +148,9 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="Files\JavaScript\TestVariable.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Files\JSON\pet.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="Files\VisualBasic\TestClasses.vb">

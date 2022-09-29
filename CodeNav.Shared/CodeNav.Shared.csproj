@@ -21,8 +21,19 @@
       <Version>4.1.4</Version>
     </PackageReference>
   </ItemGroup>
-
   <ItemGroup>
+    <Reference Include="Microsoft.WebTools.Languages.Json">
+      <HintPath>C:\Program Files\Microsoft Visual Studio\2022\Preview\Common7\IDE\Extensions\Microsoft\Web Tools\Languages\Microsoft.WebTools.Languages.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.WebTools.Languages.Shared">
+      <HintPath>C:\Program Files\Microsoft Visual Studio\2022\Preview\Common7\IDE\Extensions\Microsoft\Web Tools\Languages\Microsoft.WebTools.Languages.Shared.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.WebTools.Shared">
+      <HintPath>C:\Program Files\Microsoft Visual Studio\2022\Preview\Common7\IDE\Extensions\Microsoft\Web Tools Shared\Microsoft.WebTools.Shared.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Languages\JSON\Mappers\" />
     <Folder Include="Languages\XML\Mappers\" />
     <Folder Include="Languages\XML\Models\" />
     <Folder Include="Collections\" />

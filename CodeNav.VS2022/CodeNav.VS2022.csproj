@@ -107,7 +107,6 @@
     <Compile Include="Helpers\DocumentHelper.cs" />
     <Compile Include="Helpers\HighlightHelper.cs" />
     <Compile Include="Helpers\HistoryHelper.cs" />
-    <Compile Include="Helpers\LanguageHelper.cs" />
     <Compile Include="Helpers\LogHelper.cs" />
     <Compile Include="Helpers\NavBarOverrider.cs" />
     <Compile Include="Helpers\OutliningHelper.cs" />

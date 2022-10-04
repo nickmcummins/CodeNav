@@ -29,8 +29,7 @@ namespace CodeNav.Mappers
             }
             catch (Exception e)
             {
-                var language = await LanguageHelper.GetActiveDocumentLanguage();
-                LogHelper.Log("Error during mapping", e, null, language.ToString());
+                LogHelper.Log("Error during mapping", e, null);
             }
 
             return new List<CodeItem>();

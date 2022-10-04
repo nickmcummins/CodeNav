@@ -19,7 +19,7 @@ namespace CodeNav.Shared.Mappers
         {
             var fileExtension = Path.GetExtension(filePath);
             IList<ICodeItem?> document = null;
-            switch (fileExtension)
+            switch (fileExtension.ToLower())
             {
                 case ".js":
                     document = Languages.JavaScript.Mappers.SyntaxMapperJS.Map(filePath, text);
@@ -36,6 +36,10 @@ namespace CodeNav.Shared.Mappers
                     break;
                 case ".json":
                     document = Languages.JSON.Mappers.SyntaxMapperJSON.Map(filePath, text);
+                    break;
+                case ".yaml":
+                case ".yml":
+                    document = Languages.YAML.Mappers.SyntaxMapperYAML.Map(filePath, text);
                     break;
                 case ".cs":
                     document = await SyntaxMapperCS.MapAsync(filePath, text, codeAnalysisDocument);

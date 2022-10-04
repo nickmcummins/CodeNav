@@ -129,6 +129,7 @@
   <ItemGroup>
     <Folder Include="Files\JavaScript\" />
     <Folder Include="Files\JSON\" />
+    <Folder Include="Files\YAML\" />
     <Folder Include="Files\VisualBasic\" />
     <Folder Include="MapperTests\JavaScript\" />
     <Folder Include="MapperTests\VisualBasic\" />
@@ -178,6 +179,9 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="Files\VisualBasic\TestRegions.vb">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Files\YAML\pet.yml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>

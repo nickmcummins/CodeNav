@@ -85,7 +85,7 @@ namespace CodeNav.Shared.Languages.YAML.Mappers
 
             if (name != null)
             {
-                var scalar = new YAMLPropertyItem(keyNode, value);
+                var scalar = new YAMLPropertyItem(keyNode, value, name);
                 scalar.Depth = depth;
                 scalar.Kind = CodeItemKindEnum.Property;
                 scalar.Parameters = parameters;
@@ -102,7 +102,7 @@ namespace CodeNav.Shared.Languages.YAML.Mappers
             sequence.Depth = depth;
             sequence.MonikerString = "MarkupTag";
             sequence.Kind = CodeItemKindEnum.Property;
-            sequence.Members = sequenceNode.Children.SelectMany(sequenceItem => MapMember(null, sequenceItem, depth + 1, "Sequence Item", true)).ToList();
+            sequence.Members = sequenceNode.Children.SelectMany(sequenceItem => MapMember(null, sequenceItem, depth + 1, sequenceItem is YamlScalarNode scalarItem ? scalarItem.Value : "Sequence Item", true)).ToList();
             var lastSequenceItem = sequence.Members.OrderBy(member => member.EndLine).Last();
             sequence.EndLine = lastSequenceItem.EndLine;
             sequence.EndLinePosition = lastSequenceItem.EndLinePosition;
